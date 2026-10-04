@@ -188,11 +188,11 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .login{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px;background:#0b2147}
 .login[hidden]{display:none}
 .lg-bg{position:absolute;inset:0;background:linear-gradient(160deg,rgba(9,28,64,.88),rgba(13,44,94,.78) 55%,rgba(120,16,24,.72)),var(--lgimg) center/cover no-repeat;filter:blur(2px) saturate(.9);inset:-12px}
-.lg-card{position:relative;overflow:hidden;width:min(380px,100%);background:#fff;border-radius:16px;padding:30px 28px 20px;box-shadow:0 24px 60px rgba(0,0,0,.4);text-align:center}
+.lg-card{position:relative;overflow:hidden;width:min(380px,100%);background:#fff;border-radius:16px;padding:28px 28px 26px;box-shadow:0 24px 60px rgba(0,0,0,.4);text-align:center}
 .lg-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#0d2c5e,#b5121b)}
 .lg-mk{display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:6px;background:#0d2c5e;color:#fff;font-size:13px;font-weight:500}
 .lg-card h1{margin:14px 0 4px;font-size:24px;color:#0d2c5e;letter-spacing:-.01em}
-.lg-sub{margin:0 0 22px;font-size:12.5px;color:#5b6b82}
+.lg-sub{margin:0 0 20px;font-size:12.5px;color:#5b6b82}
 .lg-lb{display:block;text-align:left;font-size:12.5px;font-weight:600;color:#2a3546;margin-bottom:6px}
 .lg-in{position:relative}
 .lg-in input{width:100%;height:48px;border:1.5px solid #c9d3e3;border-radius:10px;padding:0 46px 0 14px;font-size:18px;letter-spacing:.3em;font-family:var(--f-mono);color:#0d2c5e;background:#f7f9fc;outline:none;transition:border-color .15s,box-shadow .15s}
@@ -200,7 +200,7 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .lg-in input:focus{border-color:#0d2c5e;box-shadow:0 0 0 3px rgba(13,44,94,.15);background:#fff}
 .lg-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;background:transparent;border-radius:8px;font-size:16px;opacity:.55;cursor:pointer}
 .lg-eye:hover{opacity:.9;background:#eef2f8}
-.lg-msg{min-height:20px;margin:6px 0 4px;font-size:12.5px;color:#b5121b;text-align:left}
+.lg-msg{min-height:18px;margin:5px 0 6px;font-size:12.5px;color:#b5121b;text-align:left}
 .lg-go{width:100%;height:48px;border:0;border-radius:10px;background:#0d2c5e;color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s}
 .lg-go:hover{background:#163d7d}.lg-go:active{transform:translateY(1px)}
 .lg-ft{margin-top:20px;padding-top:12px;border-top:1px solid #e6ebf3;font-size:10.5px;color:#8a96a8;line-height:1.5}
@@ -472,7 +472,6 @@ table.sum td.z{color:var(--muted)}
     <div class="lg-in"><input id="lgPw" type="password" inputmode="numeric" maxlength="12" placeholder="비밀번호를 입력하세요" aria-describedby="lgMsg" autofocus><button type="button" class="lg-eye" id="lgEye" aria-label="비밀번호 보기">👁</button></div>
     <p class="lg-msg" id="lgMsg" aria-live="polite"></p>
     <button type="submit" class="lg-go">입장하기</button>
-    <div class="lg-ft">Copyright © 2026 부산지휘역량강화센터 서종근. All rights reserved.</div>
   </form>
 </div>
 <div class="app" id="app">
@@ -505,7 +504,7 @@ table.sum td.z{color:var(--muted)}
         <button data-t="res" class="on">자원 <span class="bd" id="bdRes">0</span></button>
         <button data-t="prog">진행 <span class="bd" id="bdProg">0/8</span></button>
         <button data-t="log">기록</button>
-        <button data-t="sop">SOP</button>
+        <button data-t="sop">참고자료</button>
       </nav>
       <div class="pbody" id="pbody"></div>
     </aside>
@@ -1657,7 +1656,7 @@ function renderManual(){
   <div class="man-qs"><div class="man-qh">빠른 시작 <small>8단계</small></div><ol>${QS.map((q,i)=>`<li><span class="n">${i+1}</span><b>${q[0]}</b><p>${q[1]}</p></li>`).join('')}</ol></div>
   <nav class="man-toc">${TOC.map((t,i)=>`<a href="#man-${t[0]}" data-mt="${t[0]}"><em>${i+1}</em>${t[1]}</a>`).join('')}</nav>
   <div class="man-g">
-  ${sec('screen',1,'화면 구성',`<div class="man-scr"><div class="z top">상단 · 사고명 · 상황판 탭 · 경과/현재시간 · 전체화면 · 저장·불러오기 · 스크린샷 · 만든이</div><div class="z tool">툴바 · 그리기 도구 · 색/굵기 · 건물 · 배경사진 · 표지 · 확대/축소 · 패널정렬 · 초기화</div><div class="z cv"><span class="p l">진행사항</span><span class="mid">개황도 캔버스</span><span class="p r">도착(임무대기)<br>직전대기(RIT·교대조)<br>자원대기소<br>임시의료소</span></div><div class="z zs"><span><b>우측 패널</b><br>자원 · 진행<br>기록 · SOP</span></div></div>
+  ${sec('screen',1,'화면 구성',`<div class="man-scr"><div class="z top">상단 · 사고명 · 상황판 탭 · 경과/현재시간 · 전체화면 · 저장·불러오기 · 스크린샷 · 만든이</div><div class="z tool">툴바 · 그리기 도구 · 색/굵기 · 건물 · 배경사진 · 표지 · 확대/축소 · 패널정렬 · 초기화</div><div class="z cv"><span class="p l">진행사항</span><span class="mid">개황도 캔버스</span><span class="p r">도착(임무대기)<br>직전대기(RIT·교대조)<br>자원대기소<br>임시의료소</span></div><div class="z zs"><span><b>우측 패널</b><br>자원 · 진행<br>기록 · 참고자료</span></div></div>
     <ul class="man-l"><li><b>상황판 탭</b> — 여러 사고를 탭으로 동시에 관리합니다. ✕로 닫으면 그 상황판은 이 기기에서 삭제됩니다.</li><li><b>경과시간</b> — 접수 시각 기준이며 20분마다 <span class="tag red">● 20분 전파</span> 알림이 뜹니다. 누르면 화재진행시간 전파가 기록됩니다.</li><li><b>우측 패널</b> — 가운데 ▶ 버튼으로 숨기거나, 경계선을 끌어 폭을 조절합니다.</li></ul>`)}
   ${sec('draw',2,'개황도 그리기',`<table class="man-t">${row(ic('select'),'선택','차량·표지·글자·건물 선택/이동, 빈 곳을 끌면 화면 이동')}${row(ic('pen'),'펜','자유 곡선 (색·굵기 선택)')}${row(ic('line')+ic('arrow'),'직선·화살표','진입 경로, 수관 전개, 이동 방향')}${row(ic('rect')+ic('ellipse'),'사각·원','구역, 위험 범위 표시')}${row(ic('text'),'글자','누른 위치에 입력 · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> 줄바꿈 · 다시 누르면 수정·이동')}${row(ic('cline'),'통제선','붉은 점선 · 그리면 ‘통제선 설치’ 자동 체크')}${row(ic('erase'),'지우개','그린 선·글자·건물을 문질러 삭제')}${row(ic('bld'),'건물','층수·옵션을 지정해 건물 단면 템플릿 생성 · 선택 후 테두리 점으로 크기, 끌어서 이동')}${row(ic('bg'),'배경사진','사진·도면 파일 선택 또는 <kbd>Ctrl</kbd>+<kbd>V</kbd> 붙여넣기 · 주황 점으로 너비/높이 조절 · 흐리게/진하게')}${row(ic('undo')+ic('redo'),'되돌리기·다시','그리기 작업 취소/복원')}${row(ic('clear'),'그림삭제','그림만 모두 삭제 (차량·구조대상자는 유지)')}</table>`)}
   ${sec('mark',3,'표지(아이콘)',`<p class="man-p">툴바의 표지를 누른 뒤 상황판에서 놓을 위치를 누릅니다. 놓인 표지를 누르면 <b>회전·크기 조절·삭제</b>를 할 수 있습니다.</p>
@@ -1673,7 +1672,7 @@ function renderManual(){
   ${sec('prog',6,'진행사항 관리',`<ul class="man-l"><li><b>진행 탭</b>에서 항목을 누르면 수행 시각이 기록되고, 캔버스 왼쪽 ‘진행사항’ 패널에도 표시됩니다.</li><li><b>✎ 항목 편집</b>으로 추가·삭제·순서 변경, <b>목록 저장·불러오기</b>로 기관별 체크리스트를 보관합니다.</li><li><b>자동 체크</b> — 방면 지정, 통제선 그리기, 1선펌프 임무 입력, 대응단계 지정, 단위지휘관 지정, 임시의료소 표지를 놓으면 해당 항목이 자동으로 체크됩니다.</li><li><b>대응단계</b>(1·2·3단계)·<b>메모</b>·<b>접수 시각 수정</b>도 진행 탭에서 합니다.</li></ul>`)}
   ${sec('view',7,'패널·화면 조작',`<table class="man-t">${row('⠿','패널 이동','패널 제목줄을 끌어 원하는 위치로 (안의 차량도 함께 이동)')}${row('⇲','패널 크기','패널 오른쪽 아래 모서리를 끌기')}${row('−','최소화','제목줄 오른쪽 − / + 버튼')}${row(ic('panels'),'패널정렬','기본 위치·크기로 되돌리기')}${row(ic('zin')+ic('zout'),'확대·축소','툴바 버튼 · 태블릿 <b>두 손가락</b> 벌리기/오므리기 · PC <kbd>Ctrl</kbd>+휠')}${row(ic('fit'),'맞춤','화면 크기에 맞게 원래대로')}${row('⛶','전체화면','상단 버튼 (Esc로 해제)')}</table>`)}
   ${sec('save',8,'기록·저장·출력',`<ul class="man-l"><li><b>기록 탭</b> — 차량 이동·상태 변경·체크·메모가 시각과 함께 자동 기록됩니다. 분류별로 보거나 <b>텍스트 복사</b>로 보고서에 붙여 씁니다.</li><li><b>📷 스크린샷</b> — 현재 상황판을 사고명·주소·시각이 들어간 이미지로 만들고 <b>💾 이미지 저장</b>으로 PNG 파일 저장.</li><li><b>저장·불러오기</b> — ‘이 기기에 저장’으로 시점별 보관, <b>JSON 복사/파일</b>로 다른 기기에 옮기기.</li><li>${ic('reset')} <b>초기화</b> — 현재 상황판을 처음 상태로 (사고명·주소 유지 선택 가능, 되돌릴 수 없음).</li></ul>`)}
-  ${sec('tip',9,'운용 팁 · 주의',`<ul class="man-l"><li>모든 내용은 <b>이 기기 브라우저</b>에 자동 저장됩니다. 다른 기기와 자동으로 공유되지 않으니 훈련 종료 시 JSON 또는 스크린샷으로 보관하세요.</li><li>디브리핑은 <b>기록 탭 텍스트 복사</b> + <b>스크린샷</b> 조합이 가장 빠릅니다.</li><li>태블릿에서는 <b>전체화면</b>과 우측 패널 숨기기(▶)로 캔버스를 최대한 넓게 쓰세요.</li><li><b>SOP 탭</b>에서 단계별 지휘절차·선착대장·지휘대장 지휘체계를 캔버스에 띄워 항목별 수행 체크를 할 수 있습니다.</li></ul>`)}
+  ${sec('tip',9,'운용 팁 · 주의',`<ul class="man-l"><li>모든 내용은 <b>이 기기 브라우저</b>에 자동 저장됩니다. 다른 기기와 자동으로 공유되지 않으니 훈련 종료 시 JSON 또는 스크린샷으로 보관하세요.</li><li>디브리핑은 <b>기록 탭 텍스트 복사</b> + <b>스크린샷</b> 조합이 가장 빠릅니다.</li><li>태블릿에서는 <b>전체화면</b>과 우측 패널 숨기기(▶)로 캔버스를 최대한 넓게 쓰세요.</li><li><b>참고자료 탭</b>에서 단계별 지휘절차·선착대장·지휘대장 지휘체계를 캔버스에 띄워 항목별 수행 체크를 할 수 있습니다.</li></ul>`)}
   </div><footer class="man-f">© 2026 부산지휘역량강화센터 서종근</footer></div>`;
 }
 function renderSop(){const V=$('#sopView');
