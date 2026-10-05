@@ -218,6 +218,7 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .addr{display:grid;grid-template-columns:minmax(60px,82px) 44px minmax(0,1fr) auto;gap:4px;margin-top:6px;align-items:center}
 .addr .fld{min-width:0;width:100%;padding-left:6px;padding-right:4px;min-height:30px;font-size:13px}
 .addr .btn{min-height:30px}
+.mpsec{border:1px solid #b9dcc6;background:#f2faf5;border-radius:10px;padding:10px 12px;margin-bottom:10px}.mpsec h4{margin:0 0 6px;font-size:13.5px;color:#14713d}
 .chipf.ffr button.on{background:var(--rc);border-color:var(--rc);color:#fff}
 .noex li:has(> .nd.ex),.noex .l1>.nd.ex{display:none}
 .prio{margin-top:18px;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:8px;align-items:stretch;background:#0d2c5e;border-radius:12px;padding:12px}
@@ -353,6 +354,9 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 #txted .tb button{border:0;border-radius:7px;background:#1d63c9;color:#fff;font-weight:700;font-size:17px;padding:7px 13px}
 #txted .tb .mv{background:#555;cursor:move;touch-action:none}#txted .tb .del{background:#d4271d}#txted .tb .ok{background:#111}
 .ghost{position:fixed;z-index:999;pointer-events:none;transform:translate(-50%,-50%);opacity:.9}
+.ghost.tbg{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.92);border:2px dashed #9aa6b8;border-radius:10px;padding:6px 8px;font-size:12px;font-weight:700;color:#1b2433;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+#tools [data-stamp],#tools [data-tool="victim"],#tools [data-tool="bld"],#tools [data-tool="bg"]{touch-action:none}#tools img{-webkit-user-drag:none;user-select:none}
+.ghost.tbg.ok{border-color:#1d63c9}.ghost.tbg img,.ghost.tbg svg{width:34px;height:34px;object-fit:contain}.ghost.tbg svg{stroke:#1b2433;fill:none;stroke-width:2}
 
 /* panel */
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0;min-width:0}
@@ -858,6 +862,7 @@ const tvt=it=>VEH[it.vt]?it.vt:'pump';
 function stDim(it){const st=STAMPS[it.stamp],k=it.sc||1;if(it.stamp==='truck'){const V=VEH[tvt(it)],w=Math.round(66*k);return[w,Math.round(w*V[1]/V[0])];}return[Math.round(st.w*k),Math.round(st.h*k*(it.len||1))];}
 const FFR={'지휘관':{s:'지휘관',c:'#111111',f:'#fff'},'단위지휘관':{s:'단위지휘관',c:'#142b5c',f:'#fff'},'진압대원':{s:'진압',c:'#d42a20',f:'#fff'},'구조대원':{s:'구조',c:'#1d63c9',f:'#fff'},'구급대원':{s:'구급',c:'#f2b705',f:'#1a1300'},'기타':{s:'기타',c:'#6b7280',f:'#fff'}};
 function stLabel(it){if(it.stamp==='truck'&&it.name){const T=TYPES[tvt(it)];return{t:it.name,c:T.c,f:T.f};}
+  if(it.stamp==='medpost'&&it.place)return{t:it.place,c:'#1d9a50',f:'#fff'};
   if(it.stamp==='ff'&&(it.role||it.name)){const R=FFR[it.role]||{s:'',c:'#6b7280',f:'#fff'};return{t:[R.s,it.name].filter(Boolean).join(' '),c:R.c,f:R.f};}return null;}
 function stSrc(it){return it.stamp==='truck'?VEH[tvt(it)][2]:IMG[it.stamp].src;}
 function renderItems(){
@@ -913,8 +918,20 @@ function renderTools(){
   $('#wsel').value=String(width);markTool();
 }
 function markTool(){document.querySelectorAll('#tools [data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===tool&&!stampKind));document.querySelectorAll('#tools [data-stamp]').forEach(b=>b.classList.toggle('on',stampKind===b.dataset.stamp));document.querySelector('#tools [data-tool="victim"]').classList.toggle('on',tool==='victim');board.style.cursor=tool==='select'?'default':'crosshair';if(tool!=='select'&&(selB||selBg||selS)){selB=null;selBg=false;selS=null;renderSel();}}
+/* drag a stamp / victim from toolbar onto the board */
+let tbDragged=false;
+$('#tools').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-stamp],[data-tool="victim"],[data-tool="bld"],[data-tool="bg"]');if(!b||(e.pointerType==='mouse'&&e.button!==0))return;if(e.pointerType==='mouse')e.preventDefault();
+  const sx=e.clientX,sy=e.clientY,pid=e.pointerId;let g=null;
+  const mv=ev=>{if(ev.pointerId!==pid)return;if(!g){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<8)return;g=document.createElement('div');g.className='ghost tbg';const im=b.querySelector('img,svg,b');g.innerHTML=(im?im.outerHTML:'')+`<span>${b.title||b.textContent.trim()}</span>`;document.body.appendChild(g);}
+    ev.preventDefault();g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px';g.classList.toggle('ok',overBoard(ev));};
+  const up=ev=>{if(ev.pointerId!==pid)return;document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);document.removeEventListener('pointercancel',up);
+    if(!g)return;g.remove();tbDragged=true;setTimeout(()=>tbDragged=false,50);
+    if(ev.type==='pointerup'&&overBoard(ev)&&view==='board'){const pt=bp(ev);stampKind=null;tool='select';markTool();
+      if(b.dataset.tool==='bld')openBuilding(null,pt);else if(b.dataset.tool==='bg')openBg();
+      else if(b.dataset.stamp)placeStamp(b.dataset.stamp,pt);else{const v=newVictim({placed:true,x:pt[0],y:pt[1]});renderAll();openVictim(v.id);}}};
+  document.addEventListener('pointermove',mv,{passive:false});document.addEventListener('pointerup',up);document.addEventListener('pointercancel',up);});
 $('#tools').addEventListener('click',e=>{
-  const b=e.target.closest('button,select');if(!b||b.id==='wsel')return;
+  const b=e.target.closest('button,select');if(!b||b.id==='wsel')return;if(tbDragged){tbDragged=false;return;}
   if(b.dataset.color){color=b.dataset.color;if(tool==='select'||tool==='erase')tool='pen';stampKind=null;renderTools();return;}
   if(b.dataset.stamp){stampKind=stampKind===b.dataset.stamp?null:b.dataset.stamp;tool=stampKind?'stamp':'select';markTool();if(stampKind)toast('상황판에서 놓을 위치를 누르세요');return;}
   const t=b.dataset.tool;stampKind=null;
@@ -1114,7 +1131,7 @@ function placeStamp(kind,p){
   if(kind==='ladder')log('상황','사다리 설치 위치 표시');
   if(kind==='truck')log('상황','소방차 위치 표시');
   if(kind==='ff')log('상황','소방대원 위치 표시'+(floorAt(p[0],p[1])?' - '+floorAt(p[0],p[1]):''));
-  if(kind==='medpost'){log('상황','임시의료소 위치 표시');autoCheck(7);}
+  if(kind==='medpost'){log('상황','임시의료소 위치 표시');autoCheck(7);renderAll();const it=S.items[S.items.length-1];setTimeout(()=>openStamp(it),30);return;}
   if(kind==='hazard')log('상황','위험요소 표시'+(floorAt(p[0],p[1])?' - '+floorAt(p[0],p[1]):''));
   renderAll();
 }
@@ -1380,7 +1397,8 @@ function openStamp(it){
   const L=it.stamp==='ladder',RS=L?15:45;
   const sl=(id,lb,v)=>`<label class="szl">${lb} <b id="${id}v">${Math.round(v*100)}%</b><span class="szr"><button class="btn" data-d="${id}:-">－</button><input type="range" id="${id}" min="40" max="${L?400:300}" step="10" value="${Math.round(v*100)}"><button class="btn" data-d="${id}:+">＋</button></span></label>`;
   const TK=it.stamp==='truck';
-  const m=modal(`<h2>${TK?'소방차 속성':st.n}</h2>${TK?`<div class="grid2" style="margin-bottom:6px"><label>차량 종류<select class="fld" id="tkT">${TVT.map(k=>`<option value="${k}" ${k===tvt(it)?'selected':''}>${TYPES[k].n}</option>`).join('')}</select></label><label>차량 이름<input class="fld" id="tkN" value="${esc(it.name||'')}" placeholder="예: 펌프1 / 금곡펌프"></label></div><div class="chipf" id="tkPick" style="gap:6px;margin-bottom:4px">${TVT.map(k=>`<button type="button" data-tk="${k}" class="${k===tvt(it)?'on':''}" title="${TYPES[k].n}" style="padding:3px 6px;display:inline-flex;flex-direction:column;align-items:center;border-radius:8px"><img src="${VEH[k][2]}" alt="" style="height:22px;max-width:44px;object-fit:contain"><span style="font-size:10.5px">${TYPES[k].n}</span></button>`).join('')}</div>`:''}${it.stamp==='ff'?`<div style="margin-bottom:8px"><div style="font-size:13px;font-weight:600;margin-bottom:5px">대원 구분</div><div class="chipf ffr">${Object.keys(FFR).map(k=>`<button type="button" data-fr="${k}" class="${it.role===k?'on':''}" style="--rc:${FFR[k].c}">${k}</button>`).join('')}</div>
+  const m=modal(`<h2>${TK?'소방차 속성':st.n}</h2>${TK?`<div class="grid2" style="margin-bottom:6px"><label>차량 종류<select class="fld" id="tkT">${TVT.map(k=>`<option value="${k}" ${k===tvt(it)?'selected':''}>${TYPES[k].n}</option>`).join('')}</select></label><label>차량 이름<input class="fld" id="tkN" value="${esc(it.name||'')}" placeholder="예: 펌프1 / 금곡펌프"></label></div><div class="chipf" id="tkPick" style="gap:6px;margin-bottom:4px">${TVT.map(k=>`<button type="button" data-tk="${k}" class="${k===tvt(it)?'on':''}" title="${TYPES[k].n}" style="padding:3px 6px;display:inline-flex;flex-direction:column;align-items:center;border-radius:8px"><img src="${VEH[k][2]}" alt="" style="height:22px;max-width:44px;object-fit:contain"><span style="font-size:10.5px">${TYPES[k].n}</span></button>`).join('')}</div>`:''}${it.stamp==='medpost'?`<div class="mpsec"><h4>설치 장소</h4><div class="row" style="flex-wrap:nowrap"><input class="fld" id="mpP" style="flex:1" value="${esc(it.place||'')}" placeholder="예: A면 주출입구 앞 공터 / 1층 로비"><button class="btn pri sm" id="mpSave">${it.place?'수정':'입력'}</button>${it.place?'<button class="btn sm danger" id="mpDel">삭제</button>':''}</div>
+      <p class="hint" style="margin:6px 0 0">${it.place?`현재: <b>${esc(it.place)}</b>${it.pts?' · '+hm(it.pts)+' 지정':''}`:'입력하면 표지 아래에 표시되고 기록 탭에 남습니다.'}</p></div>`:''}${it.stamp==='ff'?`<div style="margin-bottom:8px"><div style="font-size:13px;font-weight:600;margin-bottom:5px">대원 구분</div><div class="chipf ffr">${Object.keys(FFR).map(k=>`<button type="button" data-fr="${k}" class="${it.role===k?'on':''}" style="--rc:${FFR[k].c}">${k}</button>`).join('')}</div>
       <label style="display:flex;flex-direction:column;gap:4px;margin-top:8px;font-size:13px;font-weight:600">소속·성명 (선택)<input class="fld" style="width:100%" id="ffN" value="${esc(it.name||'')}" placeholder="예: 진1 소방교 홍길동"></label></div>`:''}${it.stamp==='ff'?'<div class="ffsec"><h4>대원 안전사고 관리</h4><button class="btn" id="ffGo" style="background:#d4271d;color:#fff;border-color:#d4271d;width:100%;font-weight:700">🚨 안전사고 발생 (MAYDAY) — 구조대상자로 관리</button><p class="hint" style="margin:6px 0 0">고립·추락·붕괴 등 대원 사고 시 누르면 이 위치의 대원이 구조대상자로 전환되어 위치·상태·중증도·이송을 기록합니다.</p></div>':''}<div class="row"><button class="btn" id="r1">↺ 왼쪽 ${RS}°</button><button class="btn" id="r2">↻ 오른쪽 ${RS}°</button></div>${sl('szA','크기',it.sc||1)}${L?sl('szL','길이',it.len||1):''}<p class="hint">${L?'크기는 사다리 전체, 길이는 세로 방향만 늘이거나 줄입니다.':'표지 크기를 조절합니다.'}</p><div class="acts"><button class="btn" id="szR">원래 크기</button><button class="btn danger" id="sDel">삭제</button><button class="btn" data-close>닫기</button></div>`);
   m.querySelector('#r1').onclick=()=>{it.rot=((it.rot||0)-RS)%360;renderAll();dirty();};m.querySelector('#r2').onclick=()=>{it.rot=((it.rot||0)+RS)%360;renderAll();dirty();};
   const setSz=(id,v)=>{v=Math.max(40,Math.min(L?400:300,Math.round(v/10)*10));const inp=m.querySelector('#'+id);if(!inp)return;inp.value=v;m.querySelector('#'+id+'v').textContent=v+'%';if(id==='szA')it.sc=v/100;else it.len=v/100;renderItems();dirty();};
@@ -1389,6 +1407,10 @@ function openStamp(it){
   m.querySelector('#szR').onclick=()=>{setSz('szA',100);if(L)setSz('szL',100);};
   m.querySelector('#sDel').onclick=()=>{S.items=S.items.filter(i=>i!==it);closeModal();renderAll();};
   m.querySelector('#ffGo')?.addEventListener('click',()=>{closeModal();ffAlert(it);});
+  if(it.stamp==='medpost'){const inp=m.querySelector('#mpP');const save=()=>{const v=inp.value.trim();if(!v)return toast('설치 장소를 입력하세요');const old=it.place;if(v===old)return closeModal();it.place=v;it.pts=Date.now();log('상황',old?`임시의료소 설치 장소 수정 - ${old} → ${v}`:`임시의료소 설치 장소 - ${v}`);renderAll();closeModal();};
+    m.querySelector('#mpSave').onclick=save;inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();save();}};
+    m.querySelector('#mpDel')?.addEventListener('click',()=>{log('상황',`임시의료소 설치 장소 삭제 - ${it.place}`);delete it.place;delete it.pts;renderAll();closeModal();});
+    if(!it.place)setTimeout(()=>inp.focus(),60);}
   if(it.stamp==='ff'){m.querySelectorAll('[data-fr]').forEach(b=>b.onclick=()=>{const k=b.dataset.fr,on=it.role===k;it.role=on?'':k;m.querySelectorAll('[data-fr]').forEach(x=>x.classList.toggle('on',x.dataset.fr===it.role));if(it.role)log('상황',`소방대원 구분 - ${it.role}${it.name?' ('+it.name+')':''}`);renderItems();dirty();});
     const n=m.querySelector('#ffN');n.oninput=()=>{it.name=n.value.trim();renderItems();dirty();};}
   if(TK){const setT=k=>{const old=tvt(it);it.vt=k;m.querySelector('#tkT').value=k;m.querySelectorAll('[data-tk]').forEach(b=>b.classList.toggle('on',b.dataset.tk===k));if(old!==k)log('상황',`소방차 종류 변경 - ${TYPES[k].n}${it.name?' ('+it.name+')':''}`);renderItems();dirty();};
@@ -1475,7 +1497,7 @@ function openText(p,ex){
     if(k==='ok')commit();
     if(k==='d'){close();snap();S.strokes=S.strokes.filter(q=>q!==ex);redraw();dirty();}});
 }
-function openBuilding(EB){
+function openBuilding(EB,drop){
   const last=S.buildings[S.buildings.length-1];const pr=S.pn&&S.pn.prog&&S.pn.prog.a==='l'?S.pn.prog.x+S.pn.prog.w:0;const nx=last?Math.min(last.x1+140,CX-420):Math.max(150,pr+120);
   const gen=(a,b)=>{const out=['옥상'];if(a>8){out.push(a+'F','…');for(let f=5;f>=1;f--)out.push(f+'F');}else for(let f=a;f>=1;f--)out.push(f+'F');for(let f=1;f<=b;f++)out.push('B'+f);return out.join(',');};
   if(EB){const m=modal(`<h2>건물 편집</h2>
@@ -1488,12 +1510,12 @@ function openBuilding(EB){
     <div class="grid2"><label>지상 층수<input class="fld" id="bA" type="number" min="1" max="99" value="5"></label><label>지하 층수<input class="fld" id="bB" type="number" min="0" max="9" value="1"></label></div>
     <label>표시할 층 (쉼표 구분, ‘…’은 생략 구간)<input class="fld" id="bF" value="${gen(5,1)}"></label>
     <div class="grid2"><label>건물명 (선택)<input class="fld" id="bN" placeholder="예: 디에스 타워"></label><label>정면 방면<select class="fld" id="bS"><option value="A">A면</option><option value="">표시 안 함</option></select></label>
-    <label>가로 위치<select class="fld" id="bX"><option value="${nx}">${last?'기존 건물 오른쪽':'기본 위치'}</option><option value="${Math.max(150,pr+120)}">왼쪽</option><option value="${CX-470}">오른쪽</option></select></label></div>
+    <label>가로 위치<select class="fld" id="bX">${drop?`<option value="${Math.round(Math.max(20,Math.min(CX-420,drop[0]-190)))}">끌어 놓은 위치</option>`:''}<option value="${nx}">${last?'기존 건물 오른쪽':'기본 위치'}</option><option value="${Math.max(150,pr+120)}">왼쪽</option><option value="${CX-470}">오른쪽</option></select></label></div>
     <label class="ck"><input type="checkbox" id="bSt" checked> 계단실 표시</label><label class="ck"><input type="checkbox" id="bFl" ${last?'':'checked'}> Fire line(소방활동구역) 곡선 표시</label>
     <p class="hint">층 칸 안에 차량·구조대상자를 놓으면 해당 층이 자동 기록됩니다. 그린 뒤 ‘선택’ 도구로 건물을 누르면 끌어서 이동하고, 파란 점을 끌어 크기를 조정할 수 있습니다.</p>
     <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="bGo">그리기</button></div>`);
   const upd=()=>{$('#bF').value=gen(+$('#bA').value||1,+$('#bB').value||0);};m.querySelector('#bA').oninput=upd;m.querySelector('#bB').oninput=upd;
-  m.querySelector('#bGo').onclick=()=>{snap();const B=makeBuilding({name:$('#bN').value.trim(),floors:$('#bF').value,x:Math.min(+$('#bX').value,CX-420),stair:$('#bSt').checked,face:$('#bS').value,fireline:$('#bFl').checked});closeModal();redraw();if(B){tool='select';stampKind=null;markTool();selB=B.gid;renderSel();}renderAll();};
+  m.querySelector('#bGo').onclick=()=>{snap();const B=makeBuilding({name:$('#bN').value.trim(),floors:$('#bF').value,x:Math.min(+$('#bX').value,CX-420),y:drop&&$('#bX').selectedIndex===0?Math.round(Math.max(30,drop[1]-40)):undefined,stair:$('#bSt').checked,face:$('#bS').value,fireline:$('#bFl').checked});closeModal();redraw();if(B){tool='select';stampKind=null;markTool();selB=B.gid;renderSel();}renderAll();};
 }
 function openBg(){
   const m=modal(`<h2>배경 사진</h2><p class="hint">P119 지도 캡처, 건물 사진, 도면 등을 개황도 영역 배경으로 깔고 그 위에 그립니다. 화면을 캡처한 뒤 상황판에서 <b>Ctrl+V</b>로 바로 붙여넣을 수도 있습니다. 사진은 이 기기에만 저장됩니다.</p>
