@@ -271,7 +271,7 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .bsel .bar .lb{background:rgba(255,255,255,.92);color:#111;border-radius:8px;padding:8px 10px;font-weight:700;font-size:16px}
 #ink{position:absolute;left:0;top:0;width:1600px;height:1000px}
 #zones{position:absolute;left:0;top:0;width:100%;height:1000px;pointer-events:none}
-.zone{position:absolute;border:1px solid #3a3f48;border-radius:10px;background:color-mix(in srgb,var(--zt) 50%,transparent)}
+.zone{position:absolute;border:1px solid #3a3f48;border-radius:10px;background:transparent}
 .zone h3{margin:0;position:absolute;left:10px;top:6px;font-family:var(--f-body);font-weight:500;font-size:18px;color:#111;letter-spacing:.01em}
 .zone .mn,.prog .mn{position:absolute;right:6px;top:5px;width:30px;height:26px;border-radius:6px;background:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font:700 18px/1 var(--f-body);color:#333}
 .zone .rs,.prog .rs{position:absolute;right:3px;bottom:3px;width:16px;height:16px;border-right:3px solid rgba(0,0,0,.28);border-bottom:3px solid rgba(0,0,0,.28);border-radius:0 0 6px 0}
@@ -334,7 +334,7 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .vic .no{position:absolute;right:-9px;top:-8px;background:#111;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:0 5px;line-height:17px}
 .vic .lb{font-size:13px;font-weight:700;color:#111;background:rgba(255,255,255,.85);padding:0 4px;border-radius:3px;margin-top:1px;white-space:nowrap}
 .vic.done .ic::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(45deg,transparent 46%,#1d7a46 46% 54%,transparent 54%)}
-.prog{position:absolute;overflow:hidden;background:rgba(255,236,170,.2);border:1px solid #3a3f48;border-radius:10px;padding:6px 10px;color:#111;font-size:14px;line-height:1.42;pointer-events:auto;cursor:pointer}
+.prog{position:absolute;overflow:hidden;background:rgba(255,236,170,.9);border:1px solid #3a3f48;border-radius:10px;padding:6px 10px;color:#111;font-size:14px;line-height:1.42;pointer-events:auto;cursor:pointer}
 .prog h4{margin:0 0 2px;padding-right:40px;font-family:var(--f-body);font-weight:500;font-size:18px;display:flex;justify-content:space-between;align-items:baseline}
 .prog h4 small{font-family:var(--f-body);font-size:12px;font-weight:700;color:#8a1b13}
 .prog .ck{display:flex;gap:6px;align-items:center;font-weight:700}
@@ -1556,12 +1556,12 @@ async function exportImg(){
   if(S.bg){const im=new Image();im.src=S.bg;await im.decode().catch(()=>{});const bb=S.bgBox||{x:0,y:0,w:CX,h:H};g.globalAlpha=S.bgOp??.55;g.drawImage(im,bb.x,bb.y,bb.w,bb.h);g.globalAlpha=1;}
   const EM=zl().m;const med=S.victims.filter(v=>['구조완료','임시의료소','병원이송'].includes(v.status)).sort((a,b)=>a.no-b.no);
   for(const k of S.pno){const b=zbox(k),w=b.x1-b.x0,hh=b.y1-b.y0,mn=!!EM[k];g.save();g.translate(b.x0,b.y0);
-    if(k==='prog'){g.save();rr(g,0,0,w,hh,10);g.clip();g.fillStyle='rgba(255,236,170,.2)';g.fillRect(0,0,w,hh);
+    if(k==='prog'){g.save();rr(g,0,0,w,hh,10);g.clip();g.fillStyle='rgba(255,236,170,.9)';g.fillRect(0,0,w,hh);
       g.fillStyle='#111';g.font='500 18px "IBM Plex Sans KR",sans-serif';g.fillText('진행사항',10,mn?24:27);g.font='700 12px "IBM Plex Sans KR",sans-serif';g.fillStyle='#8a1b13';{const st=(mn?ckDone()+'/'+ckL().length+' ':'')+(S.stage||'');g.fillText(st,w-48-g.measureText(st).width,mn?23:26);}
       if(!mn){ckL().forEach((cc,i)=>{const cs=S.checks[cc.id];const y=52+i*20;g.strokeStyle=cs?'#c0261d':'#333';g.lineWidth=2;g.beginPath();g.arc(20,y-5,8,0,7);g.stroke();g.fillStyle='#111';g.font='700 14px "IBM Plex Sans KR",sans-serif';const mx=Math.floor((w-110)/13);g.fillText(`${i+1}. ${cc.n}`.slice(0,mx),34,y);if(cs){g.font='12px "IBM Plex Mono",monospace';g.fillStyle='#555';g.fillText(hm(cs),w-50,y);}});
         S.memos.slice(-2).forEach((m,i)=>{g.fillStyle='#111';g.font='500 12.5px "IBM Plex Sans KR",sans-serif';g.fillText(('- '+m.text).slice(0,Math.floor((w-20)/11)),10,52+ckL().length*20+4+i*18);});}
       g.restore();rr(g,0.5,0.5,w-1,hh-1,10);g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();}
-    else{rr(g,0.5,0.5,w-1,hh-1,10);g.globalAlpha=.5;g.fillStyle=b.t;g.fill();g.globalAlpha=1;g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();
+    else{rr(g,0.5,0.5,w-1,hh-1,10);g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();
       g.font='500 18px "IBM Plex Sans KR",sans-serif';g.fillStyle='#111';g.fillText(b.name,12,mn?25:31);
       g.font='500 13px "IBM Plex Mono",monospace';g.fillStyle='#5b6575';const cn=S.items.filter(i=>i.k==='u'&&locate(i.x,i.y,i.placed).z===k).length+'대';g.fillText(cn,w-50-g.measureText(cn).width,mn?24:27);
       if(k==='med'&&!mn){g.font='700 14px "IBM Plex Sans KR",sans-serif';med.slice(0,Math.max(0,Math.floor((hh-56)/21))).forEach((v,i)=>{const yy=44+15+i*21;g.fillStyle=TRI[v.triage||''].c;g.beginPath();g.arc(14,yy-5,4.5,0,7);g.fill();g.fillStyle='#111';g.fillText(`${i+1}. ${vline(v)}`.slice(0,Math.floor((w-30)/13)),22,yy);});}}
