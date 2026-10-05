@@ -931,11 +931,12 @@ $('#tools').addEventListener('change',e=>{if(e.target.id==='wsel')width=+e.targe
 /* ---------- board pointer ---------- */
 let act=null,selB=null;
 let selBg=false,selS=null;
-const SHT={l:'직선',a:'화살표',r:'사각',e:'원'};const SWS=[1,2,3,4,5,7,9,12,16];
+const SHT={l:'직선',a:'화살표',r:'사각',e:'원',p:'펜'};
+function sBox(q){if(q.t==='p'){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;q.pts.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y);});return[x0,y0,x1,y1];}return[Math.min(q.a[0],q.b[0]),Math.min(q.a[1],q.b[1]),Math.max(q.a[0],q.b[0]),Math.max(q.a[1],q.b[1])];}const SWS=[1,2,3,4,5,7,9,12,16];
 function shapeAt(p){for(let i=S.strokes.length-1;i>=0;i--){const q=S.strokes[i];if(SHT[q.t]&&!q.gid&&!q.zhid&&hit(q,p))return q;}return null;}
-function shapeSelHTML(q){const x0=Math.min(q.a[0],q.b[0]),x1=Math.max(q.a[0],q.b[0]),y0=Math.min(q.a[1],q.b[1]),y1=Math.max(q.a[1],q.b[1]),pad=8;
+function shapeSelHTML(q){const [x0,y0,x1,y1]=sBox(q),pad=8;
   const H=(k,x,y)=>`<span class="sh" data-sh="${k}" style="left:${x}px;top:${y}px"></span>`;
-  const hs=(q.t==='l'||q.t==='a')?H('a',q.a[0],q.a[1])+H('b',q.b[0],q.b[1]):H('a',q.a[0],q.a[1])+H('b',q.b[0],q.b[1])+H('c',q.b[0],q.a[1])+H('d',q.a[0],q.b[1]);
+  const hs=q.t==='p'?H('tl',x0,y0)+H('tr',x1,y0)+H('bl',x0,y1)+H('br',x1,y1):(q.t==='l'||q.t==='a')?H('a',q.a[0],q.a[1])+H('b',q.b[0],q.b[1]):H('a',q.a[0],q.a[1])+H('b',q.b[0],q.b[1])+H('c',q.b[0],q.a[1])+H('d',q.a[0],q.b[1]);
   const by=y0-pad-56<4?y1+pad+10:y0-pad-56;
   return `<div class="ssel"><div class="sbox" style="left:${x0-pad}px;top:${y0-pad}px;width:${x1-x0+pad*2}px;height:${y1-y0+pad*2}px"></div>${hs}
   <div class="sbar" style="left:${Math.max(4,x0-pad)}px;top:${by}px"><span class="lb">${SHT[q.t]}${q.dash?' (점선)':''}</span><button class="bb" data-sb="w-" aria-label="가늘게">−</button><span class="lb w">굵기 ${q.w}</span><button class="bb" data-sb="w+" aria-label="굵게">+</button>
@@ -971,7 +972,7 @@ board.addEventListener('pointerdown',e=>{
       else if(k==='del'){S.strokes=S.strokes.filter(x=>x!==q);selS=null;log('기록',`도형 삭제 - ${SHT[q.t]}`);}
       else if(k==='ok'){UNDO.pop();selS=null;}
       redraw();renderSel();dirty();return;}
-    const h=e.target.closest('[data-sh]');if(h){snap();board.setPointerCapture(e.pointerId);act={type:'sh',k:h.dataset.sh,q,pid:e.pointerId};return;}
+    const h=e.target.closest('[data-sh]');if(h){snap();board.setPointerCapture(e.pointerId);act={type:'sh',k:h.dataset.sh,q,pid:e.pointerId,op:q.pts?q.pts.map(v=>v.slice()):null,ob:sBox(q)};return;}
     return;}
   const bs=e.target.closest('.bsel');
   if(bs&&bs.dataset.bg){const bb=e.target.closest('.bb');e.preventDefault();
@@ -991,7 +992,7 @@ board.addEventListener('pointerdown',e=>{
   e.preventDefault();
   if(tool==='select'&&selBg&&S.bgBox&&p[0]>=S.bgBox.x&&p[0]<=S.bgBox.x+S.bgBox.w&&p[1]>=S.bgBox.y&&p[1]<=S.bgBox.y+S.bgBox.h){board.setPointerCapture(e.pointerId);act={type:'bg',mode:'move',o:Object.assign({},S.bgBox),sx:e.clientX,sy:e.clientY,pid:e.pointerId};return;}
   if(tool==='select'){const tx=textAt(p);if(tx){board.setPointerCapture(e.pointerId);act={type:'txt',tt:e.pointerType==='mouse'?6:14,s:tx,ox:tx.x,oy:tx.y,sx:e.clientX,sy:e.clientY,moved:false,pid:e.pointerId};return;}
-    const SQ=shapeAt(p);if(SQ){selS=SQ;selB=null;selBg=false;renderSel();board.setPointerCapture(e.pointerId);act={type:'smove',q:SQ,oa:SQ.a.slice(),ob:SQ.b.slice(),sx:e.clientX,sy:e.clientY,moved:false,pid:e.pointerId};return;}
+    const SQ=shapeAt(p);if(SQ){selS=SQ;selB=null;selBg=false;renderSel();board.setPointerCapture(e.pointerId);act={type:'smove',q:SQ,oa:SQ.a?SQ.a.slice():null,ob:SQ.b?SQ.b.slice():null,op:SQ.pts?SQ.pts.map(v=>v.slice()):null,sx:e.clientX,sy:e.clientY,moved:false,pid:e.pointerId};return;}
     if(selS){selS=null;renderSel();}
     const B=S.buildings.find(b=>b.w&&p[0]>=b.x0&&p[0]<=b.x0+b.w&&p[1]>=b.y0&&p[1]<=b.y0+b.h);
     if(B){selB=B.gid;selBg=false;renderSel();return;} if(selB||selBg){selB=null;selBg=false;renderSel();}
@@ -1018,7 +1019,11 @@ board.addEventListener('pointermove',e=>{
     const fx=x=>x<o.x0?x+(B.x0-o.x0):x>o.x0+o.w?x+(B.x0+B.w-o.x0-o.w):B.x0+(x-o.x0)*B.w/o.w,fy=y=>B.y0+(y-o.y0)*B.h/o.h;
     act.its.forEach(([ob,x,y])=>{ob.x=Math.round(fx(x));ob.y=Math.round(fy(y));});renderItems();renderSel();return;}
   if(act.type==='smove'){const dx=(e.clientX-act.sx)/scale,dy=(e.clientY-act.sy)/scale;if(!act.moved){if(Math.hypot(dx,dy)*scale<5)return;act.moved=true;snap();}
-    const q=act.q;q.a=[Math.round(act.oa[0]+dx),Math.round(act.oa[1]+dy)];q.b=[Math.round(act.ob[0]+dx),Math.round(act.ob[1]+dy)];redraw();renderSel();return;}
+    const q=act.q;if(act.op)q.pts=act.op.map(([x,y])=>[Math.round((x+dx)*10)/10,Math.round((y+dy)*10)/10]);else{q.a=[Math.round(act.oa[0]+dx),Math.round(act.oa[1]+dy)];q.b=[Math.round(act.ob[0]+dx),Math.round(act.ob[1]+dy)];}redraw();renderSel();return;}
+  if(act.type==='sh'&&act.op){const q=act.q,k=act.k,[X0,Y0,X1,Y1]=act.ob,W0=Math.max(1,X1-X0),H0=Math.max(1,Y1-Y0);
+    const fx=k.includes('l')?X1:X0,fy=k.includes('t')?Y1:Y0;let nx=p[0],ny=p[1];
+    let sx=(k.includes('l')?fx-nx:nx-fx)/W0,sy=(k.includes('t')?fy-ny:ny-fy)/H0;sx=Math.max(.1,sx);sy=Math.max(.1,sy);if(e.shiftKey){const m=Math.max(sx,sy);sx=sy=m;}
+    q.pts=act.op.map(([x,y])=>[Math.round((fx+(x-fx)*sx)*10)/10,Math.round((fy+(y-fy)*sy)*10)/10]);redraw();renderSel();return;}
   if(act.type==='sh'){const q=act.q,k=act.k,x=Math.round(p[0]),y=Math.round(p[1]);
     if(k==='a')q.a=[x,y];else if(k==='b')q.b=[x,y];else if(k==='c'){q.b=[x,q.b[1]];q.a=[q.a[0],y];}else if(k==='d'){q.a=[x,q.a[1]];q.b=[q.b[0],y];}
     redraw();renderSel();return;}
@@ -1812,7 +1817,9 @@ $('#bFull').onclick=async()=>{
   const el=document.documentElement,fn=el.requestFullscreen||el.webkitRequestFullscreen;
   try{if(!fn)throw 0;await fn.call(el);}catch(e){document.body.classList.add('focus');toast('이 화면에서는 브라우저 전체화면이 막혀 있어 상황판 영역을 최대로 넓혔습니다');}
   fullLabel();};
-document.addEventListener('fullscreenchange',fullLabel);document.addEventListener('fullscreenchange',()=>{_lsz='';setTimeout(()=>{_lsz='';queueLayout();},60);});
+document.addEventListener('fullscreenchange',fullLabel);
+document.addEventListener('fullscreenchange',()=>{const kb=navigator.keyboard;if(!kb||!kb.lock)return;
+  if(document.fullscreenElement){kb.lock(['Escape']).then(()=>toast('전체화면 해제: Esc 키를 길게(약 2초) 누르거나 상단 ‘전체화면 해제’ 버튼')).catch(()=>{});}else{try{kb.unlock();}catch(e){}}});document.addEventListener('fullscreenchange',()=>{_lsz='';setTimeout(()=>{_lsz='';queueLayout();},60);});
 function armAutoFull(){if(!UI.autoFull||isFull())return;const el=document.documentElement,fn=el.requestFullscreen||el.webkitRequestFullscreen;if(!fn)return;
   let done=false;const go=e=>{if(done)return;done=true;document.removeEventListener('pointerdown',go,true);document.removeEventListener('keydown',go,true);
     if(e&&e.target&&e.target.closest&&e.target.closest('#bFull'))return;if(!isFull()){try{const pr=fn.call(el);pr&&pr.then&&pr.then(fullLabel,()=>{});}catch(_){}}};
