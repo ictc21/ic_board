@@ -214,11 +214,21 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .setr+.setr{border-top:1px solid var(--line)}
 .setr .sn{font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
 .setr .ss{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.setr .btn{min-height:26px;padding:2px 9px}
+.setr .btn{min-height:26px;padding:2px 9px}.setr .btn:disabled{opacity:.55;cursor:default;background:var(--panel2);color:var(--muted)}
+.addbtn{width:100%;justify-content:center;margin-top:6px;min-height:34px}
 .addr{display:grid;grid-template-columns:minmax(60px,82px) 44px minmax(0,1fr) auto;gap:4px;margin-top:6px;align-items:center}
 .addr .fld{min-width:0;width:100%;padding-left:6px;padding-right:4px;min-height:30px;font-size:13px}
 .addr .btn{min-height:30px}
 .mpsec{border:1px solid #b9dcc6;background:#f2faf5;border-radius:10px;padding:10px 12px;margin-bottom:10px}.mpsec h4{margin:0 0 6px;font-size:13.5px;color:#14713d}
+.secnt{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:6px}
+.secnt .cc{display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid var(--line);border-radius:8px;padding:4px 6px 4px 8px;background:var(--panel2)}
+.secnt .cc.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,var(--panel))}
+.secnt .cn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;white-space:nowrap}.secnt .cn i{width:10px;height:10px;border-radius:3px;background:var(--c);display:inline-block}
+.secnt .cs{display:inline-flex;align-items:center;gap:2px}
+.secnt .cs{flex:none}.secnt .cn{min-width:0;overflow:hidden;text-overflow:ellipsis}.secnt .cs button{width:24px;height:28px;border:1px solid var(--line);background:var(--panel);border-radius:6px;font-weight:700;cursor:pointer;padding:0}
+.secnt .cs input{width:36px;padding:0;min-height:0;height:28px;text-align:center;border:1px solid var(--line);border-radius:6px;font:600 13px var(--f-mono);background:#fff;-moz-appearance:textfield}
+.secnt .cs input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.tchipx{display:inline-block;background:var(--c);color:#fff;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;white-space:nowrap}
 .chipf.ffr button.on{background:var(--rc);border-color:var(--rc);color:#fff}
 .noex li:has(> .nd.ex),.noex .l1>.nd.ex{display:none}
 .prio{margin-top:18px;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:8px;align-items:stretch;background:#0d2c5e;border-radius:12px;padding:12px}
@@ -268,18 +278,21 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .ssel .bb.dl{background:#d4271d}.ssel .bb.ok{background:#111}
 .ssel .sw2{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px #b9c3d3;cursor:pointer;padding:0}.ssel .sw2.on{box-shadow:0 0 0 3px #1d63c9}
 .bsel.bgs{border-color:#ef7d00;background:transparent;pointer-events:none}.bsel.bgs .h,.bsel.bgs .bar{pointer-events:auto}
-.bsel.bgs .h[data-h="br"]{right:4px;bottom:4px}.bsel.bgs .h[data-h="r"]{right:4px}.bsel.bgs .h[data-h="b"]{bottom:4px}.bsel .bar.in{top:6px;left:6px}.bsel.bgs .h{background:#ef7d00}.bsel.bgs .bb{background:#ef7d00}
+.bsel.bgs .h[data-h="br"]{right:4px;bottom:4px}.bsel.bgs .h[data-h="r"]{right:4px}.bsel.bgs .h[data-h="b"]{bottom:4px}.bsel .bar.in{top:6px;left:6px}.bsel.bgs .bar.in{left:50%;transform:translateX(-50%);top:8px}.bsel.bgs .h{background:#ef7d00}.bsel.bgs .bb{background:#ef7d00}
 .bsel .bar .lb{background:rgba(255,255,255,.92);color:#111;border-radius:8px;padding:8px 10px;font-weight:700;font-size:16px}
 #ink{position:absolute;left:0;top:0;width:1600px;height:1000px}
 #zones{position:absolute;left:0;top:0;width:100%;height:1000px;pointer-events:none}
 .zone{position:absolute;border:1px solid #3a3f48;border-radius:10px;background:transparent}
-.zone h3{margin:0;position:absolute;left:10px;top:6px;font-family:var(--f-body);font-weight:500;font-size:18px;color:#111;letter-spacing:.01em}
+.zone::before{content:"";position:absolute;left:0;right:0;top:0;height:38px;background:var(--zh,#3a3f48);border-radius:9px 9px 0 0;pointer-events:none}
+.zone.min::before{height:100%;border-radius:9px}
+.zone h3{margin:0;position:absolute;left:12px;top:8px;font-family:var(--f-body);font-weight:700;font-size:18px;color:#fff;letter-spacing:.01em;text-shadow:0 1px 1px rgba(0,0,0,.25)}
 .zone .mn,.prog .mn{position:absolute;right:6px;top:5px;width:30px;height:26px;border-radius:6px;background:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font:700 18px/1 var(--f-body);color:#333}
 .zone .rs,.prog .rs{position:absolute;right:3px;bottom:3px;width:16px;height:16px;border-right:3px solid rgba(0,0,0,.28);border-bottom:3px solid rgba(0,0,0,.28);border-radius:0 0 6px 0}
 .zone h3,.prog h4{cursor:move}
 .zone.min .medlist{display:none}
-.zone .cnt{position:absolute;right:44px;top:9px;font-family:var(--f-mono);font-size:13px;color:#5b6575}
-.medlist{position:absolute;left:12px;top:44px;right:12px;font-size:14px;font-weight:700;color:#111;line-height:1.5}
+.zone .cnt{position:absolute;right:44px;top:10px;font-family:var(--f-mono);font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:1px 8px;line-height:1.4}
+.zone .mn{background:rgba(255,255,255,.22);color:#fff}
+.medlist{position:absolute;left:12px;top:46px;right:12px;font-size:14px;font-weight:700;color:#111;line-height:1.5}
 .medlist div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .medlist .tg{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:1px}
 #sel{position:absolute;inset:0;pointer-events:none}
@@ -335,9 +348,12 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .vic .no{position:absolute;right:-9px;top:-8px;background:#111;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:0 5px;line-height:17px}
 .vic .lb{font-size:13px;font-weight:700;color:#111;background:rgba(255,255,255,.85);padding:0 4px;border-radius:3px;margin-top:1px;white-space:nowrap}
 .vic.done .ic::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(45deg,transparent 46%,#1d7a46 46% 54%,transparent 54%)}
-.prog{position:absolute;overflow:hidden;background:rgba(255,236,170,.9);border:1px solid #3a3f48;border-radius:10px;padding:6px 10px;color:#111;font-size:14px;line-height:1.42;pointer-events:auto;cursor:pointer}
-.prog h4{margin:0 0 2px;padding-right:40px;font-family:var(--f-body);font-weight:500;font-size:18px;display:flex;justify-content:space-between;align-items:baseline}
-.prog h4 small{font-family:var(--f-body);font-size:12px;font-weight:700;color:#8a1b13}
+.prog{position:absolute;overflow:hidden;background:rgba(255,236,170,.9);border:1px solid #3a3f48;border-radius:10px;padding:44px 10px 6px;color:#111;font-size:14px;line-height:1.42;pointer-events:auto;cursor:pointer}
+.prog::before{content:"";position:absolute;left:0;right:0;top:0;height:38px;background:#9a5b00;pointer-events:none}
+.prog.min{padding:0}.prog.min::before{height:100%}
+.prog h4{position:absolute;left:12px;right:44px;top:8px;margin:0;font-family:var(--f-body);font-weight:700;font-size:18px;color:#fff;display:flex;justify-content:space-between;align-items:baseline;gap:8px;text-shadow:0 1px 1px rgba(0,0,0,.25);z-index:1}
+.prog .mn{background:rgba(255,255,255,.22);color:#fff;z-index:1}
+.prog h4 small{font-family:var(--f-body);font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:1px 8px;white-space:nowrap}.prog h4 small:empty{display:none}
 .prog .ck{display:flex;gap:6px;align-items:center;font-weight:700}
 .prog .ck i{font-style:normal;width:18px;height:18px;border:2px solid #333;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
 .prog .ck.d i{border-color:#c0261d;color:#c0261d}
@@ -569,6 +585,7 @@ table.sum td.z{color:var(--muted)}
 "use strict";
 let W=1600,CX=1260,H=1000;const ZW=340,KEY='ictc-tboard-v1',SKEY='ictc-tboard-saves';
 const ZORDER=['prog','arrive','ready','med','stage'],ZHDR=38,PROGB={id:'prog',y0:0,y1:250};
+const ZHC={arrive:'#1d4f9c',ready:'#1b7a43',stage:'#5b3a91',med:'#b5121b'};
 const ZONES=[{id:'arrive',name:'도착(임무대기)',y0:250,y1:420,t:'#eef3fb'},{id:'ready',name:'직전대기(RIT, 교대조)',y0:420,y1:580,t:'#edf6ef'},{id:'med',name:'임시의료소',y0:580,y1:830,t:'#fcefee'},{id:'stage',name:'자원대기소',y0:830,y1:1000,t:'#f2f0f8'}];
 const OLDZ=[[0,240],[240,480],[480,760],[760,1000]];
 function zl(){if(!S.zl||!S.zl.w)S.zl={w:{prog:250,arrive:170,ready:160,med:250,stage:170},m:{}};return S.zl;}
@@ -577,7 +594,7 @@ function computeZonesOld(){const L=zl();const open=ZORDER.filter(k=>!L.m[k]);con
   ZORDER.forEach(k=>{const b=zbox(k);const h=L.m[k]?ZHDR:Math.round(avail*L.w[k]/sw);b.y0=y;b.y1=y+h;y+=h;});zbox(ZORDER[ZORDER.length-1]).y1=H;}
 function hidO(o){return !!(o&&o.zp&&zl().m[o.zp]);}
 /* ---- 자유 배치 패널 ---- */
-function defaultPanelRects(){const PW=320,RX=ZW-PW-3;return{prog:{a:'l',x:3,y:3,w:282,h:265},arrive:{a:'r',x:RX,y:3,w:PW,h:155},ready:{a:'r',x:RX,y:164,w:PW,h:145},stage:{a:'r',x:RX,y:315,w:PW,h:155},med:{a:'r',x:RX,y:476,w:PW,h:230}};}
+function defaultPanelRects(){const PW=320,RX=ZW-PW-3;return{prog:{a:'l',x:3,y:3,w:282,h:280},arrive:{a:'r',x:RX,y:3,w:PW,h:155},ready:{a:'r',x:RX,y:164,w:PW,h:145},stage:{a:'r',x:RX,y:315,w:PW,h:155},med:{a:'r',x:RX,y:476,w:PW,h:230}};}
 function ensurePanels(){if(S.pn&&S.pno)return;const L=zl();
   if(Object.values(L.m||{}).some(Boolean)){L.m={};try{relayoutZonesOld();}catch(e){}}
   computeZonesOld();S.pn={};ZORDER.forEach(k=>{const b=zbox(k);S.pn[k]={a:'r',x:3,y:b.y0+2,w:331,h:Math.max(60,b.y1-b.y0-4)};});S.pno=ZORDER.slice();L.m={};}
@@ -845,7 +862,7 @@ function renderZones(){
   const counts={};S.items.forEach(it=>{if(it.k!=='u')return;const L=locate(it.x,it.y,it.placed);counts[L.z]=(counts[L.z]||0)+1;});
   const med=S.victims.filter(v=>['구조완료','임시의료소','병원이송'].includes(v.status)).sort((a,b)=>a.no-b.no);
   const M=zl().m;
-  z.innerHTML=S.pno.map(k=>{if(k==='prog')return progHTML();const q=zbox(k);return `<div class="zone ${M[q.id]?'min':''}" style="left:${q.x0}px;top:${q.y0}px;width:${q.x1-q.x0}px;height:${q.y1-q.y0}px;--zt:${q.t}"><h3>${q.name}</h3><span class="cnt">${counts[q.id]||0}대</span><span class="mn">${M[q.id]?'+':'−'}</span>${M[q.id]?'':'<span class="rs"></span>'}${q.id==='med'?`<div class="medlist">${med.slice(0,Math.max(0,Math.floor((q.y1-q.y0-56)/21))).map((v,i)=>`<div><span class="tg" style="background:${TRI[v.triage||''].c}"></span>${i+1}. ${esc(vline(v))}</div>`).join('')}</div>`:''}</div>`;}).join('');
+  z.innerHTML=S.pno.map(k=>{if(k==='prog')return progHTML();const q=zbox(k);return `<div class="zone ${M[q.id]?'min':''}" style="left:${q.x0}px;top:${q.y0}px;width:${q.x1-q.x0}px;height:${q.y1-q.y0}px;--zt:${q.t};--zh:${ZHC[q.id]||'#3a3f48'}"><h3>${q.name}</h3><span class="cnt">${counts[q.id]||0}대</span><span class="mn">${M[q.id]?'+':'−'}</span>${M[q.id]?'':'<span class="rs"></span>'}${q.id==='med'?`<div class="medlist">${med.slice(0,Math.max(0,Math.floor((q.y1-q.y0-56)/21))).map((v,i)=>`<div><span class="tg" style="background:${TRI[v.triage||''].c}"></span>${i+1}. ${esc(vline(v))}</div>`).join('')}</div>`:''}</div>`;}).join('');
 }
 function vline(v){const who=v.ff?['[대원]',v.loc,v.name||'소방대원',v.acc].filter(Boolean).join(' '):[v.loc,(v.desc||'구조대상자')+(v.count||1)+(v.desc?'':'명')].filter(Boolean).join(' ');return `${who}${v.injury?', '+v.injury:''}${v.unit?'('+v.unit+')':''}${v.status==='병원이송'?' →'+(v.hospital||'이송'):''}`;}
 const isVU=it=>VMODE==='img'&&!!VEH[it.type];
@@ -962,7 +979,7 @@ function renderSel(){const el=$('#sel');
   const tp=$('#selTop');tp.innerHTML='';
   if(selS&&(tool!=='select'||!S.strokes.includes(selS)))selS=null;
   if(selS){el.innerHTML='';tp.innerHTML=shapeSelHTML(selS);return;}
-  if(selBg&&tool==='select'&&S.bg&&S.bgBox){const b=S.bgBox;el.innerHTML='';tp.innerHTML=`<div class="bsel bgs" data-bg="1" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px"><div class="bar ${b.y<70?'in':''}"><span class="lb">배경 ${Math.round((S.bgOp??.55)*100)}%</span><button class="bb" data-b="o-">흐리게</button><button class="bb" data-b="o+">진하게</button><button class="bb" data-b="fit">화면맞춤</button><button class="bb dl" data-b="bdel">삭제</button><button class="bb ok" data-b="bok">완료</button></div><span class="h" data-h="r" title="너비"></span><span class="h" data-h="b" title="높이"></span><span class="h" data-h="br" title="비율 유지"></span></div>`;return;}
+  if(selBg&&tool==='select'&&S.bg&&S.bgBox){const B0=S.bgBox,vx=Math.max(0,B0.x),vy=Math.max(0,B0.y),b={x:vx,y:vy,w:Math.min(W,B0.x+B0.w)-vx,h:Math.min(H,B0.y+B0.h)-vy};el.innerHTML='';tp.innerHTML=`<div class="bsel bgs" data-bg="1" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px"><div class="bar ${b.y<70?'in':''}"><span class="lb">배경 ${Math.round((S.bgOp??.55)*100)}%</span><button class="bb" data-b="o-">흐리게</button><button class="bb" data-b="o+">진하게</button><button class="bb" data-b="fit">화면맞춤</button><button class="bb dl" data-b="bdel">삭제</button><button class="bb ok" data-b="bok">완료</button></div><span class="h" data-h="r" title="너비"></span><span class="h" data-h="b" title="높이"></span><span class="h" data-h="br" title="비율 유지"></span></div>`;return;}
   const B=tool==='select'&&S.buildings.find(b=>b.gid===selB);
   if(!B){el.innerHTML='';return;}
   el.innerHTML=`<div class="bsel" style="left:${B.x0}px;top:${B.y0}px;width:${B.w}px;height:${B.h}px"><div class="bar"><button class="bb" data-b="ed">층·옵션 편집</button><button class="bb dl" data-b="dl">삭제</button><button class="bb ok" data-b="ok">완료</button></div><span class="h" data-h="r"></span><span class="h" data-h="b"></span><span class="h" data-h="br"></span></div>`;}
@@ -1051,7 +1068,7 @@ board.addEventListener('pointermove',e=>{
     if(P.a==='r')P.x=Math.round(nx-CX);else P.x=Math.round(nx);P.y=Math.round(ny);applyPanels();redraw();renderZones();renderItems();return;}
   if(act.type==='pr'){const dx=(e.clientX-act.sx)/scale,dy=(e.clientY-act.sy)/scale,P=S.pn[act.k];P.w=Math.round(Math.max(180,Math.min(900,act.ow+dx)));if(act.k==='prog')P.manual=true;P.h=Math.round(Math.max(80,Math.min(H,act.oh+dy)));applyPanels();renderZones();return;}
   if(act.type==='bg'){const dx=(e.clientX-act.sx)/scale,dy=(e.clientY-act.sy)/scale,o=act.o,b=S.bgBox;
-    if(act.mode==='move'){b.x=Math.round(Math.max(-b.w+120,Math.min(CX-120,o.x+dx)));b.y=Math.round(Math.max(-b.h+120,o.y+dy));}else if(act.mode==='r'){b.w=Math.round(Math.max(80,o.w+dx));}else if(act.mode==='b'){b.h=Math.round(Math.max(80,o.h+dy));}else{b.w=Math.round(Math.max(120,o.w+dx));b.h=Math.round(b.w*o.h/o.w);}
+    if(act.mode==='move'){b.x=Math.round(Math.max(-b.w+120,Math.min(W-120,o.x+dx)));b.y=Math.round(Math.max(-b.h+120,o.y+dy));}else if(act.mode==='r'){b.w=Math.round(Math.max(80,o.w+dx));}else if(act.mode==='b'){b.h=Math.round(Math.max(80,o.h+dy));}else{b.w=Math.round(Math.max(120,o.w+dx));b.h=Math.round(b.w*o.h/o.w);}
     applyBg();renderSel();return;}
   if(act.type==='pan'&&Math.hypot(e.clientX-act.sx,e.clientY-act.sy)>6)act.moved=true;
   if(act.type==='pan'){stage.scrollLeft=act.l-(e.clientX-act.sx);stage.scrollTop=act.t-(e.clientY-act.sy);return;}
@@ -1183,6 +1200,7 @@ function applySet(id){const st=getSets().find(x=>x.id===id);if(!st)return;
     if(st.auto){if(nx[u.type]==null)nx[u.type]=nextNum(u.type);label=(TYPES[u.type].p||'기타')+(nx[u.type]++);}
     else if(have.has(label)){skip++;return;}
     have.add(label);S.items.push({id:uid(),k:'u',type:u.type,label,x:null,y:null,placed:false,cmd:false,org:u.org||'',crew:u.crew||'',note:''});added.push(label);});
+  S.setUsed=S.setUsed||{};S.setUsed[st.id]=Date.now();
   if(st.stage&&(!S.stage||S.stage==='없음'))S.stage=st.stage;
   if(added.length)log('자원',`${st.name} 편성 - ${added.join(', ')}`);
   toast(added.length?`${added.length}대 추가${skip?` (중복 ${skip}대 제외)`:''}`:'이미 모두 등록된 차량입니다');renderAll();}
@@ -1207,29 +1225,49 @@ function openSets(){
       const cur=getSets();arr.forEach(st=>{if(!st||!st.name||!Array.isArray(st.units))return;st.id=uid();st.units=st.units.filter(u=>TYPES[u.type]);cur.push(st);});putSets(cur);toast(arr.length+'개 세트를 가져왔습니다');renderPanel();openSets();}catch(e){toast('세트 형식이 아닙니다');}};
   m.querySelector('#stReset').onclick=()=>confirmBox('기본 세트 복원','기본 세트(1차출동대, 1차출동(지휘,진5,구1,급1,고가,굴절))를 목록에 다시 추가합니다. 기존 세트는 유지됩니다.','복원',()=>{const cur=getSets().filter(x=>x.id!=='p1'&&x.id!=='s1');putSets(defaultSets().concat(cur));renderPanel();openSets();});
 }
-function editSet(src){
+function editSet(src,opt){const AP=!!(opt&&opt.apply);
   const st=src?JSON.parse(JSON.stringify(src)):{id:null,name:'',auto:false,units:[]};
-  const m=modal(`<h2>${src&&src.id?'세트 편집':'새 세트'}</h2>
-    <div class="grid2"><label>세트 이름<input class="fld" id="seN" value="${esc(st.name)}" placeholder="예: 북부소방서 1차 출동 / 3기 교육 시나리오A"></label>
+  const TK=Object.keys(TYPES);
+  const m=modal(`<h2>${AP?'추가 출동대 편성':src&&src.id?'세트 편집':'새 세트'}</h2>${AP?'<p class="hint" style="margin:-4px 0 8px">종류별 대수를 입력하면 지금 상황판의 번호 다음부터 호출부호가 매겨지고, ‘상황판에 추가’를 누르면 미도착·출동중 목록에 바로 들어갑니다.</p>':''}
+    <div class="grid2"><label>${AP?'출동대 이름 (선택)':'세트 이름'}<input class="fld" id="seN" value="${esc(st.name)}" placeholder="${AP?'예: 2차 추가출동 / 대응1단계 추가':'예: 북부소방서 1차 출동 / 3기 교육 시나리오A'}"></label>
     <label>대응단계 연동 (선택)<select class="fld" id="seS">${['','대응1단계','대응2단계','대응3단계'].map(v=>`<option value="${v}" ${v===(st.stage||'')?'selected':''}>${v||'없음'}</option>`).join('')}</select></label></div>
-    <label class="ck"><input type="checkbox" id="seA" ${st.auto?'checked':''}> 자동번호 — 적용할 때 이미 있는 번호 다음부터 매김 (추가 출동대용)</label>
-    <div class="row"><select class="fld" id="seT">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}">${t.n}</option>`).join('')}</select><input class="fld" id="seC" type="number" min="1" max="30" value="1" style="width:64px" aria-label="대수"><button class="btn sm" id="seAdd">차량 추가</button></div>
-    <div style="overflow-x:auto"><table class="sum" id="seTbl"></table></div>
-    <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="seSave">저장</button></div>`,'wide');
-  const tbl=m.querySelector('#seTbl');
+    ${AP?'<label class="ck"><input type="checkbox" id="seKeep"> 이 구성을 출동대 세트로도 저장 (다음에 다시 쓰기)</label>':`<label class="ck"><input type="checkbox" id="seA" ${st.auto?'checked':''}> 자동번호 — 적용할 때 이미 있는 번호 다음부터 매김 (추가 출동대용)</label>`}
+    <div class="sech" style="margin-top:6px"><h5 style="margin:0">① 차량 종류별 대수 <span class="hint" id="seTot"></span></h5><button class="lnk" id="seClr">모두 0으로</button></div>
+    <div class="secnt" id="seCnt"></div>
+    <h5 style="margin:12px 0 4px">② 상세 정보 <span class="hint">호출부호·소속·인원 (선택)</span></h5>
+    <div style="overflow-x:auto;max-height:42vh;overflow-y:auto"><table class="sum" id="seTbl"></table></div>
+    <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="seSave">${AP?'상황판에 추가':'저장'}</button></div>`,'wide');
+  const tbl=m.querySelector('#seTbl'),grid=m.querySelector('#seCnt');
+  const cnt=t=>st.units.filter(u=>u.type===t).length;
+  const sortU=()=>{st.units.sort((a,b)=>TK.indexOf(a.type)-TK.indexOf(b.type));};
+  const setCount=(t,n)=>{n=Math.max(0,Math.min(30,n|0));const T=TYPES[t];let cur=cnt(t);
+    if(n>cur){let mx=AP?nextNum(t)-1:0;st.units.forEach(u=>{if(u.type===t){const k=parseInt(String(u.label).replace(T.p,''),10);if(!isNaN(k)&&k>mx)mx=k;}});
+      for(let i=0;i<n-cur;i++)st.units.push({type:t,label:(T.p||'기타')+(mx+1+i),org:'',crew:''});}
+    else while(cur>n){let k=-1;for(let i=st.units.length-1;i>=0;i--)if(st.units[i].type===t){k=i;break;}if(k<0)break;st.units.splice(k,1);cur--;}
+    sortU();};
+  const drawGrid=()=>{grid.innerHTML=TK.map(t=>{const T=TYPES[t],n=cnt(t);return `<div class="cc ${n?'on':''}" style="--c:${T.c}"><span class="cn"><i></i>${T.n}</span><span class="cs"><button type="button" data-cd="${t}:-1" aria-label="${T.n} 줄이기">−</button><input type="number" min="0" max="30" value="${n}" data-ct="${t}" aria-label="${T.n} 대수"><button type="button" data-cd="${t}:1" aria-label="${T.n} 늘리기">+</button></span></div>`;}).join('');
+    m.querySelector('#seTot').textContent=`· 총 ${st.units.length}대`;};
   const draw=()=>{tbl.innerHTML=`<thead><tr><th>종류</th><th>호출부호</th><th>소속</th><th>인원</th><th></th></tr></thead><tbody>${st.units.map((u,i)=>`<tr>
-      <td><select class="fld" data-i="${i}" data-f="type">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}" ${k===u.type?'selected':''}>${t.n}</option>`).join('')}</select></td>
+      <td><span class="tchipx" style="--c:${(TYPES[u.type]||TYPES.etc).c}">${(TYPES[u.type]||TYPES.etc).n}</span></td>
       <td><input class="fld" data-i="${i}" data-f="label" value="${esc(u.label)}" style="width:96px"></td>
       <td><input class="fld" data-i="${i}" data-f="org" value="${esc(u.org||'')}" placeholder="예: 금곡119안전센터" style="width:100%;min-width:140px"></td>
       <td><input class="fld" data-i="${i}" data-f="crew" value="${esc(u.crew||'')}" type="number" min="0" style="width:64px"></td>
-      <td><button class="btn sm danger" data-rm="${i}" aria-label="삭제">✕</button></td></tr>`).join('')||'<tr><td colspan="5" class="z">위에서 종류와 대수를 골라 차량을 추가하세요</td></tr>'}</tbody>`;};
-  draw();
+      <td><button class="btn sm danger" data-rm="${i}" aria-label="삭제">✕</button></td></tr>`).join('')||'<tr><td colspan="5" class="z">위 ①에서 차량 종류별 대수를 입력하세요</td></tr>'}</tbody>`;};
+  const all=()=>{drawGrid();draw();};
+  sortU();all();
+  grid.addEventListener('click',e=>{const b=e.target.closest('[data-cd]');if(!b)return;const [t,d]=b.dataset.cd.split(':');setCount(t,cnt(t)+(+d));all();});
+  grid.addEventListener('change',e=>{const t=e.target.dataset.ct;if(!t)return;setCount(t,+e.target.value);all();});
+  grid.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.ct){e.preventDefault();setCount(e.target.dataset.ct,+e.target.value);all();}});
+  m.querySelector('#seClr').onclick=()=>{st.units=[];all();};
   tbl.addEventListener('input',e=>{const t=e.target;if(t.dataset.i==null)return;st.units[+t.dataset.i][t.dataset.f]=t.value;});
-  tbl.addEventListener('change',e=>{const t=e.target;if(t.dataset.f==='type'){st.units[+t.dataset.i].type=t.value;}});
-  tbl.addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(b){st.units.splice(+b.dataset.rm,1);draw();}});
-  m.querySelector('#seAdd').onclick=()=>{const t=$('#seT').value,n=Math.max(1,Math.min(30,+$('#seC').value||1));const T=TYPES[t];
-    let mx=0;st.units.forEach(u=>{if(u.type===t){const k=parseInt(String(u.label).replace(T.p,''),10);if(!isNaN(k)&&k>mx)mx=k;}});
-    for(let i=0;i<n;i++)st.units.push({type:t,label:(T.p||'기타')+(mx+1+i),org:'',crew:''});draw();};
+  tbl.addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(b){st.units.splice(+b.dataset.rm,1);all();}});
+  if(AP){m.querySelector('#seSave').onclick=()=>{const nm=$('#seN').value.trim();const us=st.units.filter(u=>String(u.label).trim());if(!us.length)return toast('추가할 차량 대수를 입력하세요');
+      const have=new Set(S.items.filter(i=>i.k==='u').map(i=>i.label));const added=[];let skip=0;
+      us.forEach(u=>{const l=String(u.label).trim();if(have.has(l)){skip++;return;}have.add(l);S.items.push({id:uid(),k:'u',type:u.type,label:l,x:null,y:null,placed:false,cmd:false,org:u.org||'',crew:u.crew||'',note:''});added.push(l);});
+      const sg=$('#seS').value;if(sg){S.stage=sg;autoCheck(4);}
+      if(added.length)log('자원',`${nm||'추가 출동대'} 편성 - ${added.join(', ')}`);
+      if($('#seKeep').checked){if(!nm)return toast('세트로 저장하려면 출동대 이름을 입력하세요');const a=getSets();a.push({id:uid(),name:nm,auto:true,stage:sg,units:us.map(u=>({type:u.type,label:u.label,org:u.org||'',crew:u.crew||''}))});putSets(a);}
+      closeModal();toast(added.length?`${added.length}대 추가${skip?` (중복 ${skip}대 제외)`:''}`:'이미 모두 등록된 차량입니다');renderAll();};return;}
   m.querySelector('#seSave').onclick=()=>{st.name=$('#seN').value.trim();if(!st.name)return toast('세트 이름을 입력하세요');st.units=st.units.filter(u=>String(u.label).trim());if(!st.units.length)return toast('차량을 1대 이상 추가하세요');
     st.auto=$('#seA').checked;st.stage=$('#seS').value;const a=getSets();if(st.id){const i=a.findIndex(x=>x.id===st.id);if(i>=0)a[i]=st;else a.push(st);}else{st.id=uid();a.push(st);}
     if(putSets(a)){toast('세트를 저장했습니다');renderPanel();openSets();}};
@@ -1244,13 +1282,8 @@ function renderPanel(){
     const commanders=S.items.filter(i=>i.k==='u'&&i.cmd);
     P.innerHTML=`
     <div class="sec"><div class="sech"><h5>출동대 추가</h5><button class="lnk" id="setMgr">⚙ 세트 관리</button></div>
-      <div class="setl">${getSets().map(st=>`<div class="setr" title="${esc(st.name)} — ${esc(setSummary(st))}"><span class="sn">${esc(st.name)}</span><span class="ss">${esc(setSummary(st))}</span><button class="btn sm" data-set="${st.id}" aria-label="${esc(st.name)} 추가">추가</button></div>`).join('')||'<p class="hint">저장된 세트가 없습니다. ⚙ 세트 관리에서 만드세요.</p>'}</div>
-      <div class="addr">
-        <select class="fld" id="aType" aria-label="차량 종류">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}">${t.n}</option>`).join('')}</select>
-        <input class="fld" id="aCnt" type="number" min="1" max="20" value="1" aria-label="대수">
-        <input class="fld" id="aLabel" placeholder="이름 (선택)" aria-label="이름 직접 입력">
-        <button class="btn pri sm" id="aGo">추가</button>
-      </div></div>
+      <div class="setl">${getSets().map(st=>`<div class="setr" title="${esc(st.name)} — ${esc(setSummary(st))}"><span class="sn">${esc(st.name)}</span><span class="ss">${esc(setSummary(st))}</span>${S.setUsed&&S.setUsed[st.id]?`<button class="btn sm" disabled title="${hm(S.setUsed[st.id])} 추가됨">추가됨</button>`:`<button class="btn sm" data-set="${st.id}" aria-label="${esc(st.name)} 추가">추가</button>`}</div>`).join('')||'<p class="hint">저장된 세트가 없습니다. ⚙ 세트 관리에서 만드세요.</p>'}</div>
+      <button class="btn pri addbtn" id="aMore">+ 추가 출동대 편성</button></div>
     <div class="sec"><div class="row" style="margin-bottom:4px;align-items:center"><span style="font-size:12px;color:var(--muted)">차량 표시</span><span class="vmode"><button data-vm="img" class="${VMODE==='img'?'on':''}">🚒 이미지</button><button data-vm="chip" class="${VMODE!=='img'?'on':''}">칩</button></span></div><h5>미도착 · 출동중 <span>${tray.length}대 — 상황판으로 끌어 배치</span></h5>
       <div class="tray" id="trayBox">${tray.length?tray.map(i=>`<div class="tchip" data-id="${i.id}">${unitHTML(i)}</div>`).join(''):'<span class="empty">상황판의 차량을 여기로 끌어오면 미도착 상태로 돌아옵니다.</span>'}</div></div>
     <div class="sec"><h5>자원 현황</h5>
@@ -1317,6 +1350,7 @@ $('#pbody').addEventListener('click',e=>{const vm=e.target.closest('[data-vm]');
   if(b.dataset.view)return setView(b.dataset.view);
   if(b.dataset.set)return applySet(b.dataset.set);
   if(b.id==='setMgr')return openSets();
+  if(b.id==='aMore'){editSet(null,{apply:true});return;}
   if(b.id==='aGo'){const t=$('#aType').value,n=Math.max(1,Math.min(20,+$('#aCnt').value||1)),l=$('#aLabel').value.trim();addUnits(t,n,l);return;}
   if(b.dataset.ck!=null){const c=ckL().find(x=>x.id===b.dataset.ck);if(!c)return;if(S.checks[c.id]){delete S.checks[c.id];log('진행',c.n+' 체크 해제');}else{S.checks[c.id]=Date.now();log('진행',c.n);}renderAll();return;}
   if(b.id==='ckEd'){ckEdit=!ckEdit;renderPanel();return;}
@@ -1523,7 +1557,7 @@ function openBg(){
   m.querySelector('#bgPick').onclick=()=>$('#fileBg').click();m.querySelector('#bgDel')?.addEventListener('click',()=>{S.bg=null;S.bgBox=null;selBg=false;applyBg();renderSel();closeModal();dirty();});
   m.querySelector('#bgAdj')?.addEventListener('click',()=>{closeModal();selectBg();});
 }
-function loadBgBlob(f,how){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,2000/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);S.bg=c.toDataURL('image/jpeg',.82);S.bgBox=null;applyBg(selectBg);closeModal();dirty();log('기록','개황도 배경사진 적용'+(how?' ('+how+')':''));toast('배경 사진을 넣었습니다 — 주황 점으로 크기 조정');};im.src=r.result;};r.readAsDataURL(f);}
+function loadBgBlob(f,how){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,2000/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);S.bg=c.toDataURL('image/jpeg',.82);S.bgBox=null;applyBg();closeModal();dirty();log('기록','개황도 배경사진 적용'+(how?' ('+how+')':''));toast('배경 사진을 캔버스 전체에 맞췄습니다 — 조정은 선택 도구로 사진을 누르세요');};im.src=r.result;};r.readAsDataURL(f);}
 $('#fileBg').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadBgBlob(f);e.target.value='';});
 document.addEventListener('paste',e=>{const items=[...(e.clipboardData?.items||[])];const it=items.find(i=>i.kind==='file'&&i.type.startsWith('image/'));if(!it)return;
   e.preventDefault();const f=it.getAsFile();if(f)loadBgBlob(f,'붙여넣기');});
@@ -1532,7 +1566,7 @@ function applyBg(cb){const i=$('#bgimg');
   if(!S.bg){i.hidden=true;i.removeAttribute('src');return;}
   const place=()=>{const b=S.bgBox;i.style.left=b.x+'px';i.style.top=b.y+'px';i.style.width=b.w+'px';i.style.height=b.h+'px';i.style.opacity=S.bgOp??.55;i.hidden=false;if(selBg)renderSel();cb&&cb();};
   if(S.bgBox){if(i.getAttribute('src')!==S.bg)i.src=S.bg;place();return;}
-  const im=new Image();im.onload=()=>{const FW=CX,k=Math.min(FW/im.width,H/im.height);S.bgBox={x:Math.round((FW-im.width*k)/2),y:Math.round((H-im.height*k)/2),w:Math.round(im.width*k),h:Math.round(im.height*k)};i.src=S.bg;place();dirty();};im.src=S.bg;}
+  const im=new Image();im.onload=()=>{const FW=W,k=Math.max(FW/im.width,H/im.height);S.bgBox={x:Math.round((FW-im.width*k)/2),y:Math.round((H-im.height*k)/2),w:Math.round(im.width*k),h:Math.round(im.height*k)};i.src=S.bg;place();dirty();};im.src=S.bg;}
 
 /* files */
 function openFiles(){
@@ -1575,17 +1609,17 @@ async function exportImg(){
   g.fillStyle='#fbfcfd';g.fillRect(0,0,W,H+60);
   g.fillStyle='#0d2c5e';g.fillRect(0,H,W,60);g.fillStyle='#fff';g.font='700 22px "IBM Plex Sans KR",sans-serif';g.fillText(`${S.meta.title||'전술상황판'}  ·  ${S.meta.addr||''}`,20,H+38);
   g.font='600 18px "IBM Plex Mono",monospace';const tl=`접수 ${hms(S.meta.t0)}  |  작성 ${new Date().toLocaleDateString('ko-KR')} ${hms(Date.now())}`;g.fillText(tl,W-20-g.measureText(tl).width,H+38);
-  if(S.bg){const im=new Image();im.src=S.bg;await im.decode().catch(()=>{});const bb=S.bgBox||{x:0,y:0,w:CX,h:H};g.globalAlpha=S.bgOp??.55;g.drawImage(im,bb.x,bb.y,bb.w,bb.h);g.globalAlpha=1;}
+  if(S.bg){const im=new Image();im.src=S.bg;await im.decode().catch(()=>{});const bb=S.bgBox||{x:0,y:0,w:W,h:H};g.globalAlpha=S.bgOp??.55;g.drawImage(im,bb.x,bb.y,bb.w,bb.h);g.globalAlpha=1;}
   const EM=zl().m;const med=S.victims.filter(v=>['구조완료','임시의료소','병원이송'].includes(v.status)).sort((a,b)=>a.no-b.no);
   for(const k of S.pno){const b=zbox(k),w=b.x1-b.x0,hh=b.y1-b.y0,mn=!!EM[k];g.save();g.translate(b.x0,b.y0);
     if(k==='prog'){g.save();rr(g,0,0,w,hh,10);g.clip();g.fillStyle='rgba(255,236,170,.9)';g.fillRect(0,0,w,hh);
-      g.fillStyle='#111';g.font='500 18px "IBM Plex Sans KR",sans-serif';g.fillText('진행사항',10,mn?24:27);g.font='700 12px "IBM Plex Sans KR",sans-serif';g.fillStyle='#8a1b13';{const st=(mn?ckDone()+'/'+ckL().length+' ':'')+(S.stage||'');g.fillText(st,w-48-g.measureText(st).width,mn?23:26);}
-      if(!mn){ckL().forEach((cc,i)=>{const cs=S.checks[cc.id];const y=52+i*20;g.strokeStyle=cs?'#c0261d':'#333';g.lineWidth=2;g.beginPath();g.arc(20,y-5,8,0,7);g.stroke();g.fillStyle='#111';g.font='700 14px "IBM Plex Sans KR",sans-serif';const mx=Math.floor((w-110)/13);g.fillText(`${i+1}. ${cc.n}`.slice(0,mx),34,y);if(cs){g.font='12px "IBM Plex Mono",monospace';g.fillStyle='#555';g.fillText(hm(cs),w-50,y);}});
-        S.memos.slice(-2).forEach((m,i)=>{g.fillStyle='#111';g.font='500 12.5px "IBM Plex Sans KR",sans-serif';g.fillText(('- '+m.text).slice(0,Math.floor((w-20)/11)),10,52+ckL().length*20+4+i*18);});}
+      g.fillStyle='#9a5b00';g.fillRect(0,0,w,mn?hh:38);g.fillStyle='#fff';g.font='700 18px "IBM Plex Sans KR",sans-serif';g.fillText('진행사항',12,26);g.font='700 12px "IBM Plex Sans KR",sans-serif';{const st=(mn?ckDone()+'/'+ckL().length+' ':'')+(S.stage||'');g.fillText(st,w-48-g.measureText(st).width,25);}
+      if(!mn){ckL().forEach((cc,i)=>{const cs=S.checks[cc.id];const y=62+i*20;g.strokeStyle=cs?'#c0261d':'#333';g.lineWidth=2;g.beginPath();g.arc(20,y-5,8,0,7);g.stroke();g.fillStyle='#111';g.font='700 14px "IBM Plex Sans KR",sans-serif';const mx=Math.floor((w-110)/13);g.fillText(`${i+1}. ${cc.n}`.slice(0,mx),34,y);if(cs){g.font='12px "IBM Plex Mono",monospace';g.fillStyle='#555';g.fillText(hm(cs),w-50,y);}});
+        S.memos.slice(-2).forEach((m,i)=>{g.fillStyle='#111';g.font='500 12.5px "IBM Plex Sans KR",sans-serif';g.fillText(('- '+m.text).slice(0,Math.floor((w-20)/11)),10,62+ckL().length*20+4+i*18);});}
       g.restore();rr(g,0.5,0.5,w-1,hh-1,10);g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();}
-    else{rr(g,0.5,0.5,w-1,hh-1,10);g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();
-      g.font='500 18px "IBM Plex Sans KR",sans-serif';g.fillStyle='#111';g.fillText(b.name,12,mn?25:31);
-      g.font='500 13px "IBM Plex Mono",monospace';g.fillStyle='#5b6575';const cn=S.items.filter(i=>i.k==='u'&&locate(i.x,i.y,i.placed).z===k).length+'대';g.fillText(cn,w-50-g.measureText(cn).width,mn?24:27);
+    else{rr(g,0.5,0.5,w-1,hh-1,10);g.save();rr(g,0.5,0.5,w-1,hh-1,10);g.clip();g.fillStyle=ZHC[k]||'#3a3f48';g.fillRect(0,0,w,mn?hh:38);g.restore();g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();
+      g.font='700 18px "IBM Plex Sans KR",sans-serif';g.fillStyle='#fff';g.fillText(b.name,12,26);
+      g.font='700 13px "IBM Plex Mono",monospace';g.fillStyle='#fff';const cn=S.items.filter(i=>i.k==='u'&&locate(i.x,i.y,i.placed).z===k).length+'대';g.fillText(cn,w-50-g.measureText(cn).width,25);
       if(k==='med'&&!mn){g.font='700 14px "IBM Plex Sans KR",sans-serif';med.slice(0,Math.max(0,Math.floor((hh-56)/21))).forEach((v,i)=>{const yy=44+15+i*21;g.fillStyle=TRI[v.triage||''].c;g.beginPath();g.arc(14,yy-5,4.5,0,7);g.fill();g.fillStyle='#111';g.fillText(`${i+1}. ${vline(v)}`.slice(0,Math.floor((w-30)/13)),22,yy);});}}
     g.restore();}
   for(const s of S.strokes)if(!s.zhid)drawStroke(g,s);
