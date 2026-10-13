@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>전자 전술상황판</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,6 +66,11 @@ button{cursor:pointer}
 .bt{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-bottom:0;background:var(--panel2);border-radius:9px 9px 0 0;padding:6px 6px 6px 12px;font-size:13px;color:var(--muted);white-space:nowrap;cursor:pointer;flex:none;max-width:240px}
 .bt .nm{overflow:hidden;text-overflow:ellipsis;font-weight:700}
 .bt .el{font-family:var(--f-mono);font-size:11.5px}
+.bt.tdrag{position:relative;z-index:5;opacity:.92;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:grabbing;transition:none}
+.bt.tins-l{box-shadow:inset 3px 0 0 var(--signal)}.bt.tins-r{box-shadow:inset -3px 0 0 var(--signal)}
+.top .bt[data-bid]{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.bt .btin{font:inherit;font-weight:700;font-size:12.5px;width:150px;border:1.5px solid var(--accent);border-radius:5px;padding:1px 6px;background:#fff;color:var(--ink);outline:none}
+.bt.on:not(.ren) .nm{cursor:text}.bt.on:not(.ren):hover .nm{text-decoration:underline dotted;text-underline-offset:3px}
 .bt .x{border:0;background:transparent;color:var(--muted);font-size:14px;width:22px;height:22px;border-radius:5px;padding:0;cursor:pointer}
 .bt .x:hover{background:var(--line);color:var(--signal)}
 .bt.on{background:var(--panel);color:var(--ink);box-shadow:inset 0 3px 0 var(--accent)}
@@ -361,19 +366,42 @@ kbd{font:600 11px var(--f-mono);background:#eef2f8;border:1px solid #c9d3e3;bord
 .vic .no{position:absolute;right:-9px;top:-8px;background:#111;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:0 5px;line-height:17px}
 .vic .lb{font-size:13px;font-weight:700;color:#111;background:rgba(255,255,255,.85);padding:0 4px;border-radius:3px;margin-top:1px;white-space:nowrap}
 .vic.done .ic::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(45deg,transparent 46%,#1d7a46 46% 54%,transparent 54%)}
-.prog{position:absolute;overflow:hidden;background:#ffecaa;border:1px solid #3a3f48;border-radius:10px;padding:44px 10px 6px;color:#111;font-size:14px;line-height:1.42;pointer-events:auto;cursor:pointer}
+.prog{position:absolute;overflow:hidden;background:#ffecaa;border:1px solid #3a3f48;border-radius:10px;padding:44px 10px 6px;color:#111;font-size:16px;line-height:1.5;pointer-events:auto;cursor:pointer}
 .prog::before{content:"";position:absolute;left:0;right:0;top:0;height:38px;background:#9a5b00;pointer-events:none}
 .prog.min{padding:0}.prog.min::before{height:100%}
-.prog h4{position:absolute;left:12px;right:44px;top:8px;margin:0;font-family:var(--f-body);font-weight:700;font-size:18px;color:#fff;display:flex;justify-content:space-between;align-items:baseline;gap:8px;text-shadow:0 1px 1px rgba(0,0,0,.25);z-index:1}
+.prog h4{position:absolute;left:12px;right:110px;top:8px;margin:0;font-family:var(--f-body);font-weight:700;font-size:18px;color:#fff;display:flex;justify-content:space-between;align-items:baseline;gap:8px;text-shadow:0 1px 1px rgba(0,0,0,.25);z-index:1}
 .prog .mn{background:rgba(255,255,255,.22);color:#fff;z-index:1}
+.prog .pgear{position:absolute;right:40px;top:5px;width:30px;height:26px;border-radius:6px;background:rgba(255,255,255,.22);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:2;cursor:pointer}.prog .pgear:hover{background:rgba(255,255,255,.38)}
+.prog .pedit{position:absolute;right:74px;top:5px;width:30px;height:26px;border-radius:6px;background:rgba(255,255,255,.22);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;z-index:2;cursor:pointer}.prog .pedit.on{background:#fff;color:#9a5b00}
+.prog .ra{display:inline-flex;gap:3px;flex:none;margin-left:4px}.prog .ra b{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;border-radius:5px;background:rgba(255,255,255,.75);border:1px solid rgba(154,91,0,.35);font-size:12px;color:#5a3a00;cursor:pointer}.prog .ra b.x{color:#c0261d}
+.prog .padd{margin:4px 0 2px;border:1.5px dashed rgba(154,91,0,.6);border-radius:7px;text-align:center;font-weight:700;color:#7a4700;padding:2px 0;font-size:14px}
+.prog .mh{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px}.prog .stgb{font-size:13.5px;font-weight:600;border-radius:6px;padding:1px 6px;background:rgba(255,255,255,.55);border:1px solid rgba(154,91,0,.35)}.prog .stgb b{color:#b5121b}.prog .madd{font-size:13px;font-weight:700;color:#fff;background:#9a5b00;border-radius:6px;padding:1px 9px}
+.prog .mr{display:flex;align-items:center;gap:6px;padding:1px 0}.prog .mr .mt{font-family:var(--f-mono);font-size:12.5px;color:#555;flex:none}.prog .mr .mx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}.prog:not(.ped) .mr .ra{display:none}
+.prog .ck{border-radius:6px;padding:1px 3px;margin:0 -3px}.prog .ck:hover{background:rgba(154,91,0,.12)}.prog .mm{cursor:pointer}
+.pbody.pm{padding:0;overflow:visible;flex:none;min-height:0}
 .prog h4 small{font-family:var(--f-body);font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);border-radius:999px;padding:1px 8px;white-space:nowrap}.prog h4 small:empty{display:none}
 .prog .ck{display:flex;gap:6px;align-items:center;font-weight:700}
-.prog .ck i{font-style:normal;width:18px;height:18px;border:2px solid #333;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
-.prog .ck.d i{border-color:#c0261d;color:#c0261d}
+.prog .ck i{font-style:normal;width:19px;height:19px;border:2px solid #333;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+.prog .ck.d i{border-color:#111;background:#111}
 .prog .cn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prog.min .ck,.prog.min .mm{display:none}
-.prog .ck span.tm{margin-left:4px;font-family:var(--f-mono);font-size:12px;color:#555}
-.prog .mm{border-top:1px dashed #999;margin-top:3px;padding-top:2px;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog .ck span.tm{margin-left:4px;font-family:var(--f-mono);font-size:13px;color:#555}
+.prog .mm{border-top:1px dashed #999;margin-top:5px;padding-top:4px;font-size:14px}
+#minline{position:absolute;z-index:85;display:flex;flex-wrap:wrap;align-items:center;gap:4px;background:#fff;border:2px solid #9a5b00;border-radius:8px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.25);font-family:var(--f-body)}
+#minline .mtm{width:96px;flex:none;margin-right:auto;border:1px solid #d6b56a;border-radius:6px;padding:3px 4px;font:600 13px var(--f-mono);background:#fffaf0}
+#minline .mtx{order:-1;flex:1 1 100%;min-width:0;border:1px solid #d6b56a;border-radius:6px;padding:4px 7px;font-size:15px;font-weight:600;background:#fffaf0;outline:none}#minline .mtx:focus{border-color:#9a5b00;background:#fff}
+#minline .mb{flex:none;border:0;border-radius:6px;padding:5px 9px;font-size:13.5px;font-weight:700;cursor:pointer;background:#eee;color:#333}#minline .mb.ok{background:#9a5b00;color:#fff}#minline .mb.dl{background:#c0261d;color:#fff}
+#minline.del{background:#fff5f4;border-color:#c0261d}#minline .q{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+#minline.stg .sc{display:flex;gap:4px;flex:1 1 100%}#minline .sb{flex:1;padding:6px 2px;font-size:13.5px;background:#fff7e0;border:1px solid #d6b56a;color:#5a3a00}#minline .sb.on{background:#b5121b;border-color:#b5121b;color:#fff}#minline .sb[data-s="없음"]{flex:.7}#minline .sb.on[data-s="없음"]{background:#6b7280;border-color:#6b7280}
+#minline .mck{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#5a3a00;margin-left:auto;margin-right:4px}
+#mfix[hidden],#retBin[hidden]{display:none!important}
+#mfix{position:absolute;z-index:84;display:flex;gap:4px;align-items:center;height:34px}
+#mfix .mfx{flex:1;min-width:0;height:32px;border:1.5px solid #c99a3e;border-radius:7px;padding:0 8px;font-size:15px;font-weight:600;background:#fffdf5;outline:none;font-family:var(--f-body)}#mfix .mfx:focus{border-color:#9a5b00;background:#fff;box-shadow:0 0 0 2px rgba(154,91,0,.2)}
+#mfix .mb{flex:none;border:0;border-radius:7px;height:32px;padding:0 12px;font-size:14px;font-weight:700;cursor:pointer;background:#9a5b00;color:#fff}
+.prog .mslot{height:36px;margin:3px 0 4px}
+#retBin{position:fixed;z-index:950;transform:translateX(-50%);background:rgba(13,44,94,.92);color:#fff;border:2px dashed rgba(255,255,255,.7);border-radius:999px;padding:12px 22px;font-size:15px;font-weight:600;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.3);white-space:nowrap}
+#retBin.hot{background:#d4271d;border-style:solid;transform:translateX(-50%) scale(1.06)}
+.tray.hot{background:color-mix(in srgb,var(--accent) 10%,var(--panel2))}
 #txted{position:absolute;z-index:80;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
 #txtin{font-weight:700;border:2px dashed #1d63c9;background:#fff;color:#111;padding:2px 6px;min-width:260px;font-family:var(--f-body);line-height:1.25;resize:none;overflow:hidden;field-sizing:content;max-width:900px}
 #txted .tb{display:flex;gap:5px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,.95);padding:5px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
@@ -456,6 +484,9 @@ table.sum td.z{color:var(--muted)}
 .modal .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .modal textarea{min-height:140px;font-family:var(--f-mono);font-size:12px}
 .modal img.exp{width:100%;border-radius:8px;border:1px solid var(--line)}
+.mask.light{background:rgba(5,10,20,.16)}
+.modal h2.mdh{cursor:move;user-select:none;-webkit-user-select:none;touch-action:none;position:relative;padding-right:22px}.modal h2.mdh::after{content:"⠿";position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);opacity:.6}
+.modal.mdrag{box-shadow:0 18px 40px rgba(0,0,0,.35);opacity:.97}
 .toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 16px;border-radius:999px;font-size:13px;z-index:2000;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 
@@ -547,6 +578,7 @@ table.sum td.z{color:var(--muted)}
     </div>
     <div class="topbtns">
       <button class="btn" id="bFull" title="전체화면 (Esc로 해제)">⛶ 전체화면</button>
+      <button class="btn" id="bAddB" title="새 상황판을 탭으로 추가">+ 상황판 추가</button>
       <button class="btn" id="bFiles">저장·불러오기</button>
       <button class="btn pri" id="bImg">📷 스크린샷</button>
       <button class="btn" id="bAbout" title="만든이">ⓘ 만든이</button>
@@ -557,7 +589,7 @@ table.sum td.z{color:var(--muted)}
     <aside class="panel">
       <nav class="tabs" id="tabs">
         <button data-t="res" class="on">자원 <span class="bd" id="bdRes">0</span></button>
-        <button data-t="prog">진행 <span class="bd" id="bdProg">0/8</span></button>
+        <button data-t="prog" style="display:none" aria-hidden="true">진행 <span class="bd" id="bdProg">0/8</span></button>
         <button data-t="log">기록</button>
         <button data-t="sop">참고자료</button>
       </nav>
@@ -611,9 +643,12 @@ function defaultPanelRects(){const PW=320,RX=ZW-PW-3;return{prog:{a:'l',x:3,y:3,
 function ensurePanels(){if(S.pn&&S.pno)return;const L=zl();
   if(Object.values(L.m||{}).some(Boolean)){L.m={};try{relayoutZonesOld();}catch(e){}}
   computeZonesOld();S.pn={};ZORDER.forEach(k=>{const b=zbox(k);S.pn[k]={a:'r',x:3,y:Math.round((b.y0+2)/pky()),w:331,h:Math.round(Math.max(60,b.y1-b.y0-4)/pky())};});S.pno=ZORDER.slice();L.m={};S.pky=1;}
-let _fitC=null;function fitProgW(){const L=ckL();_fitC=_fitC||document.createElement('canvas').getContext('2d');_fitC.font='700 14px "IBM Plex Sans KR","Malgun Gothic",sans-serif';
-  let mx=0;L.forEach((c,i)=>{mx=Math.max(mx,_fitC.measureText(`${i+1}. ${c.n}`).width);});_fitC.font='700 14px "IBM Plex Sans KR",sans-serif';const two=_fitC.measureText('가나').width;
-  const hasT=L.some(c=>S.checks[c.id]);return Math.round(Math.max(170,22+24+mx+two+(hasT?44:0)));}
+let _fitC=null;function fitProgW(){const L=ckL();_fitC=_fitC||document.createElement('canvas').getContext('2d');_fitC.font='700 16px "IBM Plex Sans KR","Malgun Gothic",sans-serif';
+  let mx=0;L.forEach((c,i)=>{mx=Math.max(mx,_fitC.measureText(`${i+1}. ${c.n}`).width);});_fitC.font='700 16px "IBM Plex Sans KR",sans-serif';const two=_fitC.measureText('가나').width;
+  const hasT=L.some(c=>S.checks[c.id]);return Math.round(Math.min(560,Math.max(250,22+26+mx+two+(hasT?50:0)+(PEDIT?122:0))));}
+let PROG_NEED=0;function progCap(){const P=S.pn&&S.pn.prog;const y=P?Math.round(P.y*pky()):0;return Math.max(200,H-y-4);}
+function fitProgH(){const cap=progCap();if(PROG_NEED)return Math.min(cap,Math.max(160,PROG_NEED));const n=ckL().length,mm=Math.min(S.memos.length,8);return Math.round(Math.min(cap,Math.max(200,44+n*25+(PEDIT?32:0)+14+30+mm*25+16)));}
+function growProg(){const P=S.pn&&S.pn.prog;if(!P||!P.manual||!PROG_NEED)return;const ky=pky(),cur=P.h*ky,need=Math.min(progCap(),PROG_NEED);if(need>cur+2){P.h=Math.round(need/ky);applyPanels();renderZones();}}
 let VH=1000;function pky(){try{return (S&&S.pky)||1;}catch(e){return 1;}}
 function tky(){return Math.max(1,Math.min(H,VH)/1000);}
 function applyPanels(){applyPanelsK(pky());}
@@ -626,7 +661,7 @@ function syncPanelScale(){if(!S||!S.pn||!S.pno)return false;const ky=Math.round(
     const mem=new Set();pc.forEach(o=>{o.c.objs.forEach(x=>mem.add(x));o.c.sts.forEach(x=>mem.add(x));});S.strokes.forEach(st=>{if(st.t!=='t'||st.gid||mem.has(st))return;if(zoneAt(st.x,st.y))st.pfx=1;else delete st.pfx;});
     S.items.concat(S.victims).forEach(o=>{if(o.x==null||(o.k==='u'&&!o.placed)||(o.placed===false&&!o.k))return;if(mem.has(o))return;if(zoneAt(o.x,o.y))o.pfx=1;else delete o.pfx;});}
   return true;}
-function applyPanelsK(ky){const m=zl().m;{const P=S.pn&&S.pn.prog;if(P&&!P.manual)P.w=fitProgW();}ZORDER.forEach(k=>{const P=S.pn[k],b=zbox(k);b.x0=P.a==='r'?CX+P.x:P.x;b.x1=b.x0+P.w;b.y0=Math.round(P.y*ky);b.h=Math.round(P.h*ky);b.y1=b.y0+(m[k]?ZHDR:b.h);});}
+function applyPanelsK(ky){const m=zl().m;{const P=S.pn&&S.pn.prog;if(P&&!P.manual){P.w=fitProgW();P.h=Math.round(fitProgH()/ky);}}ZORDER.forEach(k=>{const P=S.pn[k],b=zbox(k);b.x0=P.a==='r'?CX+P.x:P.x;b.x1=b.x0+(k==='prog'&&PEDIT&&P.manual?Math.max(P.w,fitProgW()):P.w);b.y0=Math.round(P.y*ky);b.h=Math.round(P.h*ky);b.y1=b.y0+(m[k]?ZHDR:b.h);});}
 function computeZones(){ensurePanels();applyPanels();}
 function zoneAt(x,y){for(let i=S.pno.length-1;i>=0;i--){const k=S.pno[i];const b=zbox(k);if(x>=b.x0&&x<=b.x1&&y>=b.y0&&y<=b.y1)return k;}return null;}
 function inFull(k,x,y){const b=zbox(k);return x>=b.x0&&x<=b.x1&&y>=b.y0&&y<=b.y0+b.h;}
@@ -643,7 +678,7 @@ function toggleZone(k){const L=zl(),b=zbox(k);
   else{S.items.concat(S.victims).forEach(o=>{if(o.zp===k){o.y=Math.round(b.y0+o.zdy);delete o.zp;delete o.zdy;}});
     S.strokes.forEach(st=>{if(st.zp===k){const ay=st.t==='t'?st.y:(st.pts?st.pts[0][1]:st.a[1]);shiftStrokeY(st,b.y0+st.zdy-ay);delete st.zp;delete st.zdy;delete st.zhid;}});L.m[k]=false;}
   applyPanels();redraw();renderAll();}
-function resetPanels(){const D=defaultPanelRects();ZORDER.forEach(k=>{const b=zbox(k);const c=panelCollect(k);const P=S.pn[k];const tx=CX+D[k].x,ty=Math.round(D[k].y*pky());moveCollected(c,tx-b.x0,ty-b.y0);Object.assign(P,D[k]);});S.pno=ZORDER.slice();applyPanels();redraw();renderAll();log('기록','패널 위치 정렬');}
+function resetPanels(){const D=defaultPanelRects();ZORDER.forEach(k=>{const b=zbox(k);const c=panelCollect(k);const P=S.pn[k];const tx=CX+D[k].x,ty=Math.round(D[k].y*pky());moveCollected(c,tx-b.x0,ty-b.y0);Object.assign(P,D[k]);if(k==='prog')delete P.manual;});S.pno=ZORDER.slice();applyPanels();redraw();renderAll();log('기록','패널 위치 정렬');}
 function relayoutZonesOld(){
   const old=ZONES.map(z=>({id:z.id,y0:z.y0,y1:z.y1}));computeZonesOld();const L=zl();
   const fix=o=>{if(o.x==null||o.x<CX)return;const oz=old.find(z=>o.y>=z.y0&&o.y<z.y1);if(!oz)return;const nz=zbox(oz.id);const dy=o.zdy!=null?o.zdy:o.y-oz.y0;
@@ -751,7 +786,9 @@ const MKEY='ictc-tboard-multi',BKEY=id=>'ictc-tboard-b:'+id;let BIDX={active:nul
 function idxSave(){try{localStorage.setItem(MKEY,JSON.stringify(BIDX));}catch(e){}}
 function boardLoad(id){try{const r=localStorage.getItem(BKEY(id));if(r){const o=JSON.parse(r);if(o&&o.v===1)return o;}}catch(e){}return null;}
 let saveWarned=false;
-function save(){const e=BIDX.ids.find(x=>x.id===BIDX.active);if(e){e.title=S.meta.title;e.t0=S.meta.t0;e.clock=clk();}idxSave();
+let ckSig=null;const ckSigOf=()=>((S&&S.ck)||[]).map(c=>c.n).join('\n');
+function ckRemember(){if(!S||!Array.isArray(S.ck))return;const sg=ckSigOf();if(ckSig===null){ckSig=sg;return;}if(sg===ckSig)return;ckSig=sg;if(S.meta&&S.meta.example||!S.ck.length)return;const o=ckStore();o.def=S.ck.map(c=>c.n);ckPut(o);}
+function save(){ckRemember();const e=BIDX.ids.find(x=>x.id===BIDX.active);if(e){e.title=S.meta.title;e.t0=S.meta.t0;e.clock=clk();}idxSave();
   try{localStorage.setItem(BKEY(BIDX.active),JSON.stringify(S));saveWarned=false;}catch(err){if(!saveWarned){saveWarned=true;toast('저장 공간이 부족합니다. 쓰지 않는 상황판 탭을 닫거나 배경사진을 지우세요');}}}
 let saveT;function dirty(){clearTimeout(saveT);saveT=setTimeout(save,400);}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.v===1)return migrate(o);}}catch(e){}return null;}
@@ -801,7 +838,7 @@ function genBuilding(B){
   const yb=y,roofTop=rows[0].l==='옥상'?top+rows[0].h:top;
   st.push({t:'r',c:C,w:5,a:[x0,roofTop],b:[x1,yb],gid});
   let yy=top;rows.forEach((r,i)=>{yy+=r.h;if(i<rows.length-1&&yy>roofTop+1)st.push({t:'l',c:C,w:4,a:[x0,yy],b:[x1,yy],gid});});
-  if(B.stair){st.push({t:'l',c:C,w:4,a:[x0+colW,roofTop],b:[x0+colW,yb],gid});st.push({t:'t',c:C,size:Math.max(12,Math.min(16,colW/3)),x:x0+6,y:roofTop+20,s:'계단',gid});}
+  if(B.stair){const R=B.stairSide==='R',lx=R?x1-colW:x0+colW;st.push({t:'l',c:C,w:4,a:[lx,roofTop],b:[lx,yb],gid});st.push({t:'t',c:C,size:Math.max(12,Math.min(16,colW/3)),x:(R?x1-colW:x0)+6,y:roofTop+20,s:'계단',gid});}
   let yg=yb;if(ug){yg=top;for(const r of rows){if(/^B/i.test(r.l))break;yg+=r.h;}}
   st.push({t:'l',c:C,w:5,a:[x0-80,yg],b:[x1+80,yg],gid});
   if(B.face)st.push({t:'t',c:C,size:40,x:x0+w/2-40,y:yb+62,s:B.face+'면',gid,disp:1});
@@ -814,7 +851,7 @@ function makeBuilding(o,silent){
   const labels=o.floors.split(',').map(s=>s.trim()).filter(Boolean);if(!labels.length)return;
   const wt=l=>l==='…'||l==='~'?.45:(l==='옥상'?.7:1);
   const top=o.y||60,h=Math.min(780,labels.reduce((a,l)=>a+wt(l),0)*66);
-  const B={gid:uid(),name:o.name||'',floors:labels.join(','),stair:!!o.stair,face:o.face||'',fireline:!!o.fireline,x0:o.x,y0:top,w:o.w||380,h};
+  const B={gid:uid(),name:o.name||'',floors:labels.join(','),stair:!!o.stair,stairSide:o.stairSide==='R'?'R':'L',face:o.face||'',fireline:!!o.fireline,x0:o.x,y0:top,w:o.w||380,h};
   S.buildings.push(B);applyBuilding(B);
   if(!silent)log('기록','개황도 건물 작성 - '+(B.name||labels.filter(l=>l!=='…'&&l!=='옥상').join('·')));
   return B;
@@ -883,23 +920,102 @@ function bp(e){const r=board.getBoundingClientRect();return[(e.clientX-r.left)/s
 function overBoard(e){const r=stage.getBoundingClientRect();return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;}
 
 /* ---------- zones + items render ---------- */
-function renderZones(){
+function renderZones(){if(zl().m.prog&&$('#minline'))closeMemoInline();
   const z=$('#zones');
   const counts={};S.items.forEach(it=>{if(it.k!=='u')return;const L=locate(it.x,it.y,it.placed);counts[L.z]=(counts[L.z]||0)+1;});
   const med=S.victims.filter(v=>['구조완료','임시의료소','병원이송'].includes(v.status)).sort((a,b)=>a.no-b.no);
   const M=zl().m;
   z.innerHTML=S.pno.map(k=>{if(k==='prog')return progHTML();const q=zbox(k);return `<div class="zone ${M[q.id]?'min':''}" style="left:${q.x0}px;top:${q.y0}px;width:${q.x1-q.x0}px;height:${q.y1-q.y0}px;--zt:${q.t};--zh:${ZHC[q.id]||'#3a3f48'}"><h3>${q.name}</h3><span class="cnt">${counts[q.id]||0}대</span><span class="mn">${M[q.id]?'+':'−'}</span>${M[q.id]?'':'<span class="rs"></span>'}${q.id==='med'?`<div class="medlist">${med.slice(0,Math.max(0,Math.floor((q.y1-q.y0-56)/21))).map((v,i)=>`<div><span class="tg" style="background:${TRI[v.triage||''].c}"></span>${i+1}. ${esc(vline(v))}</div>`).join('')}</div>`:''}</div>`;}).join('');
+  {const pb=$('#progBox'),P=S.pn&&S.pn.prog;if(pb&&P&&!zl().m.prog&&!renderZones._g){const prev=pb.style.height;pb.style.height='auto';const need=Math.ceil(pb.scrollHeight)+2+50;pb.style.height=prev;if(Math.abs(need-PROG_NEED)>2){PROG_NEED=need;if(!P.manual){applyPanels();renderZones._g=1;try{renderZones();}finally{renderZones._g=0;}}}}}
+  placeMemoFix();
 }
 function vline(v){const who=v.ff?['[대원]',v.loc,v.name||'소방대원',v.acc].filter(Boolean).join(' '):[v.loc,(v.desc||'구조대상자')+(v.count||1)+(v.desc?'':'명')].filter(Boolean).join(' ');return `${who}${v.injury?', '+v.injury:''}${v.unit?'('+v.unit+')':''}${v.status==='병원이송'?' →'+(v.hospital||'이송'):''}`;}
 const isVU=it=>VMODE==='img'&&!!VEH[it.type];
 function unitHTML(it,cls='',plain,sc){const T=TYPES[it.type]||TYPES.etc;
   if(!plain&&VMODE==='img'&&VEH[it.type])return `<div class="unit vu ${cls}" style="--c:${T.c};--fc:${T.f}" title="${T.n} ${esc(it.label)}"><img src="${VEH[it.type][2]}" alt="" draggable="false"${sc&&sc!==1?` style="max-height:${36*sc}px;max-width:${66*sc}px"`:''}>${it.cmd?'<b class="cm">단</b>':''}${it.rit?'<b class="rt">R</b>':''}<span class="vl">${esc(it.label)}</span></div>`;
   return `<div class="unit ${cls}" style="--c:${T.c};--fc:${T.f}">${it.cmd?'<b class="cm">단</b>':''}${it.rit?'<b class="rt">R</b>':''}${esc(it.label)}</div>`;}
+let PEDIT=false;
 function progHTML(){
   const CK=ckL(),done=ckDone();
   const M=zl().m,b=PROGB;
-  return `<div class="prog ${M.prog?'min':''}" id="progBox" style="left:${b.x0}px;top:${b.y0}px;width:${b.x1-b.x0}px;height:${b.y1-b.y0}px"><span class="mn">${M.prog?'+':'−'}</span>${M.prog?'':'<span class="rs"></span>'}<h4>진행사항 <small>${M.prog?done+'/'+CK.length+' ':''}${esc(S.stage||'')}</small></h4>${CK.map((c,i)=>`<div class="ck ${S.checks[c.id]?'d':''}"><i>${S.checks[c.id]?'○':''}</i><span class="cn">${i+1}. ${esc(c.n)}</span><span class="tm">${S.checks[c.id]?hm(S.checks[c.id]):''}</span></div>`).join('')}${S.memos.length?`<div class="mm">${S.memos.slice(-2).map(m=>'<div>- '+esc(m.text)+'</div>').join('')}</div>`:''}</div>`;
+  const ed=PEDIT&&!M.prog;
+  return `<div class="prog ${M.prog?'min':''} ${ed?'ped':''}" id="progBox" style="left:${b.x0}px;top:${b.y0}px;width:${b.x1-b.x0}px;height:${b.y1-b.y0}px"><span class="mn">${M.prog?'+':'−'}</span><span class="pgear" title="진행사항 관리 (목록 저장·불러오기, 접수시각)" role="button" aria-label="진행사항 관리">⚙</span><span class="pedit ${ed?'on':''}" title="${ed?'편집 완료':'항목·메모 편집'}" role="button" aria-label="항목 편집">${ed?'✓':'✎'}</span>${M.prog?'':'<span class="rs"></span>'}<h4>진행사항 <small>${M.prog?done+'/'+CK.length+' ':''}${esc(S.stage||'')}</small></h4>`
+   +CK.map((c,i)=>`<div class="ck ${S.checks[c.id]?'d':''}" data-ck="${c.id}" title="${ed?'눌러서 이름 수정':'누르면 '+(S.checks[c.id]?'체크 해제':'수행 시각 기록')}"><i></i><span class="cn">${i+1}. ${esc(c.n)}</span><span class="tm">${S.checks[c.id]?hm(S.checks[c.id]):''}</span>${ed?`<span class="ra"><b data-cku2="${i}" title="위로">▲</b><b data-ckd2="${i}" title="아래로">▼</b><b data-cke="${c.id}" title="수정">✎</b><b class="x" data-ckx2="${c.id}" title="삭제">✕</b></span>`:''}</div>`).join('')
+   +(ed?`<div class="padd" data-ckadd>+ 항목 추가</div>`:'')
+   +`<div class="mm"><div class="mh"><span class="stgb" data-stgset title="대응단계 발령·해제">대응단계 : <b>${esc(S.stage||'없음')}</b></span></div><div class="mslot"></div>${S.memos.map((m,i)=>({m,i})).reverse().map(({m,i})=>`<div class="mr" data-mi="${i}"><span class="mt">${hm(m.t)}</span><span class="mx">${esc(m.text)}</span><span class="ra"><b data-me="${i}" title="수정">✎</b><b class="x" data-mx="${i}" title="삭제">✕</b></span></div>`).join('')}</div></div>`;
 }
+function inputDlg(title,fields,fn,extra=''){const m=modal(`<h2>${title}</h2>${fields.map((f,i)=>`<label>${f.label}<input class="fld" id="dlgF${i}" type="${f.type||'text'}" ${f.step?`step="${f.step}"`:''} value="${esc(f.value||'')}" placeholder="${esc(f.ph||'')}"></label>`).join('')}${extra}<div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="dlgOk">확인</button></div>`);
+  const go=()=>{const v=fields.map((f,i)=>m.querySelector('#dlgF'+i).value);if(fn(v,m)!==false)closeModal();};m.querySelector('#dlgOk').onclick=go;
+  m.querySelectorAll('input.fld').forEach(x=>x.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();go();}}));setTimeout(()=>{const f=m.querySelector('#dlgF0');if(f){f.focus();f.select&&f.select();}},60);return m;}
+function hmIn(t){const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function setHM(t,v){const[h,mi]=String(v||'').split(':').map(Number);if(isNaN(h))return t;const d=new Date(t);d.setHours(h,mi||0,0,0);return d.getTime();}
+function ckRename(id){const c=ckL().find(x=>x.id===id);if(!c)return;inputDlg('진행사항 항목 수정',[{label:'항목 이름',value:c.n}],v=>{const n=v[0].trim();if(!n){toast('이름을 입력하세요');return false;}if(n!==c.n){log('진행',`진행사항 항목 수정 - ${c.n} → ${n}`);c.n=n;}renderAll();});}
+function ckAddDlg(){inputDlg('진행사항 항목 추가',[{label:'항목 이름',ph:'예: 유관기관 통보'}],v=>{const n=v[0].trim();if(!n){toast('이름을 입력하세요');return false;}ckL().push({id:uid(),n});log('진행','진행사항 항목 추가 - '+n);renderAll();growProg();});}
+function ckDel(id){const L=ckL(),i=L.findIndex(x=>x.id===id);if(i<0)return;const c=L[i];confirmBox('항목 삭제',`‘${esc(c.n)}’ 항목을 삭제합니다.${S.checks[c.id]?' 체크 기록도 함께 지워집니다.':''}`,'삭제',()=>{L.splice(i,1);delete S.checks[c.id];log('진행','진행사항 항목 삭제 - '+c.n);renderAll();});}
+function memoDlg(i){const m=i!=null?S.memos[i]:null;
+  const dm=inputDlg(m?'메모 수정':'진행사항 메모 기록',[{label:'내용',value:m?m.text:'',ph:'예: 갈매기 지원요청 / 물탱크 4대 추가요청'},{label:'시각',type:'time',value:hmIn(m?m.t:Date.now())}],v=>{const t=v[0].trim();if(!t){toast('내용을 입력하세요');return false;}
+    if(m){m.text=t;m.t=setHM(m.t,v[1]);log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),v[1]),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);}renderAll();growProg();});
+  if(m){const a=dm.querySelector('.acts');const d=document.createElement('button');d.className='btn danger';d.textContent='삭제';d.style.marginRight='auto';d.onclick=()=>memoDel(i);a.prepend(d);}}
+function memoDel(i){const m=S.memos[i];if(!m)return;confirmBox('메모 삭제',`${hm(m.t)} ‘${esc(m.text)}’ 메모를 삭제합니다.`,'삭제',()=>{S.memos.splice(i,1);log('진행','메모 삭제 - '+m.text);renderAll();});}
+function stageDlg(){const cur=S.stage||'없음';const m=modal(`<h2>대응단계 발령</h2><div class="chipf" id="sdStg" style="gap:6px">${['없음','대응1단계','대응2단계','대응3단계'].map(x=>`<button type="button" data-s="${x}" class="${x===cur?'on':''}" style="font-size:15px;padding:6px 14px">${x}</button>`).join('')}</div>
+  <label>발령 시각<input class="fld" type="time" id="sdT" value="${hmIn(Date.now())}"></label><label class="ck"><input type="checkbox" id="sdMemo" checked> 진행사항 메모로 기록</label>
+  <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="sdOk">확인</button></div>`);let sel=cur;
+  m.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{sel=b.dataset.s;m.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('on',x===b));});
+  m.querySelector('#sdOk').onclick=()=>{const t=setHM(Date.now(),m.querySelector('#sdT').value);const prev=S.stage||'없음';S.stage=sel==='없음'?'':sel;
+    if(sel!==prev){const txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);if(m.querySelector('#sdMemo').checked){S.memos.push({t,text:txt});S.memos.sort((a,b)=>a.t-b.t);}if(sel!=='없음')autoCheck(4);}
+    closeModal();renderAll();};}
+
+function closeMemoInline(){const o=$('#minline');if(o)o.remove();}
+function memoInline(i,mode){closeMemoInline();const pb=$('#progBox');if(!pb)return;const m=i!=null?S.memos[i]:null;
+  const tgt=m?pb.querySelector(`[data-mi="${i}"]`):pb.querySelector('.mh');if(!tgt)return;
+  const br=board.getBoundingClientRect(),pr=pb.getBoundingClientRect(),tr=tgt.getBoundingClientRect();
+  const x=(pr.left-br.left)/scale+6,w=pr.width/scale-12,y=(m?tr.top:tr.bottom)-br.top;
+  const o=document.createElement('div');o.id='minline';o.style.left=x+'px';o.style.top=(y/scale+(m?-3:2))+'px';o.style.width=w+'px';
+  if(mode==='del'){o.className='del';o.innerHTML=`<span class="q">‘${esc(m.text)}’ 메모를 삭제할까요?</span><button class="mb dl" data-a="del">삭제</button><button class="mb" data-a="no">취소</button>`;}
+  else o.innerHTML=`<input type="time" class="mtm" value="${hmIn(m?m.t:Date.now())}" aria-label="시각"><input class="mtx" value="${m?esc(m.text):''}" placeholder="진행사항 메모 (예: 갈매기 지원요청)" aria-label="메모 내용"><button class="mb ok" data-a="ok">${m?'수정':'기록'}</button>${m?'<button class="mb dl" data-a="del">삭제</button>':''}<button class="mb" data-a="no" aria-label="취소">✕</button>`;
+  board.appendChild(o);
+  ['pointerdown','click','mousedown','touchstart'].forEach(t=>o.addEventListener(t,e=>e.stopPropagation()));
+  const save=()=>{const t=o.querySelector('.mtx').value.trim();if(!t){o.querySelector('.mtx').focus();return;}const tv=o.querySelector('.mtm').value;
+    if(m){m.text=t;m.t=setHM(m.t,tv);S.memos.sort((a,b)=>a.t-b.t);log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),tv),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);}
+    closeMemoInline();renderAll();growProg();};
+  const del=()=>{const k=S.memos.indexOf(m);if(k>=0){S.memos.splice(k,1);log('진행','메모 삭제 - '+m.text);}closeMemoInline();renderAll();};
+  o.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='ok')save();else if(a==='del')del();else closeMemoInline();});
+  o.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();closeMemoInline();return;}if(e.key==='Enter'&&!e.isComposing&&mode!=='del'){e.preventDefault();save();}});
+  setTimeout(()=>{const f=o.querySelector('.mtx')||o.querySelector('[data-a="del"]');if(f){f.focus();f.select&&f.select();}},30);}
+
+function stageInline(){closeMemoInline();const pb=$('#progBox');if(!pb)return;const tgt=pb.querySelector('.mh');if(!tgt)return;
+  const br=board.getBoundingClientRect(),pr=pb.getBoundingClientRect(),tr=tgt.getBoundingClientRect();const cur=S.stage||'없음';
+  const o=document.createElement('div');o.id='minline';o.className='stg';o.style.left=((pr.left-br.left)/scale+6)+'px';o.style.top=((tr.bottom-br.top)/scale+2)+'px';o.style.width=(pr.width/scale-12)+'px';
+  o.innerHTML=`<div class="sc">${['없음','대응1단계','대응2단계','대응3단계'].map(x=>`<button class="mb sb ${x===cur?'on':''}" data-s="${x}">${x==='없음'?'해제':x}</button>`).join('')}</div><input type="time" class="mtm" value="${hmIn(Date.now())}" aria-label="발령 시각"><label class="mck"><input type="checkbox" checked> 메모 기록</label><button class="mb" data-a="no" aria-label="닫기">✕</button>`;
+  board.appendChild(o);['pointerdown','click','mousedown','touchstart'].forEach(t=>o.addEventListener(t,e=>e.stopPropagation()));
+  o.addEventListener('click',e=>{const b=e.target.closest('[data-s],[data-a]');if(!b)return;if(b.dataset.a){closeMemoInline();return;}
+    const sel=b.dataset.s,prev=S.stage||'없음';if(sel===prev){closeMemoInline();return;}
+    const t=setHM(Date.now(),o.querySelector('.mtm').value);S.stage=sel==='없음'?'':sel;const txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);
+    if(o.querySelector('.mck input').checked){S.memos.push({t,text:txt});S.memos.sort((a,b)=>a.t-b.t);}if(sel!=='없음')autoCheck(4);closeMemoInline();renderAll();growProg();});
+  o.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();closeMemoInline();}});}
+
+function placeMemoFix(){let f=$('#mfix');
+  if(!f){f=document.createElement('div');f.id='mfix';f.innerHTML=`<input class="mfx" placeholder="진행사항 메모 입력 후 Enter" aria-label="진행사항 메모" enterkeyhint="done"><button class="mb ok" type="button">기록</button>`;board.appendChild(f);
+    ['pointerdown','click','mousedown','touchstart','dblclick'].forEach(t=>f.addEventListener(t,e=>e.stopPropagation()));
+    const inp=f.querySelector('.mfx');const go=()=>{const t=inp.value.trim();if(!t){inp.focus();return;}S.memos.push({t:Date.now(),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);inp.value='';renderAll();growProg();setTimeout(()=>inp.focus(),0);};
+    f.querySelector('button').addEventListener('click',go);
+    inp.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'&&!e.isComposing){e.preventDefault();go();}else if(e.key==='Escape'){inp.blur();}});}
+  const pb=$('#progBox'),slot=pb&&pb.querySelector('.mslot');
+  if(!slot||zl().m.prog){f.hidden=true;return;}
+  f.hidden=false;f.style.left=(PROGB.x0+slot.offsetLeft)+'px';f.style.top=(PROGB.y0+slot.offsetTop)+'px';f.style.width=slot.offsetWidth+'px';}
+function progAct(e){const q=s=>hitProg(e,s);let r;
+  if((r=q('[data-cku2]'))){const L=ckL(),i=+r.dataset.cku2;if(i>0){[L[i-1],L[i]]=[L[i],L[i-1]];renderAll();}return true;}
+  if((r=q('[data-ckd2]'))){const L=ckL(),i=+r.dataset.ckd2;if(i<L.length-1){[L[i+1],L[i]]=[L[i],L[i+1]];renderAll();}return true;}
+  if((r=q('[data-cke]'))){ckRename(r.dataset.cke);return true;}
+  if((r=q('[data-ckx2]'))){ckDel(r.dataset.ckx2);return true;}
+  if(q('[data-ckadd]')){ckAddDlg();return true;}
+  if(q('[data-stgset]')){stageInline();return true;}
+  if(q('[data-madd]')){memoInline(null);return true;}
+  if((r=q('[data-me]'))){memoInline(+r.dataset.me);return true;}
+  if((r=q('[data-mx]'))){memoInline(+r.dataset.mx,'del');return true;}
+  if((r=q('[data-mi]'))){memoInline(+r.dataset.mi);return true;}
+  if((r=q('[data-ck]'))){if(PEDIT)ckRename(r.dataset.ck);else toggleCk(r.dataset.ck);return true;}
+  return false;}
 const TVT=['pump','tank','gucha','geupcha','gul','gogo','cmdcha','heli','etcv'];
 const tvt=it=>VEH[it.vt]?it.vt:'pump';
 function stDim(it){const st=STAMPS[it.stamp],k=it.sc||1;if(it.stamp==='truck'){const V=VEH[tvt(it)],w=Math.round(66*k);return[w,Math.round(w*V[1]/V[0])];}return[Math.round(st.w*k),Math.round(st.h*k*(it.len||1))];}
@@ -918,7 +1034,8 @@ function renderItems(){
   for(const v of S.victims){if(!v.placed||hidO(v))continue;h+=`<div class="it vic ${['구조완료','임시의료소','병원이송'].includes(v.status)?'done':''} ${v.ff?'ffv'+(vOpen(v)?' alarm':''):''}" data-vid="${v.id}" style="left:${v.x}px;top:${v.y}px;--tc:${TRI[v.triage||''].c}"><div class="ic">${v.ff?`<img src="${IMG.ff.src}" alt="">`:PERSON}<span class="no">${v.no}</span></div><div class="lb">${esc(vName(v))}${v.ff&&v.acc?' · '+esc(v.acc):''}</div></div>`;}
   L.innerHTML=h;
 }
-function renderAll(){if(S.pn)applyPanels();renderZones();renderItems();renderPanel();renderTop();dirty();}
+function renderAll(){if(S.pn)applyPanels();renderZones();renderItems();renderPanel();renderProgM();renderTop();dirty();}
+function toggleCk(id){const c=ckL().find(x=>x.id===id);if(!c)return;if(S.checks[c.id]){delete S.checks[c.id];log('진행',c.n+' 체크 해제');}else{S.checks[c.id]=Date.now();log('진행',c.n);}renderAll();}
 
 /* ---------- top ---------- */
 function renderTop(){
@@ -1012,12 +1129,14 @@ function renderSel(){const el=$('#sel');
 board.addEventListener('pointerdown',e=>{
   if(act||(e.pointerType==='mouse'&&e.button!==0))return;
   const el=e.target.closest('.it');const p=bp(e);
+  if(hitProg(e,'.pgear')){e.preventDefault();openProgM();return;}
+  if(hitProg(e,'.pedit')){e.preventDefault();PEDIT=!PEDIT;if(S.pn&&S.pn.prog&&!S.pn.prog.manual)applyPanels();renderZones();return;}
   if(!el){const M=zl().m;const hk=zoneAt(p[0],p[1]);
     if(hk){const b=zbox(hk),P=S.pn[hk];
       if(p[0]>=b.x1-44&&p[0]<=b.x1-2&&p[1]>=b.y0&&p[1]<=b.y0+34){e.preventDefault();toggleZone(hk);return;}
       if(!M[hk]&&p[0]>=b.x1-26&&p[1]>=b.y1-26){e.preventDefault();board.setPointerCapture(e.pointerId);toFront(hk);act={type:'pr',k:hk,ow:P.w,oh:P.h,sx:e.clientX,sy:e.clientY,pid:e.pointerId};return;}
       if(p[1]<=b.y0+34){e.preventDefault();board.setPointerCapture(e.pointerId);toFront(hk);act={type:'pm',k:hk,c:panelCollect(hk),ox:b.x0,oy:b.y0,lx:0,ly:0,sx:e.clientX,sy:e.clientY,pid:e.pointerId,moved:false};return;}
-      if(hk==='prog'&&tool==='select'&&!M.prog){switchTab('prog');return;}}}
+      if(hk==='prog'&&tool==='select'&&!M.prog){return;}}}
   if(el&&tool!=='erase'){
     e.preventDefault();el.setPointerCapture(e.pointerId);
     act={type:'item',tt:e.pointerType==='mouse'?6:14,el,id:el.dataset.id,vid:el.dataset.vid,sx:e.clientX,sy:e.clientY,ox:parseFloat(el.style.left),oy:parseFloat(el.style.top),p0:p,moved:false,pid:e.pointerId};
@@ -1070,7 +1189,7 @@ board.addEventListener('pointermove',e=>{
   if(!act||e.pointerId!==act.pid)return;const p=bp(e);
   if(act.type==='item'){const dx=(e.clientX-act.sx)/scale,dy=(e.clientY-act.sy)/scale;if(!act.moved&&Math.hypot(dx,dy)*scale<act.tt)return;act.moved=true;act.el.classList.add('drag');
     act.el.style.left=Math.max(0,Math.min(W,act.ox+dx))+'px';act.el.style.top=Math.max(0,Math.min(H,act.oy+dy))+'px';
-    $('#trayBox')?.classList.toggle('hot',inTray(e));return;}
+    dragRet(act,e);const hot=inTray(e)||overBin(e);$('#trayBox')?.classList.toggle('hot',inTray(e));$('#retBin')?.classList.toggle('hot',overBin(e));return;}
   if(act.type==='bld'){const dx=(e.clientX-act.sx)/scale,dy=(e.clientY-act.sy)/scale,B=act.B,o=act.o,m=act.mode;
     if(m==='move'){B.x0=Math.round(Math.max(60,Math.min(CX-B.w-20,o.x0+dx)));B.y0=Math.round(Math.max(30,o.y0+dy));}
     if(m==='br'||m==='r')B.w=Math.round(Math.max(150,o.w+dx));
@@ -1105,11 +1224,11 @@ board.addEventListener('pointermove',e=>{
 });
 function endAct(e){
   if(!act||e.pointerId!==act.pid)return;const a=act;act=null;
-  if(a.type==='item'){a.el.classList.remove('drag');$('#trayBox')?.classList.remove('hot');
+  if(a.type==='item'){a.el.classList.remove('drag');$('#trayBox')?.classList.remove('hot');const back=inTray(e)||overBin(e);dragRetEnd(a);
     if(!a.moved){if(a.vid)openVictim(a.vid);else openItem(a.id);return;}
     const x=parseFloat(a.el.style.left),y=parseFloat(a.el.style.top);
-    if(a.vid){moveVictim(a.vid,x,y,inTray(e));return;}
-    moveItem(a.id,x,y,inTray(e));return;}
+    if(a.vid){moveVictim(a.vid,x,y,back);return;}
+    moveItem(a.id,x,y,back);if(back)toast('미도착·출동중으로 되돌렸습니다');return;}
   if(a.type==='pm'){if(a.moved){anchorPanel(a.k);applyPanels();layout();renderAll();}else renderZones();dirty();return;}
   if(a.type==='pr'){applyPanels();renderAll();dirty();return;}
   if(a.type==='bg'||a.type==='zr'){dirty();return;}
@@ -1132,7 +1251,7 @@ function cancelAct(){const a=act;if(!a)return;act=null;
   if(a.type==='pen'){const i=S.strokes.indexOf(a.s);if(i>=0)S.strokes.splice(i,1);UNDO.pop();}
   else if(a.type==='shape'){temp=null;}
   else if(a.type==='erase'){if(a.n){const o=JSON.parse(UNDO.pop());S.strokes=o.s;S.buildings=o.b;}else UNDO.pop();}
-  else if(a.type==='item'){a.el.classList.remove('drag');a.el.style.left=a.ox+'px';a.el.style.top=a.oy+'px';$('#trayBox')?.classList.remove('hot');}
+  else if(a.type==='item'){a.el.classList.remove('drag');a.el.style.left=a.ox+'px';a.el.style.top=a.oy+'px';$('#trayBox')?.classList.remove('hot');dragRetEnd(a);}
   else if(a.type==='txt'&&a.moved){a.s.x=a.ox;a.s.y=a.oy;}
   else if(a.type==='pm'||a.type==='pr'||a.type==='bld'){renderAll();}
   redraw();}
@@ -1148,6 +1267,14 @@ function tpEnd(e){if(!TP.has(e.pointerId))return;TP.delete(e.pointerId);if(pinch
 stage.addEventListener('pointerup',tpEnd,true);stage.addEventListener('pointercancel',tpEnd,true);
 stage.addEventListener('wheel',e=>{if(SOPON||!e.ctrlKey)return;e.preventDefault();zoomAt(zoom*Math.exp(-e.deltaY*.01),e.clientX,e.clientY);},{passive:false});
 function eraseAt(p){for(let i=S.strokes.length-1;i>=0;i--){const s=S.strokes[i];if(hit(s,p)){if(s.gid){S.strokes=S.strokes.filter(q=>q.gid!==s.gid);S.buildings=S.buildings.filter(b=>b.gid!==s.gid);if(selB===s.gid){selB=null;renderSel();}}else S.strokes.splice(i,1);act&&act.n++;redraw();dirty();return;}}}
+function retOK(a){if(a.vid)return true;const it=S.items.find(i=>i.id===a.id);return !!(it&&it.k==='u');}
+function overBin(e){const b=$('#retBin');if(!b||b.hidden)return false;const r=b.getBoundingClientRect();return e.clientX>=r.left-6&&e.clientX<=r.right+6&&e.clientY>=r.top-6&&e.clientY<=r.bottom+6;}
+function dragRet(a,e){if(!retOK(a))return;let b=$('#retBin');if(!b){b=document.createElement('div');b.id='retBin';b.innerHTML='↩ 여기에 놓으면 <b>미도착·출동중</b>으로 되돌리기';document.body.appendChild(b);}
+  if(b.hidden!==false){const r=stage.getBoundingClientRect();b.style.left=(r.left+r.width/2)+'px';b.style.top=(r.bottom-64)+'px';b.hidden=false;}
+  const r=stage.getBoundingClientRect(),out=e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;let g=$('#dragGhost');
+  if(out){if(!g){g=document.createElement('div');g.id='dragGhost';g.className='ghost';g.innerHTML=a.el.innerHTML;document.body.appendChild(g);}g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';a.el.style.opacity='.25';}
+  else if(g){g.remove();a.el.style.opacity='';}}
+function dragRetEnd(a){const b=$('#retBin');if(b){b.hidden=true;b.classList.remove('hot');}$('#dragGhost')?.remove();if(a&&a.el)a.el.style.opacity='';}
 function inTray(e){const t=$('#trayBox');if(!t)return false;const r=t.getBoundingClientRect();return r.width>0&&e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;}
 
 function moveItem(id,x,y,toTray){
@@ -1300,6 +1427,19 @@ function editSet(src,opt){const AP=!!(opt&&opt.apply);
     st.auto=$('#seA').checked;st.stage=$('#seS').value;const a=getSets();if(st.id){const i=a.findIndex(x=>x.id===st.id);if(i>=0)a[i]=st;else a.push(st);}else{st.id=uid();a.push(st);}
     if(putSets(a)){toast('세트를 저장했습니다');renderPanel();openSets();}};
 }
+function progPanelHTML(){return `
+    <div class="sec"><h5>진행사항 체크</h5><div class="row" style="margin-bottom:6px"><button class="btn sm ${ckEdit?'pri':''}" id="ckEd">${ckEdit?'✓ 편집 완료':'✎ 항목 편집'}</button><button class="btn sm" id="ckLists">목록 저장·불러오기</button></div>
+      ${ckEdit?`<div class="cklist">${ckL().map((c,i)=>`<div class="ckrow ed"><span class="bx">${i+1}</span><input class="fld" data-ckn="${c.id}" value="${esc(c.n)}" aria-label="항목 이름"><span class="ckb"><button class="btn sm" data-cku="${i}" ${i?'':'disabled'} aria-label="위로">▲</button><button class="btn sm" data-ckd="${i}" ${i<ckL().length-1?'':'disabled'} aria-label="아래로">▼</button><button class="btn sm danger" data-ckx="${c.id}" aria-label="삭제">✕</button></span></div>`).join('')}</div>
+        <div class="row" style="margin-top:6px"><input class="fld" id="ckNew" style="flex:1" placeholder="새 항목 (예: 유관기관 통보)"><button class="btn pri sm" id="ckAdd">+ 추가</button></div>
+        <p class="hint">이름은 입력하면 바로 바뀝니다. 체크 기록은 항목을 옮기거나 이름을 바꿔도 유지됩니다.</p>`
+      :`<p class="hint" style="margin:0 0 6px">누르면 시각이 기록됩니다.</p><div class="cklist">${ckL().map((c,i)=>`<button class="ckrow ${S.checks[c.id]?'d':''}" data-ck="${c.id}"><span class="bx">${S.checks[c.id]?'✓':i+1}</span><span class="nm">${esc(c.n)}</span><span class="tm">${S.checks[c.id]?hms(S.checks[c.id]):'—'}</span></button>`).join('')||'<p class="hint">항목이 없습니다. ‘항목 편집’에서 추가하세요.</p>'}</div>`}</div>
+    <div class="sec"><h5>대응단계</h5><div class="chipf" id="stg">${['없음','대응1단계','대응2단계','대응3단계'].map(s=>`<button class="${(S.stage||'없음')===s?'on':''}" data-stg="${s}">${s}</button>`).join('')}</div></div>
+    <div class="sec"><h5>요청·지시 메모 <span>상황판 진행사항 칸에 최근 4건 표시</span></h5>
+      <div class="row"><input class="fld" id="mIn" style="flex:1" placeholder="예: 갈매기 지원요청 / 물탱크 4대 추가요청"><button class="btn pri sm" id="mGo">기록</button></div>
+      <div class="memo" style="margin-top:6px">${S.memos.slice().reverse().map((m,i)=>`<div><span class="tm">${hm(m.t)}</span><span>${esc(m.text)}</span><button data-mdel="${S.memos.length-1-i}" aria-label="삭제">✕</button></div>`).join('')||'<span class="hint">아직 메모가 없습니다.</span>'}</div></div>
+    <div class="sec"><h5>접수 시각</h5><div class="row"><input class="fld" type="time" step="1" id="t0" value="${hms(S.meta.t0)}"><span class="hint">바꾸면 경과시간이 이 시각부터 다시 계산됩니다. 20분 단위 화재진행시간 전파 알림의 기준입니다.</span></div></div>`;}
+function renderProgM(){const m=$('#progM');if(m){const ae=document.activeElement,id=ae&&ae.id;m.innerHTML=progPanelHTML();if(id&&id!=='t0'){const n=document.getElementById(id);if(n&&m.contains(n))n.focus();}}}
+function openProgM(){const m=modal(`<h2>진행사항 관리</h2><div id="progM" class="pbody pm"></div><div class="acts"><button class="btn pri" data-close>닫기</button></div>`);const c=m.querySelector('#progM');c.innerHTML=progPanelHTML();['click','input','keydown','change'].forEach(t=>c.addEventListener(t,PB[t]));}
 function renderPanel(){
   const P=$('#pbody');
   if(tab==='res'){
@@ -1322,19 +1462,7 @@ function renderPanel(){
     <div class="sec"><h5>단위지휘관</h5>${commanders.length?`<div class="memo">${commanders.map(c=>`<div><b>${esc(c.label)}</b><span>${esc(locText(locate(c.x,c.y,c.placed)))}${c.note?' · '+esc(c.note):''}</span></div>`).join('')}</div>`:'<p class="hint">차량을 눌러 ‘단위지휘관’으로 지정하면 칩에 단 표시가 붙습니다.</p>'}</div>
     <p class="hint">차량 칩을 끌어 개황도(투입 위치) 또는 오른쪽 4개 구역에 놓으면 상태와 시각이 자동 기록됩니다. 건물 템플릿 안에 놓으면 층이 함께 기록됩니다. 칩을 누르면 소속·인원·임무를 편집합니다.</p>`;
   }
-  else if(tab==='prog'){
-    P.innerHTML=`
-    <div class="sec"><h5>진행사항 체크</h5><div class="row" style="margin-bottom:6px"><button class="btn sm ${ckEdit?'pri':''}" id="ckEd">${ckEdit?'✓ 편집 완료':'✎ 항목 편집'}</button><button class="btn sm" id="ckLists">목록 저장·불러오기</button></div>
-      ${ckEdit?`<div class="cklist">${ckL().map((c,i)=>`<div class="ckrow ed"><span class="bx">${i+1}</span><input class="fld" data-ckn="${c.id}" value="${esc(c.n)}" aria-label="항목 이름"><span class="ckb"><button class="btn sm" data-cku="${i}" ${i?'':'disabled'} aria-label="위로">▲</button><button class="btn sm" data-ckd="${i}" ${i<ckL().length-1?'':'disabled'} aria-label="아래로">▼</button><button class="btn sm danger" data-ckx="${c.id}" aria-label="삭제">✕</button></span></div>`).join('')}</div>
-        <div class="row" style="margin-top:6px"><input class="fld" id="ckNew" style="flex:1" placeholder="새 항목 (예: 유관기관 통보)"><button class="btn pri sm" id="ckAdd">+ 추가</button></div>
-        <p class="hint">이름은 입력하면 바로 바뀝니다. 체크 기록은 항목을 옮기거나 이름을 바꿔도 유지됩니다.</p>`
-      :`<p class="hint" style="margin:0 0 6px">누르면 시각이 기록됩니다.</p><div class="cklist">${ckL().map((c,i)=>`<button class="ckrow ${S.checks[c.id]?'d':''}" data-ck="${c.id}"><span class="bx">${S.checks[c.id]?'✓':i+1}</span><span class="nm">${esc(c.n)}</span><span class="tm">${S.checks[c.id]?hms(S.checks[c.id]):'—'}</span></button>`).join('')||'<p class="hint">항목이 없습니다. ‘항목 편집’에서 추가하세요.</p>'}</div>`}</div>
-    <div class="sec"><h5>대응단계</h5><div class="chipf" id="stg">${['없음','대응1단계','대응2단계','대응3단계'].map(s=>`<button class="${(S.stage||'없음')===s?'on':''}" data-stg="${s}">${s}</button>`).join('')}</div></div>
-    <div class="sec"><h5>요청·지시 메모 <span>상황판 진행사항 칸에 최근 4건 표시</span></h5>
-      <div class="row"><input class="fld" id="mIn" style="flex:1" placeholder="예: 갈매기 지원요청 / 물탱크 4대 추가요청"><button class="btn pri sm" id="mGo">기록</button></div>
-      <div class="memo" style="margin-top:6px">${S.memos.slice().reverse().map((m,i)=>`<div><span class="tm">${hm(m.t)}</span><span>${esc(m.text)}</span><button data-mdel="${S.memos.length-1-i}" aria-label="삭제">✕</button></div>`).join('')||'<span class="hint">아직 메모가 없습니다.</span>'}</div></div>
-    <div class="sec"><h5>접수 시각</h5><div class="row"><input class="fld" type="time" step="1" id="t0" value="${hms(S.meta.t0)}"><span class="hint">바꾸면 경과시간이 이 시각부터 다시 계산됩니다. 20분 단위 화재진행시간 전파 알림의 기준입니다.</span></div></div>`;
-  }
+  else if(tab==='prog'){P.innerHTML=progPanelHTML();}
   else if(tab==='vic'){
     const tot=S.victims.reduce((a,v)=>a+(+v.count||0),0),sum=st=>S.victims.filter(v=>st.includes(v.status)).reduce((a,v)=>a+(+v.count||0),0);
     const list=S.victims.filter(v=>vFilter==='전체'||(vFilter==='미구조'?['정보입수','위치확인','구조중'].includes(v.status):v.triage===vFilter)).sort((a,b)=>VST.indexOf(a.status)-VST.indexOf(b.status)||a.no-b.no);
@@ -1373,17 +1501,17 @@ function renderPanel(){
     <div class="log">${L.map(l=>`<div><span class="tm">${hms(l.t)}</span><span class="cat" style="background:${CATC[l.cat]||'#56667e'}">${l.cat}</span><span>${esc(l.text)}</span></div>`).join('')||'<p class="hint">기록이 없습니다.</p>'}</div>`;
   }
 }
-$('#pbody').addEventListener('click',e=>{const vm=e.target.closest('[data-vm]');if(vm){setVMode(vm.dataset.vm);return;}
+const PB={};PB.click=e=>{const vm=e.target.closest('[data-vm]');if(vm){setVMode(vm.dataset.vm);return;}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.view)return setView(b.dataset.view);
   if(b.dataset.set)return applySet(b.dataset.set);
   if(b.id==='setMgr')return openSets();
   if(b.id==='aMore'){editSet(null,{apply:true});return;}
   if(b.id==='aGo'){const t=$('#aType').value,n=Math.max(1,Math.min(20,+$('#aCnt').value||1)),l=$('#aLabel').value.trim();addUnits(t,n,l);return;}
-  if(b.dataset.ck!=null){const c=ckL().find(x=>x.id===b.dataset.ck);if(!c)return;if(S.checks[c.id]){delete S.checks[c.id];log('진행',c.n+' 체크 해제');}else{S.checks[c.id]=Date.now();log('진행',c.n);}renderAll();return;}
-  if(b.id==='ckEd'){ckEdit=!ckEdit;renderPanel();return;}
+  if(b.dataset.ck!=null){toggleCk(b.dataset.ck);return;}
+  if(b.id==='ckEd'){ckEdit=!ckEdit;renderPanel();renderProgM();return;}
   if(b.id==='ckLists')return openCkLists();
-  if(b.id==='ckAdd'){const v=$('#ckNew').value.trim();if(!v)return;ckL().push({id:uid(),n:v});log('진행','진행사항 항목 추가 - '+v);renderAll();setTimeout(()=>$('#ckNew')?.focus(),0);return;}
+  if(b.id==='ckAdd'){const v=$('#ckNew').value.trim();if(!v)return;ckL().push({id:uid(),n:v});log('진행','진행사항 항목 추가 - '+v);renderAll();growProg();setTimeout(()=>$('#ckNew')?.focus(),0);return;}
   if(b.dataset.cku!=null||b.dataset.ckd!=null){const L=ckL(),i=+(b.dataset.cku??b.dataset.ckd),j=b.dataset.cku!=null?i-1:i+1;if(j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];renderAll();return;}
   if(b.dataset.ckx){const L=ckL(),i=L.findIndex(x=>x.id===b.dataset.ckx);if(i<0)return;const c=L[i];confirmBox('항목 삭제',`‘${esc(c.n)}’ 항목을 삭제합니다.${S.checks[c.id]?' 체크 기록도 함께 지워집니다.':''}`,'삭제',()=>{L.splice(i,1);delete S.checks[c.id];log('진행','진행사항 항목 삭제 - '+c.n);renderAll();});return;}
   if(b.dataset.stg){const s=b.dataset.stg;S.stage=s==='없음'?'':s;log('진행','대응단계 - '+s);if(s!=='없음')autoCheck(4);renderAll();return;}
@@ -1396,17 +1524,18 @@ $('#pbody').addEventListener('click',e=>{const vm=e.target.closest('[data-vm]');
   if(b.dataset.lf){logFilter=b.dataset.lf;renderPanel();return;}
   if(b.id==='lGo'){const v=$('#lIn').value.trim();if(!v)return;log('기록',v);renderAll();setTimeout(()=>$('#lIn')?.focus(),0);return;}
   if(b.id==='lCopy'){const txt=`[${S.meta.title||'상황판'}] ${S.meta.addr}\n`+S.log.slice().sort((a,b)=>a.t-b.t).map(l=>`${hms(l.t)} [${l.cat}] ${l.text}`).join('\n');copyText(txt);return;}
-});
-$('#pbody').addEventListener('input',e=>{const id=e.target.dataset&&e.target.dataset.ckn;if(!id)return;const c=ckL().find(x=>x.id===id);if(c){c.n=e.target.value;renderZones();renderTop();dirty();}});
-$('#pbody').addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;if(e.target.id==='ckNew'){$('#ckAdd').click();return;}if(e.target.id==='mIn')$('#mGo').click();if(e.target.id==='lIn')$('#lGo').click();if(e.target.id==='aLabel')$('#aGo').click();});
-$('#pbody').addEventListener('change',e=>{if(e.target.id==='t0'){const[h,m,s]=e.target.value.split(':').map(Number);const d=new Date(S.meta.t0);d.setHours(h||0,m||0,s||0,0);if(d.getTime()>Date.now())d.setDate(d.getDate()-1);S.meta.t0=d.getTime();S.clock={run:true,acc:0,since:S.meta.t0};S.ack20=Math.floor((Date.now()-S.meta.t0)/1200000);log('진행','접수시각 수정 - '+hms(S.meta.t0));renderAll();tick();}});
+};
+PB.input=e=>{const id=e.target.dataset&&e.target.dataset.ckn;if(!id)return;const c=ckL().find(x=>x.id===id);if(c){c.n=e.target.value;renderZones();renderTop();dirty();}};
+PB.keydown=e=>{if(e.key!=='Enter'||e.isComposing)return;if(e.target.id==='ckNew'){$('#ckAdd').click();return;}if(e.target.id==='mIn')$('#mGo').click();if(e.target.id==='lIn')$('#lGo').click();if(e.target.id==='aLabel')$('#aGo').click();};
+PB.change=e=>{if(e.target.id==='t0'){const[h,m,s]=e.target.value.split(':').map(Number);const d=new Date(S.meta.t0);d.setHours(h||0,m||0,s||0,0);if(d.getTime()>Date.now())d.setDate(d.getDate()-1);S.meta.t0=d.getTime();S.clock={run:true,acc:0,since:S.meta.t0};S.ack20=Math.floor((Date.now()-S.meta.t0)/1200000);log('진행','접수시각 수정 - '+hms(S.meta.t0));renderAll();tick();}};
+['click','input','keydown','change'].forEach(t=>$('#pbody').addEventListener(t,PB[t]));
 function copyText(t){const done=()=>toast('복사했습니다');try{navigator.clipboard.writeText(t).then(done,()=>fallbackCopy(t));}catch(e){fallbackCopy(t);}}
 function fallbackCopy(t){modal(`<h2>텍스트</h2><textarea class="fld" id="cpT" readonly>${esc(t)}</textarea><p class="hint">전체 선택 후 복사하세요.</p><div class="acts"><button class="btn" data-close>닫기</button></div>`);const ta=$('#cpT');ta.focus();ta.select();}
 
 /* ---------- victims ---------- */
 const ACC=['고립','추락','붕괴·매몰','화상','공기부족','탈진·열손상','실종(연락두절)','기타'];
 const vOpen=v=>['정보입수','위치확인','구조중'].includes(v.status);
-const vName=v=>v.ff?('대원'+(v.name?' '+v.name:'')):((v.desc||'구조대상자')+v.count);
+const vName=v=>v.ff?('대원'+(v.name?' '+v.name:'')):(v.loc&&String(v.loc).trim()?String(v.loc).trim()+((+v.count||1)>1?` (${v.count}명)`:''):((v.desc||'구조대상자')+v.count));
 function ffAlert(st){const v=newVictim({ff:true,placed:true,x:st.x,y:st.y,desc:st.role||'소방대원',name:st.name||'',status:'위치확인'});v.ts['위치확인']=Date.now();S.items=S.items.filter(i=>i!==st);
   log('구조',`🚨 대원 안전사고(MAYDAY) 발생 #${v.no}${v.loc?' - '+v.loc:''}`);renderAll();openVictim(v.id);toast('대원 안전사고 등록 — 소속·성명·사고유형을 입력하세요');}
 function ffClear(v){S.items.push({id:uid(),k:'s',stamp:'ff',x:v.x,y:v.y,rot:0});S.victims=S.victims.filter(q=>q!==v);log('구조',`#${v.no} 대원 안전사고 해제 (일반 대원 표시로 전환)`);renderAll();}
@@ -1416,12 +1545,30 @@ function newVictim(o){S.vseq=(S.vseq||0)+1;const v=Object.assign({id:uid(),no:S.
 function setVStatus(v,s,auto){if(v.status===s)return;v.status=s;v.ts[s]=Date.now();log('구조',`#${v.no} ${v.loc} ${v.ff?'[대원] '+(v.name||''):v.desc}${v.count>1?' '+v.count+'명':''} — ${s}${v.unit?' ('+v.unit+')':''}${s==='병원이송'&&v.hospital?' → '+v.hospital:''}${auto?' (의료소 이동)':''}`);}
 
 /* ---------- modals ---------- */
-function modal(html,cls=''){closeModal();const m=document.createElement('div');m.className='mask';m.id='mask';m.innerHTML=`<div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div>`;document.body.appendChild(m);
+function modal(html,cls=''){closeModal();const m=document.createElement('div');m.className='mask';m.id='mask';m.innerHTML=`<div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div>`;document.body.appendChild(m);mdrag(m);
+  m.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing||e.defaultPrevented||e.shiftKey||e.ctrlKey||e.metaKey)return;const t=e.target;if(t.closest('#progM')||t.tagName==='TEXTAREA'||t.tagName==='BUTTON'||t.tagName==='A')return;
+    const md=m.querySelector('.modal');if(md.classList.contains('wide'))return;const pri=[...md.querySelectorAll('.acts .btn.pri')].filter(b=>!b.disabled&&b.offsetParent!==null).pop();const cl=md.querySelector('.acts [data-close]');const b=pri||cl;if(!b)return;e.preventDefault();
+    if(t.tagName==='INPUT'||t.tagName==='SELECT')t.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{if(document.body.contains(b))b.click();},0);});
   const t0=performance.now();let downOnMask=false;
   m.addEventListener('pointerdown',e=>{downOnMask=e.target===m&&performance.now()-t0>250;});
   m.addEventListener('click',e=>{if(e.target.closest('[data-close]')){closeModal();return;}
     if(e.target===m){if(downOnMask)closeModal();downOnMask=false;}});return m;}
 function closeModal(){$('#mask')?.remove();}
+function pmodal(sel,html,cls){const m=modal(html,cls);propDlg(m,sel);return m;}
+let PROPOFF=null;
+function mdrag(mask){const md=mask.querySelector('.modal'),h=md&&md.querySelector('h2');if(!h)return;h.classList.add('mdh');h.title='제목을 끌어 창을 옮길 수 있습니다';
+  h.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;if(e.target.closest('button,input,select'))return;e.preventDefault();h.setPointerCapture(e.pointerId);
+    const m0=(md.style.transform.match(/-?[\d.]+/g)||[0,0]).map(Number),sx=e.clientX,sy=e.clientY,r0=md.getBoundingClientRect();md.classList.add('mdrag');
+    const mv=ev=>{let dx=m0[0]+ev.clientX-sx,dy=m0[1]+ev.clientY-sy;const L=r0.left+(dx-m0[0]),T=r0.top+(dy-m0[1]);
+      if(L<-r0.width+80)dx+=(-r0.width+80-L);if(L>innerWidth-80)dx-=(L-innerWidth+80);if(T<0)dy-=T;if(T>innerHeight-50)dy-=(T-innerHeight+50);
+      md.style.transform=`translate(${dx}px,${dy}px)`;if(md.dataset.prop)PROPOFF=[dx,dy];};
+    const up=()=>{h.removeEventListener('pointermove',mv);h.removeEventListener('pointerup',up);h.removeEventListener('pointercancel',up);md.classList.remove('mdrag');};
+    h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up);h.addEventListener('pointercancel',up);});}
+function propDlg(mask,sel){mask.classList.add('light');const md=mask.querySelector('.modal');if(!md)return;md.dataset.prop='1';
+  if(PROPOFF){md.style.transform=`translate(${PROPOFF[0]}px,${PROPOFF[1]}px)`;const r=md.getBoundingClientRect();if(r.right<60||r.left>innerWidth-60||r.top>innerHeight-40||r.bottom<40){md.style.transform='';PROPOFF=null;}else return;}
+  const el=sel&&document.querySelector(sel);if(!el)return;const r=el.getBoundingClientRect(),mr=md.getBoundingClientRect();
+  const ov=!(r.right<mr.left||r.left>mr.right||r.bottom<mr.top||r.top>mr.bottom);if(!ov)return;
+  const cx=r.left+r.width/2;const gp=Math.max(70,r.width*1.3);let dx=cx<innerWidth/2?Math.min(innerWidth-mr.width-16,r.right+gp)-mr.left:Math.max(16,r.left-gp-mr.width)-mr.left;md.style.transform=`translate(${Math.round(dx)}px,0px)`;}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();if(selS){selS=null;renderSel();}}
   if(selS&&(e.key==='Delete'||e.key==='Backspace')&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'')&&!$('#mask')){e.preventDefault();snap();const q=selS;S.strokes=S.strokes.filter(x=>x!==q);selS=null;redraw();renderSel();dirty();log('기록',`도형 삭제 - ${SHT[q.t]}`);}});
 function confirmBox(title,msg,okLabel,fn){const m=modal(`<h2>${title}</h2><p class="hint" style="font-size:14px">${msg}</p><div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="okB">${okLabel}</button></div>`);m.querySelector('#okB').onclick=()=>{closeModal();fn();};}
@@ -1430,7 +1577,7 @@ function openItem(id){
   const it=S.items.find(i=>i.id===id);if(!it)return;
   if(it.k==='s')return openStamp(it);
   const L=locate(it.x,it.y,it.placed);
-  const m=modal(`<h2>${unitHTML(it,'',true).replace('class="unit ','class="unit " style="display:inline-flex;position:relative;transform:none;--c:'+TYPES[it.type].c+';--fc:'+TYPES[it.type].f+'"')} <span class="hint" style="margin-left:8px">${esc(locText(L))}</span></h2>
+  const m=pmodal(`#layer .it[data-id="${id}"]`,`<h2>${unitHTML(it,'',true).replace('class="unit ','class="unit " style="display:inline-flex;position:relative;transform:none;--c:'+TYPES[it.type].c+';--fc:'+TYPES[it.type].f+'"')} <span class="hint" style="margin-left:8px">${esc(locText(L))}</span></h2>
     <div class="grid2"><label>호출부호<input class="fld" id="uL" value="${esc(it.label)}"></label><label>종류<select class="fld" id="uT">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}" ${k===it.type?'selected':''}>${t.n}</option>`).join('')}</select></label>
     <label>소속(센터)<input class="fld" id="uO" value="${esc(it.org)}" placeholder="예: 금곡119안전센터"></label><label>인원<input class="fld" id="uC" type="number" min="0" value="${esc(it.crew)}"></label></div>
     <label>임무·메모<input class="fld" id="uN" value="${esc(it.note)}" placeholder="예: 4층 화점 내부진압 / R.I.T / 1선펌프"></label>
@@ -1459,7 +1606,7 @@ function openStamp(it){
   const L=it.stamp==='ladder',RS=L?15:45;
   const sl=(id,lb,v)=>`<label class="szl">${lb} <b id="${id}v">${Math.round(v*100)}%</b><span class="szr"><button class="btn" data-d="${id}:-">－</button><input type="range" id="${id}" min="40" max="${L?400:300}" step="10" value="${Math.round(v*100)}"><button class="btn" data-d="${id}:+">＋</button></span></label>`;
   const TK=it.stamp==='truck';
-  const m=modal(`<h2>${TK?'소방차 속성':st.n}</h2>${TK?`<div class="grid2" style="margin-bottom:6px"><label>차량 종류<select class="fld" id="tkT">${TVT.map(k=>`<option value="${k}" ${k===tvt(it)?'selected':''}>${TYPES[k].n}</option>`).join('')}</select></label><label>차량 이름<input class="fld" id="tkN" value="${esc(it.name||'')}" placeholder="예: 펌프1 / 금곡펌프"></label></div><div class="chipf" id="tkPick" style="gap:6px;margin-bottom:4px">${TVT.map(k=>`<button type="button" data-tk="${k}" class="${k===tvt(it)?'on':''}" title="${TYPES[k].n}" style="padding:3px 6px;display:inline-flex;flex-direction:column;align-items:center;border-radius:8px"><img src="${VEH[k][2]}" alt="" style="height:22px;max-width:44px;object-fit:contain"><span style="font-size:10.5px">${TYPES[k].n}</span></button>`).join('')}</div>`:''}${it.stamp==='medpost'?`<div class="mpsec"><h4>설치 장소</h4><div class="row" style="flex-wrap:nowrap"><input class="fld" id="mpP" style="flex:1" value="${esc(it.place||'')}" placeholder="예: A면 주출입구 앞 공터 / 1층 로비"><button class="btn pri sm" id="mpSave">${it.place?'수정':'입력'}</button>${it.place?'<button class="btn sm danger" id="mpDel">삭제</button>':''}</div>
+  const m=pmodal(`#layer .it[data-id="${it.id}"]`,`<h2>${TK?'소방차 속성':st.n}</h2>${TK?`<div class="grid2" style="margin-bottom:6px"><label>차량 종류<select class="fld" id="tkT">${TVT.map(k=>`<option value="${k}" ${k===tvt(it)?'selected':''}>${TYPES[k].n}</option>`).join('')}</select></label><label>차량 이름<input class="fld" id="tkN" value="${esc(it.name||'')}" placeholder="예: 펌프1 / 금곡펌프"></label></div><div class="chipf" id="tkPick" style="gap:6px;margin-bottom:4px">${TVT.map(k=>`<button type="button" data-tk="${k}" class="${k===tvt(it)?'on':''}" title="${TYPES[k].n}" style="padding:3px 6px;display:inline-flex;flex-direction:column;align-items:center;border-radius:8px"><img src="${VEH[k][2]}" alt="" style="height:22px;max-width:44px;object-fit:contain"><span style="font-size:10.5px">${TYPES[k].n}</span></button>`).join('')}</div>`:''}${it.stamp==='medpost'?`<div class="mpsec"><h4>설치 장소</h4><div class="row" style="flex-wrap:nowrap"><input class="fld" id="mpP" style="flex:1" value="${esc(it.place||'')}" placeholder="예: A면 주출입구 앞 공터 / 1층 로비"><button class="btn pri sm" id="mpSave">${it.place?'수정':'입력'}</button>${it.place?'<button class="btn sm danger" id="mpDel">삭제</button>':''}</div>
       <p class="hint" style="margin:6px 0 0">${it.place?`현재: <b>${esc(it.place)}</b>${it.pts?' · '+hm(it.pts)+' 지정':''}`:'입력하면 표지 아래에 표시되고 기록 탭에 남습니다.'}</p></div>`:''}${it.stamp==='ff'?`<div style="margin-bottom:8px"><div style="font-size:13px;font-weight:600;margin-bottom:5px">대원 구분</div><div class="chipf ffr">${Object.keys(FFR).map(k=>`<button type="button" data-fr="${k}" class="${it.role===k?'on':''}" style="--rc:${FFR[k].c}">${k}</button>`).join('')}</div>
       <label style="display:flex;flex-direction:column;gap:4px;margin-top:8px;font-size:13px;font-weight:600">소속·성명 (선택)<input class="fld" style="width:100%" id="ffN" value="${esc(it.name||'')}" placeholder="예: 진1 소방교 홍길동"></label></div>`:''}${it.stamp==='ff'?'<div class="ffsec"><h4>대원 안전사고 관리</h4><button class="btn" id="ffGo" style="background:#d4271d;color:#fff;border-color:#d4271d;width:100%;font-weight:700">🚨 안전사고 발생 (MAYDAY) — 구조대상자로 관리</button><p class="hint" style="margin:6px 0 0">고립·추락·붕괴 등 대원 사고 시 누르면 이 위치의 대원이 구조대상자로 전환되어 위치·상태·중증도·이송을 기록합니다.</p></div>':''}<div class="row"><button class="btn" id="r1">↺ 왼쪽 ${RS}°</button><button class="btn" id="r2">↻ 오른쪽 ${RS}°</button></div>${sl('szA','크기',it.sc||1)}${L?sl('szL','길이',it.len||1):''}<p class="hint">${L?'크기는 사다리 전체, 길이는 세로 방향만 늘이거나 줄입니다.':'표지 크기를 조절합니다.'}</p><div class="acts"><button class="btn" id="szR">원래 크기</button><button class="btn danger" id="sDel">삭제</button><button class="btn" data-close>닫기</button></div>`);
   m.querySelector('#r1').onclick=()=>{it.rot=((it.rot||0)-RS)%360;renderAll();dirty();};m.querySelector('#r2').onclick=()=>{it.rot=((it.rot||0)+RS)%360;renderAll();dirty();};
@@ -1486,7 +1633,7 @@ function sideLbl(t){t=(t??'A').toString().trim()||'A';return /^[A-Za-z]$/.test(t
 function openSide(p){sideDlg(null,p);}
 function sideDlg(it,p){
   const L=sideList(),cur=it?sideLbl(it.text):'';
-  const m=modal(`<h2>${it?'방면 표시 수정':'방면 지정'}</h2><p class="hint">건물 정면(진입면)을 A면으로 하고 시계방향으로 B·C·D면을 지정합니다. 아래에서 방면명을 추가·수정·삭제할 수 있습니다.</p>
+  const m=pmodal(it?`#layer .it[data-id="${it.id}"]`:null,`<h2>${it?'방면 표시 수정':'방면 지정'}</h2><p class="hint">건물 정면(진입면)을 A면으로 하고 시계방향으로 B·C·D면을 지정합니다. 아래에서 방면명을 추가·수정·삭제할 수 있습니다.</p>
     <div class="chipf sdpick">${L.map((n,i)=>`<button data-si="${i}" class="${n===cur?'on':''}">${esc(n)}</button>`).join('')}</div>
     <div class="row" style="margin:8px 0 2px"><input class="fld" id="sdTxt" style="flex:1" placeholder="직접 입력 (예: 정면, 주출입구, 북측, 1방면)" value="${it&&!L.includes(cur)?esc(cur):''}"><button class="btn pri sm" id="sdUse">${it?'이 이름으로 변경':'이 이름으로 표시'}</button></div>
     <details class="sdman"${L.join()!=='A면,B면,C면,D면'?' open':''}><summary>방면명 목록 관리 (추가·수정·삭제)</summary>
@@ -1512,7 +1659,7 @@ function sideDlg(it,p){
 }
 function openVictim(id){
   const v=S.victims.find(q=>q.id===id);if(!v)return;
-  const m=modal(`<h2>${v.ff?'🚨 대원 안전사고':'구조대상자'} #${v.no}</h2>
+  const m=pmodal(`#layer [data-vid="${id}"]`,`<h2>${v.ff?'🚨 대원 안전사고':'구조대상자'} #${v.no}</h2>
     ${v.ff?`<div class="ffsec"><h4>사고 대원 정보</h4><div class="grid2"><label>소속·성명<input class="fld" id="vN" value="${esc(v.name||'')}" placeholder="예: 진1 소방교 홍길동"></label><label>최종 위치·확인 수단<input class="fld" id="vLast" value="${esc(v.last||'')}" placeholder="예: 4층 계단실 / PASS 경보음"></label></div>
       <div style="margin-top:8px;font-size:13px;font-weight:600">사고 유형</div><div class="chipf acc" id="vAcc">${ACC.map(a=>`<button type="button" class="${v.acc===a?'on':''}" data-a="${a}">${a}</button>`).join('')}</div></div>`:''}
     <div class="grid2"><label>위치(층·호)<input class="fld" id="vL" value="${esc(v.loc)}" placeholder="예: 3층 206호"></label><label>인원<input class="fld" id="vC" type="number" min="1" value="${v.count}"></label>
@@ -1565,19 +1712,19 @@ function openBuilding(EB,drop){
   if(EB){const m=modal(`<h2>건물 편집</h2>
     <label>표시할 층 (쉼표 구분, ‘…’은 생략 구간)<input class="fld" id="bF" value="${esc(EB.floors)}"></label>
     <div class="grid2"><label>건물명<input class="fld" id="bN" value="${esc(EB.name)}"></label><label>정면 방면<select class="fld" id="bS">${['A','B','C','D',''].map(v=>`<option value="${v}" ${v===EB.face?'selected':''}>${v?v+'면':'표시 안 함'}</option>`).join('')}</select></label></div>
-    <label class="ck"><input type="checkbox" id="bSt" ${EB.stair?'checked':''}> 계단실 표시</label><label class="ck"><input type="checkbox" id="bFl" ${EB.fireline?'checked':''}> Fire line 곡선 표시</label>
+    <label>계단실 표시<select class="fld" id="bSt">${[['L','좌측'],['R','우측'],['','표시 안 함']].map(([v,n])=>`<option value="${v}" ${(EB.stair?(EB.stairSide==='R'?'R':'L'):'')===v?'selected':''}>${n}</option>`).join('')}</select></label><label class="ck"><input type="checkbox" id="bFl" ${EB.fireline?'checked':''}> Fire line 곡선 표시</label>
     <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="bGo">적용</button></div>`);
-    m.querySelector('#bGo').onclick=()=>{snap();const f=$('#bF').value.split(',').map(x=>x.trim()).filter(Boolean);if(f.length)EB.floors=f.join(',');EB.name=$('#bN').value.trim();EB.face=$('#bS').value;EB.stair=$('#bSt').checked;EB.fireline=$('#bFl').checked;applyBuilding(EB);closeModal();redraw();renderSel();renderAll();};return;}
+    m.querySelector('#bGo').onclick=()=>{snap();const f=$('#bF').value.split(',').map(x=>x.trim()).filter(Boolean);if(f.length)EB.floors=f.join(',');EB.name=$('#bN').value.trim();EB.face=$('#bS').value;EB.stair=!!$('#bSt').value;if(EB.stair)EB.stairSide=$('#bSt').value;EB.fireline=$('#bFl').checked;applyBuilding(EB);closeModal();redraw();renderSel();renderAll();};return;}
   const m=modal(`<h2>건물 개황도 그리기</h2>
     <div class="grid2"><label>지상 층수<input class="fld" id="bA" type="number" min="1" max="99" value="5"></label><label>지하 층수<input class="fld" id="bB" type="number" min="0" max="9" value="1"></label></div>
     <label>표시할 층 (쉼표 구분, ‘…’은 생략 구간)<input class="fld" id="bF" value="${gen(5,1)}"></label>
     <div class="grid2"><label>건물명 (선택)<input class="fld" id="bN" placeholder="예: 디에스 타워"></label><label>정면 방면<select class="fld" id="bS"><option value="A">A면</option><option value="">표시 안 함</option></select></label>
     <label>가로 위치<select class="fld" id="bX">${drop?`<option value="${Math.round(Math.max(20,Math.min(CX-420,drop[0]-190)))}">끌어 놓은 위치</option>`:''}<option value="${nx}">${last?'기존 건물 오른쪽':'기본 위치'}</option><option value="${Math.max(150,pr+120)}">왼쪽</option><option value="${CX-470}">오른쪽</option></select></label></div>
-    <label class="ck"><input type="checkbox" id="bSt" checked> 계단실 표시</label><label class="ck"><input type="checkbox" id="bFl" ${last?'':'checked'}> Fire line(소방활동구역) 곡선 표시</label>
+    <div class="grid2"><label>계단실 표시<select class="fld" id="bSt"><option value="L">좌측</option><option value="R">우측</option><option value="">표시 안 함</option></select></label><span></span></div><label class="ck"><input type="checkbox" id="bFl" ${last?'':'checked'}> Fire line(소방활동구역) 곡선 표시</label>
     <p class="hint">층 칸 안에 차량·구조대상자를 놓으면 해당 층이 자동 기록됩니다. 그린 뒤 ‘선택’ 도구로 건물을 누르면 끌어서 이동하고, 파란 점을 끌어 크기를 조정할 수 있습니다.</p>
     <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="bGo">그리기</button></div>`);
   const upd=()=>{$('#bF').value=gen(+$('#bA').value||1,+$('#bB').value||0);};m.querySelector('#bA').oninput=upd;m.querySelector('#bB').oninput=upd;
-  m.querySelector('#bGo').onclick=()=>{snap();const B=makeBuilding({name:$('#bN').value.trim(),floors:$('#bF').value,x:Math.min(+$('#bX').value,CX-420),y:drop&&$('#bX').selectedIndex===0?Math.round(Math.max(30,drop[1]-40)):undefined,stair:$('#bSt').checked,face:$('#bS').value,fireline:$('#bFl').checked});closeModal();redraw();if(B){tool='select';stampKind=null;markTool();selB=B.gid;renderSel();}renderAll();};
+  m.querySelector('#bGo').onclick=()=>{snap();const B=makeBuilding({name:$('#bN').value.trim(),floors:$('#bF').value,x:Math.min(+$('#bX').value,CX-420),y:drop&&$('#bX').selectedIndex===0?Math.round(Math.max(30,drop[1]-40)):undefined,stair:!!$('#bSt').value,stairSide:$('#bSt').value,face:$('#bS').value,fireline:$('#bFl').checked});closeModal();redraw();if(B){tool='select';stampKind=null;markTool();selB=B.gid;renderSel();}renderAll();};
 }
 function openBg(){
   const m=modal(`<h2>배경 사진</h2><p class="hint">P119 지도 캡처, 건물 사진, 도면 등을 개황도 영역 배경으로 깔고 그 위에 그립니다. 화면을 캡처한 뒤 상황판에서 <b>Ctrl+V</b>로 바로 붙여넣을 수도 있습니다. 사진은 이 기기에만 저장됩니다.</p>
@@ -1621,7 +1768,7 @@ function openFiles(){
 }
 function importJSON(txt){try{const o=JSON.parse(txt);if(!o||o.v!==1||!o.meta)throw 0;openAsTab(o);closeModal();toast('새 탭으로 불러왔습니다');}catch(e){toast('상황판 JSON 형식이 아닙니다');}}
 $('#fileJson').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>importJSON(r.result);r.readAsText(f);e.target.value='';});
-function adopt(o){S=Object.assign(blank(),migrate(o));if(o.cx==null)S.cx=CX;normCol(S);if(!Array.isArray(o.ck)){delete S.ck;}ensureCk(S);computeZones();S.buildings.forEach(upgradeBuilding);selB=null;selBg=false;$('#sel').innerHTML='';$('#selTop').innerHTML='';UNDO=[];REDO=[];applyBg();redraw();renderAll();if(syncPanelScale()){renderZones();renderItems();redraw();}tick();}
+function adopt(o){S=Object.assign(blank(),migrate(o));if(o.cx==null)S.cx=CX;normCol(S);if(!Array.isArray(o.ck)){delete S.ck;}ensureCk(S);ckSig=ckSigOf();computeZones();S.buildings.forEach(upgradeBuilding);selB=null;selBg=false;$('#sel').innerHTML='';$('#selTop').innerHTML='';UNDO=[];REDO=[];applyBg();redraw();renderAll();if(syncPanelScale()){renderZones();renderItems();redraw();}tick();}
 
 function openReset(){
   const m=modal(`<h2>상황판 초기화</h2><p class="hint" style="font-size:14px">현재 상황판의 개황도 그림·건물·배경사진, 차량·자원, 구조대상자, 진행사항 체크, 메모·기록, 경과시간을 모두 지우고 처음 상태로 되돌립니다. <b style="color:#b5121b">되돌릴 수 없습니다.</b> 보관이 필요하면 먼저 ‘저장·불러오기’나 ‘스크린샷’으로 남기세요.</p>
@@ -1642,8 +1789,10 @@ async function exportImg(){
   for(const k of S.pno){const b=zbox(k),w=b.x1-b.x0,hh=b.y1-b.y0,mn=!!EM[k];g.save();g.translate(b.x0,b.y0);
     if(k==='prog'){g.save();rr(g,0,0,w,hh,10);g.clip();g.fillStyle='#ffecaa';g.fillRect(0,0,w,hh);
       g.fillStyle='#9a5b00';g.fillRect(0,0,w,mn?hh:38);g.fillStyle='#fff';g.font='700 18px "IBM Plex Sans KR",sans-serif';g.fillText('진행사항',12,26);g.font='700 12px "IBM Plex Sans KR",sans-serif';{const st=(mn?ckDone()+'/'+ckL().length+' ':'')+(S.stage||'');g.fillText(st,w-48-g.measureText(st).width,25);}
-      if(!mn){ckL().forEach((cc,i)=>{const cs=S.checks[cc.id];const y=62+i*20;g.strokeStyle=cs?'#c0261d':'#333';g.lineWidth=2;g.beginPath();g.arc(20,y-5,8,0,7);g.stroke();g.fillStyle='#111';g.font='700 14px "IBM Plex Sans KR",sans-serif';const mx=Math.floor((w-110)/13);g.fillText(`${i+1}. ${cc.n}`.slice(0,mx),34,y);if(cs){g.font='12px "IBM Plex Mono",monospace';g.fillStyle='#555';g.fillText(hm(cs),w-50,y);}});
-        S.memos.slice(-2).forEach((m,i)=>{g.fillStyle='#111';g.font='500 12.5px "IBM Plex Sans KR",sans-serif';g.fillText(('- '+m.text).slice(0,Math.floor((w-20)/11)),10,62+ckL().length*20+4+i*18);});}
+      if(!mn){ckL().forEach((cc,i)=>{const cs=S.checks[cc.id];const y=64+i*24;g.strokeStyle=cs?'#111':'#333';g.lineWidth=2;g.beginPath();g.arc(21,y-6,9,0,7);if(cs){g.fillStyle='#111';g.fill();}g.stroke();g.fillStyle='#111';g.font='700 16px "IBM Plex Sans KR",sans-serif';const fitT=(t,mw)=>{if(g.measureText(t).width<=mw)return t;while(t.length>1&&g.measureText(t+'…').width>mw)t=t.slice(0,-1);return t+'…';};g.fillText(fitT(`${i+1}. ${cc.n}`,w-36-(cs?60:12)),36,y);if(cs){g.font='13px "IBM Plex Mono",monospace';g.fillStyle='#555';g.fillText(hm(cs),w-52,y);}});
+        let my=64+ckL().length*24+6;g.strokeStyle='#999';g.setLineDash([3,3]);g.lineWidth=1;g.beginPath();g.moveTo(10,my-14);g.lineTo(w-10,my-14);g.stroke();g.setLineDash([]);
+        g.font='600 13.5px "IBM Plex Sans KR",sans-serif';g.fillStyle='#111';g.fillText('대응단계 : ',12,my+2);g.fillStyle='#b5121b';g.font='700 13.5px "IBM Plex Sans KR",sans-serif';g.fillText(S.stage||'없음',12+g.measureText('대응단계 : ').width+4,my+2);
+        S.memos.slice().reverse().forEach((m,i)=>{const yy=my+26+i*22;if(yy>hh-6)return;g.fillStyle='#555';g.font='12.5px "IBM Plex Mono",monospace';g.fillText(hm(m.t),12,yy);g.fillStyle='#111';g.font='600 14px "IBM Plex Sans KR",sans-serif';g.fillText(m.text.slice(0,Math.floor((w-70)/14)),58,yy);});}
       g.restore();rr(g,0.5,0.5,w-1,hh-1,10);g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();}
     else{rr(g,0.5,0.5,w-1,hh-1,10);g.save();rr(g,0.5,0.5,w-1,hh-1,10);g.clip();g.fillStyle='#fff';g.fillRect(0,0,w,hh);g.fillStyle=ZHC[k]||'#3a3f48';g.fillRect(0,0,w,mn?hh:38);g.restore();g.strokeStyle='#3a3f48';g.lineWidth=1;g.stroke();
       g.font='700 18px "IBM Plex Sans KR",sans-serif';g.fillStyle='#fff';g.fillText(b.name,12,26);
@@ -1803,7 +1952,7 @@ const EXS=[
  ['ex_mt','산불화재','위성지도 배경',['지도서비스(브이월드) 위성지도를 캡처해 <b>배경사진</b>으로 붙여넣기','주황 원으로 화선·확산 범위, 지명(금정·동래·사상·북부)으로 <b>방면명</b> 표시','화살표로 진입·확산 방향, 펌프·탱크차를 화선 주변에 분산 배치','진행사항 패널을 펼쳐 체크 항목과 시각을 함께 확인'],['배경사진','원','화살표','방면명 관리']],
  ['ex_hi','고층건물 화재','3D 항공지도 배경',['3D 항공지도 캡처를 배경으로 실제 건물 외형 위에 작성','층별 진압·구조대 배치와 구조대상자 위치·인원 표시','실선·점선 화살표로 진입 경로와 연소확대 방향 구분','파란 펜으로 통제선 범위, 고가·굴절차와 지휘 위치 배치'],['배경사진','점선','통제선','고가·굴절']],
  ['ex_farm','농촌주택 화재','일반지도 배경',['도로·건물명이 보이는 일반지도를 캡처해 배경으로 사용','소화전 → 펌프 → 탱크 중계 수관 연장을 검은 펜으로 표시','소방대원 아이콘(진압대원)으로 대원 위치, 차량을 진입로에 배치','직전대기(RIT) 패널에 구1을 두고 <b>R</b> 지정'],['배경사진','소방대원','수관 연장','RIT']],
- ['ex_prog','진행사항 체크','진행 탭',['지휘권 선언·상황보고 등 항목을 누르면 수행 시각이 자동 기록','대응단계 지정, 요청·지시 메모를 함께 관리','캔버스 진행사항 패널에 수행 현황(체크 수) 표시'],['진행 탭','대응단계','메모']],
+ ['ex_prog','진행사항 체크','진행사항 관리',['지휘권 선언·상황보고 등 항목을 누르면 수행 시각이 자동 기록','대응단계 지정, 요청·지시 메모를 함께 관리','캔버스 진행사항 패널에 수행 현황(체크 수) 표시'],['진행사항 패널','대응단계','메모']],
  ['ex_log','활동기록','기록 탭',['차량 이동·상태 변경·체크·구조대상자 변화가 시간순으로 자동 기록','분류별 보기, <b>텍스트 복사</b>로 보고서·디브리핑 자료에 바로 활용'],['기록 탭','텍스트 복사','디브리핑']]];
 function openEx(k){const e=EXS.find(x=>x[0]===k);if(!e)return;modal(`<h2>활용 예시 · ${e[1]} <small style="font-size:13px;color:var(--muted);font-weight:500">${e[2]}</small></h2><div class="exv"><img src="${EXIMG[k]}" alt="${e[1]} 상황판 예시"></div><div class="acts"><button class="btn pri" data-close>닫기</button></div>`,'wide');}
 function renderManual(){
@@ -1812,14 +1961,14 @@ function renderManual(){
   const vh=k=>`<img class="mi wide" src="${VEH[k][2]}" alt="">`;
   const row=(i,n,d)=>`<tr><td class="mi-c">${i}</td><th>${n}</th><td>${d}</td></tr>`;
   const sec=(id,no,t,body)=>`<section class="man-s" id="man-${id}"><h3><span class="no">${no}</span>${t}</h3>${body}</section>`;
-  const QS=[['상황판 추가','상단 탭의 <b>+ 상황판 추가</b>로 새 상황판을 만들고 사고명을 입력'],['시간 확인','경과시간이 접수 시각부터 자동 계산 (❚❚ 중지 · ↺ 초기화)'],['출동대 등록','자원 탭에서 <b>1차출동대</b> 세트 <b>추가</b>, 증원은 <b>+ 추가 출동대 편성</b>'],['개황도 작성','<b>건물</b> 템플릿 또는 <b>배경사진</b>을 깔고(툴바에서 끌어 놓기 가능) 통제선·방면 표시'],['차량 배치','미도착 목록의 차량을 개황도나 오른쪽 패널로 끌어 놓기'],['진행사항 체크','지휘권 선언 등 항목을 눌러 시각 기록 (일부 자동 체크)'],['구조대상자 관리','위치 등록 → 진행상태·중증도 변경 → 임시의료소 목록 자동'],['기록·출력','<b>스크린샷</b>으로 이미지 저장, <b>저장·불러오기</b>로 보관']];
+  const QS=[['상황판 추가','상단 탭의 <b>+ 상황판 추가</b>로 새 상황판을 만들고 사고명을 입력'],['시간 확인','경과시간이 접수 시각부터 자동 계산 (❚❚ 중지 · ↺ 초기화)'],['출동대 등록','자원 탭에서 <b>1차출동대</b> 세트 <b>추가</b>, 증원은 <b>+ 추가 출동대 편성</b>'],['개황도 작성','<b>건물</b> 템플릿 또는 <b>배경사진</b>을 깔고(툴바에서 끌어 놓기 가능) 통제선·방면 표시'],['차량 배치','미도착 목록의 차량을 개황도나 오른쪽 패널로 끌어 놓기'],['진행사항 체크','캔버스 <b>진행사항</b> 패널의 항목을 눌러 시각 기록 (일부 자동 체크)'],['구조대상자 관리','위치 등록 → 진행상태·중증도 변경 → 임시의료소 목록 자동'],['기록·출력','<b>스크린샷</b>으로 이미지 저장, <b>저장·불러오기</b>로 보관']];
   const TOC=[['screen','화면 구성'],['draw','개황도 그리기'],['mark','표지(아이콘)'],['res','자원·차량 관리'],['vic','구조대상자·대원 안전사고'],['prog','진행사항 관리'],['view','패널·화면 조작'],['save','기록·저장·출력'],['ex','활용 예시'],['tip','운용 팁·주의']];
   return `<div class="man">${svHead('사용 매뉴얼','전자 전술상황판 사용 매뉴얼','현장지휘 훈련·실무에서 전술상황판을 작성하는 순서와 기능별 사용법')}
   <div class="man-qs"><div class="man-qh">빠른 시작 <small>8단계</small></div><ol>${QS.map((q,i)=>`<li><span class="n">${i+1}</span><b>${q[0]}</b><p>${q[1]}</p></li>`).join('')}</ol></div>
   <nav class="man-toc">${TOC.map((t,i)=>`<a href="#man-${t[0]}" data-mt="${t[0]}"><em>${i+1}</em>${t[1]}</a>`).join('')}</nav>
   <div class="man-g">
-  ${sec('screen',1,'화면 구성',`<div class="man-scr"><div class="z top">상단 · 사고명 · 상황판 탭 · 경과/현재시간 · 전체화면 · 저장·불러오기 · 스크린샷 · 만든이</div><div class="z tool">툴바 · 그리기 도구 · 색/굵기 · 건물 · 배경사진 · 표지 · 확대/축소 · 패널정렬 · 초기화</div><div class="z cv"><span class="p l">진행사항</span><span class="mid">개황도 캔버스</span><span class="p r">도착(임무대기)<br>직전대기(RIT·교대조)<br>자원대기소<br>임시의료소</span></div><div class="z zs"><span><b>우측 패널</b><br>자원 · 진행<br>기록 · 참고자료</span></div></div>
-    <ul class="man-l"><li><b>접속</b> — 처음 열면 비밀번호 입력 화면이 나옵니다. 브라우저 창(탭)을 닫았다가 다시 열면 다시 입력합니다.</li><li><b>상황판 탭</b> — 여러 사고를 탭으로 동시에 관리합니다. ✕로 닫으면 그 상황판은 이 기기에서 삭제됩니다.</li><li><b>경과시간</b> — 접수 시각 기준이며 20분마다 <span class="tag red">● 20분 전파</span> 알림이 뜹니다. 누르면 화재진행시간 전파가 기록됩니다.</li><li><b>대기패널</b> — 도착·직전대기·자원대기소·임시의료소는 제목줄 색(파랑·초록·보라·빨강)으로 구분됩니다. 진행사항과 대기패널은 배경사진 위에서도 잘 보이도록 불투명하며, 화면(캔버스) 높이에 맞춰 크기가 비율대로 자동 조절됩니다.</li><li><b>우측 패널</b> — 가운데 ▶ 버튼으로 숨기거나, 경계선을 끌어 폭을 조절합니다.</li><li><b>ⓘ 만든이</b> — 개발자·저작권 정보</li></ul>`)}
+  ${sec('screen',1,'화면 구성',`<div class="man-scr"><div class="z top">상단 · 사고명 · 상황판 탭 · 경과/현재시간 · 전체화면 · 저장·불러오기 · 스크린샷 · 만든이</div><div class="z tool">툴바 · 그리기 도구 · 색/굵기 · 건물 · 배경사진 · 표지 · 확대/축소 · 패널정렬 · 초기화</div><div class="z cv"><span class="p l">진행사항</span><span class="mid">개황도 캔버스</span><span class="p r">도착(임무대기)<br>직전대기(RIT·교대조)<br>자원대기소<br>임시의료소</span></div><div class="z zs"><span><b>우측 패널</b><br>자원 · 기록<br>참고자료</span></div></div>
+    <ul class="man-l"><li><b>접속</b> — 처음 열면 비밀번호 입력 화면이 나옵니다. 브라우저 창(탭)을 닫았다가 다시 열면 다시 입력합니다.</li><li><b>상황판 탭</b> — 여러 사고를 탭으로 동시에 관리합니다. <b>+ 상황판 추가</b>를 누르면 이름(사고명)을 묻습니다. 다른 탭을 한 번 누르면 전환, <b>지금 열린 탭을 한 번 더 누르면 이름 변경</b>(다른 탭은 두 번 누르면 전환 후 바로 이름 변경, Enter 저장·Esc 취소)입니다. ✕로 닫으면 그 상황판은 이 기기에서 삭제됩니다.</li><li><b>경과시간</b> — 접수 시각 기준이며 20분마다 <span class="tag red">● 20분 전파</span> 알림이 뜹니다. 누르면 화재진행시간 전파가 기록됩니다.</li><li><b>대기패널</b> — 도착·직전대기·자원대기소·임시의료소는 제목줄 색(파랑·초록·보라·빨강)으로 구분됩니다. 진행사항과 대기패널은 배경사진 위에서도 잘 보이도록 불투명하며, 화면(캔버스) 높이에 맞춰 크기가 비율대로 자동 조절됩니다.</li><li><b>우측 패널</b> — 가운데 ▶ 버튼으로 숨기거나, 경계선을 끌어 폭을 조절합니다.</li><li><b>ⓘ 만든이</b> — 개발자·저작권 정보</li></ul>`)}
   ${sec('draw',2,'개황도 그리기',`<table class="man-t">${row(ic('select'),'선택','차량·표지·글자·건물 선택/이동, 빈 곳을 끌면 화면 이동')}${row(ic('pen'),'펜','자유 곡선 (색·굵기 선택)')}${row(ic('line')+ic('arrow'),'직선·화살표','진입 경로, 수관 전개, 이동 방향')}${row(ic('rect')+ic('ellipse'),'사각·원','구역, 위험 범위 표시')}${row(ic('text'),'글자','누른 위치에 입력 · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> 줄바꿈 · 다시 누르면 수정·이동')}${row(ic('cline'),'통제선','붉은 점선 · 그리면 ‘통제선 설치’ 자동 체크')}${row(ic('erase'),'지우개','그린 선·글자·건물을 문질러 삭제')}${row(ic('bld'),'건물','층수·옵션을 지정해 건물 단면 템플릿 생성 · 툴바 아이콘을 원하는 위치로 끌어 놓아도 됨 · 선택 후 테두리 점으로 크기, 끌어서 이동')}${row(ic('bg'),'배경사진','사진·도면 파일 선택 또는 <kbd>Ctrl</kbd>+<kbd>V</kbd> 붙여넣기 · 캔버스 전체를 채워 배치 · 주황 점으로 너비/높이 조절 · 흐리게/진하게')}${row(ic('undo')+ic('redo'),'되돌리기·다시','그리기 작업 취소/복원')}${row(ic('clear'),'그림삭제','그림만 모두 삭제 (차량·구조대상자는 유지)')}</table>
     <p class="man-p" style="margin-top:10px"><b>그린 뒤 수정</b> — <b>선택</b> 도구로 펜·직선·화살표·사각·원을 누르면 파란 점과 편집 막대가 나옵니다.</p>
     <ul class="man-l"><li><b>크기·모양</b> — 파란 점을 끌어 끝점·모서리를 옮깁니다 (펜은 네 모서리로 확대·축소).</li><li><b>이동</b> — 선택된 도형을 끌어 옮깁니다.</li><li><b>편집 막대</b> — 굵기 −/+, 색, 실선/점선 전환, 삭제, 완료</li><li><b>글자</b> — 글자를 누르면 크기(−/+)·색 변경, ✥로 이동, 삭제를 할 수 있습니다.</li></ul>`)}
@@ -1833,7 +1982,7 @@ function renderManual(){
   ${sec('vic',5,'구조대상자 · 대원 안전사고',`<p class="man-p">툴바 <b>구조대상자</b>를 누르고 위치를 찍으면 층이 자동 입력된 기록 창이 열립니다. 위치·인원·연령/성별·부상·중증도·담당대·이송병원을 입력합니다.</p>
     <div class="man-flow">${['정보입수','위치확인','구조중','구조완료','임시의료소','병원이송'].map((s,i)=>`<span>${s}</span>`).join('<i>→</i>')}</div>
     <ul class="man-l"><li>중증도는 <span class="tri" style="--t:#d4271d">긴급</span><span class="tri" style="--t:#f2b705">응급</span><span class="tri" style="--t:#1d9a50">비응급</span><span class="tri" style="--t:#111">지연</span> 색 테두리로 표시됩니다.</li><li>구조완료 이후 상태는 <b>임시의료소 패널 목록</b>에 자동으로 정리됩니다. 아이콘을 임시의료소 패널로 끌어 놓아도 됩니다.</li><li><b>대원 안전사고(MAYDAY)</b> — 상황판의 소방대원 아이콘 → <span class="tag red">🚨 안전사고 발생</span> → 소속·성명, 최종 위치, 사고유형(고립·추락·붕괴 등) 입력. 미구조 동안 빨간 원이 깜박이고 상단에 <span class="tag red">🚨 대원 안전사고</span> 배지가 유지됩니다.</li></ul>`)}
-  ${sec('prog',6,'진행사항 관리',`<ul class="man-l"><li><b>진행 탭</b>에서 항목을 누르면 수행 시각이 기록되고, 캔버스 왼쪽 ‘진행사항’ 패널에도 표시됩니다.</li><li><b>✎ 항목 편집</b>으로 추가·삭제·순서 변경, <b>목록 저장·불러오기</b>로 기관별 체크리스트를 보관합니다.</li><li><b>자동 체크</b> — 방면 지정, 통제선 그리기, 1선펌프 임무 입력, 대응단계 지정, 단위지휘관 지정, 임시의료소 표지를 놓으면 해당 항목이 자동으로 체크됩니다.</li><li><b>대응단계</b>(1·2·3단계)·<b>메모</b>·<b>접수 시각 수정</b>도 진행 탭에서 합니다.</li></ul>`)}
+  ${sec('prog',6,'진행사항 관리',`<ul class="man-l"><li>캔버스 왼쪽 <b>‘진행사항’ 패널</b>의 항목을 바로 누르면 수행 시각이 기록되고, 다시 누르면 해제됩니다. 제목줄 <b>−/+</b>로 접고 펼칩니다.</li><li>제목줄 <b>✎</b>을 누르면 편집 모드가 되어 항목마다 ▲(순서)·✎(수정)·✕(삭제)와 <b>+ 항목 추가</b>가 나타나고, 메모도 수정·삭제할 수 있습니다. 다시 누르면(✓) 편집이 끝납니다.</li><li>패널 아래 <b>대응단계</b>를 눌러 발령·해제하면 발령 시각과 함께 메모로 기록되고, <b>+ 메모</b>로 진행사항(요청·지시 등)을 기록합니다. 기록된 메모를 누르면 내용·시각 수정이나 삭제를 할 수 있습니다.</li><li>제목줄 <b>⚙</b>을 누르면 ‘진행사항 관리’ 창이 열립니다. <b>✎ 항목 편집</b>으로 추가·삭제·순서 변경, <b>목록 저장·불러오기</b>로 기관별 체크리스트를 보관합니다.</li><li><b>자동 체크</b> — 방면 지정, 통제선 그리기, 1선펌프 임무 입력, 대응단계 지정, 단위지휘관 지정, 임시의료소 표지를 놓으면 해당 항목이 자동으로 체크됩니다.</li><li><b>대응단계</b>(1·2·3단계)·<b>요청·지시 메모</b>·<b>접수 시각 수정</b>도 ⚙ 진행사항 관리 창에서 합니다.</li></ul>`)}
   ${sec('view',7,'패널·화면 조작',`<table class="man-t">${row('⠿','패널 이동','패널 제목줄을 끌어 원하는 위치로 (안의 차량도 함께 이동)')}${row('⇲','패널 크기','패널 오른쪽 아래 모서리를 끌기')}${row('−','최소화','제목줄 오른쪽 − / + 버튼')}${row(ic('panels'),'패널정렬','기본 위치·크기로 되돌리기')}${row(ic('zin')+ic('zout'),'확대·축소','툴바 버튼 · 태블릿 <b>두 손가락</b> 벌리기/오므리기 · PC <kbd>Ctrl</kbd>+휠')}${row(ic('fit'),'맞춤','화면 크기에 맞게 원래대로')}${row('⛶','전체화면','상단 버튼 · 패널·글자 크기는 일반 화면과 같게 유지 · 실수로 풀리지 않도록 <kbd>Esc</kbd> 한 번으로는 해제되지 않음 → 상단 <b>전체화면 해제</b> 버튼 (PC 크롬·엣지는 <kbd>Esc</kbd> 길게 누르기)')}</table>`)}
   ${sec('save',8,'기록·저장·출력',`<ul class="man-l"><li><b>기록 탭</b> — 차량 이동·상태 변경·체크·메모가 시각과 함께 자동 기록됩니다. 분류별로 보거나 <b>텍스트 복사</b>로 보고서에 붙여 씁니다.</li><li><b>📷 스크린샷</b> — 현재 상황판을 사고명·주소·시각이 들어간 이미지로 만들고 <b>💾 이미지 저장</b>으로 PNG 파일 저장.</li><li><b>저장·불러오기</b> — ‘이 기기에 저장’으로 시점별 보관, <b>JSON 복사/파일</b>로 다른 기기에 옮기기. 시연·교육용 <b>예시 상황판</b>(공사장 화재)도 여기서 새 탭으로 엽니다.</li><li>${ic('reset')} <b>초기화</b> — 현재 상황판을 처음 상태로 (사고명·주소 유지 선택 가능, 되돌릴 수 없음).</li></ul>`)}
   ${sec('ex',9,'활용 예시',`<p class="man-p">교육·훈련에서 실제로 작성한 상황판입니다. 사진을 누르면 크게 볼 수 있습니다. <b>건물 템플릿</b>은 구조가 단순한 건물에, <b>지도·항공사진 배경</b>은 산불·고층·주거지처럼 주변 지형이 중요한 현장에 알맞습니다.</p>
@@ -1870,7 +2019,7 @@ function openCkLists(){const st=ckStore();const cur=ckL().map(c=>c.n);
     <p class="hint">훈련·소방서별로 진행사항 항목 구성을 저장해 두고 불러옵니다. 이 기기 브라우저에 저장됩니다.</p>
     <div class="row"><input class="fld" id="clN" style="flex:1" placeholder="목록 이름 (예: 공장화재 훈련용)"><button class="btn pri" id="clSave">현재 목록 저장</button></div>
     <div class="memo">${st.lists.map((l,i)=>`<div style="align-items:center"><span style="min-width:0"><b>${esc(l.name)}</b><br><span class="hint">${l.items.length}개 · ${esc(l.items.slice(0,4).join(', '))}${l.items.length>4?' …':''}</span></span><span style="margin-left:auto;display:flex;gap:4px;flex:none"><button class="btn sm pri" data-cla="${i}">불러오기</button><button class="btn sm danger" data-cld="${i}">삭제</button></span></div>`).join('')||'<span class="hint">저장된 목록이 없습니다.</span>'}</div>
-    <div class="sec"><h5>새 상황판 기본 목록</h5><p class="hint" style="margin:0 0 6px">현재: ${esc((st.def||DEF_CHECKS).join(', '))}</p>
+    <div class="sec"><h5>새 상황판 기본 목록</h5><p class="hint" style="margin:0 0 6px">진행사항 항목을 추가·수정·삭제·이동하면 마지막 구성이 자동으로 새 상황판 기본 목록이 됩니다.<br>현재: ${esc((st.def||DEF_CHECKS).join(', '))}</p>
       <div class="row"><button class="btn" id="clDef">현재 목록을 기본으로 지정</button><button class="btn" id="clReset">기본값(10개) 복원</button><button class="btn" id="clBase">현재 상황판을 기본값으로 되돌리기</button></div></div>
     <div class="acts"><button class="btn" data-close>닫기</button></div>`);
   m.querySelector('#clSave').onclick=()=>{const n=$('#clN').value.trim();if(!n)return toast('목록 이름을 입력하세요');if(!cur.length)return toast('항목이 없습니다');const o=ckStore();o.lists=o.lists.filter(x=>x.name!==n);o.lists.unshift({name:n,items:cur,t:Date.now()});if(ckPut(o)){toast('목록을 저장했습니다');openCkLists();}};
@@ -1887,13 +2036,17 @@ function applyCkNames(names,label){const old=ckL();const keep={};
 /* ---------- 상황판 탭 ---------- */
 function elapsedMin(b){return Math.floor(elMs(b.clock||{run:true,acc:0,since:b.t0||Date.now()})/60000);}
 function renderBoardTabs(){const T=$('#btabs');const cur=BIDX.ids.find(x=>x.id===BIDX.active);if(cur){cur.title=S.meta.title;cur.t0=S.meta.t0;cur.clock=clk();}
-  T.innerHTML=BIDX.ids.map((b,i)=>`<div class="bt ${b.id===BIDX.active?'on':''}" data-bid="${b.id}" title="${esc(b.title||'상황판 '+(i+1))}"><span class="nm">${esc((b.title||'상황판 '+(i+1)).slice(0,18))}</span><span class="el">${elapsedMin(b)}분</span><button class="x" data-bx="${b.id}" aria-label="상황판 닫기">✕</button></div>`).join('')+`<button class="bt add" id="btAdd">+ 상황판 추가</button>`;}
+  T.innerHTML=`<button class="bt add" id="btAdd">+ 상황판 추가</button>`+BIDX.ids.map((b,i)=>`<div class="bt ${b.id===BIDX.active?'on':''}" data-bid="${b.id}" title="${esc(b.title||'상황판 '+(BIDX.ids.length-i))}${b.id===BIDX.active?' — 누르면 이름 변경':' — 누르면 이 상황판으로 전환'}"><span class="nm">${esc((b.title||'상황판 '+(BIDX.ids.length-i)).slice(0,18))}</span><span class="el">${elapsedMin(b)}분</span><button class="x" data-bx="${b.id}" aria-label="상황판 닫기">✕</button></div>`).join('');}
 function updTabs(){const cur=BIDX.ids.find(x=>x.id===BIDX.active);if(cur){cur.title=S.meta.title;cur.t0=S.meta.t0;cur.clock=clk();}
-  document.querySelectorAll('#btabs [data-bid]').forEach((el,i)=>{const b=BIDX.ids.find(x=>x.id===el.dataset.bid);if(!b)return;const nm=b.title||'상황판 '+(i+1);el.querySelector('.nm').textContent=nm.slice(0,18);el.title=nm;el.querySelector('.el').textContent=elapsedMin(b)+'분';});}
+  document.querySelectorAll('#btabs [data-bid]').forEach((el,i)=>{const b=BIDX.ids.find(x=>x.id===el.dataset.bid);if(!b)return;const nm=b.title||'상황판 '+(BIDX.ids.length-i);el.querySelector('.nm').textContent=nm.slice(0,18);el.title=nm;el.querySelector('.el').textContent=elapsedMin(b)+'분';});}
 addEventListener('pagehide',()=>{clearTimeout(saveT);save();});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(saveT);save();}});
 function switchBoard(id){if(id===BIDX.active)return;clearTimeout(saveT);save();BIDX.active=id;idxSave();const o=boardLoad(id)||blank();if(view!=='board')setView('board');adopt(o);renderBoardTabs();}
-function openAsTab(o){clearTimeout(saveT);save();const id=uid();BIDX.ids.push({id,title:o.meta.title||'',t0:o.meta.t0});BIDX.active=id;idxSave();if(view!=='board')setView('board');adopt(o);save();renderBoardTabs();}
-function addBoard(){clearTimeout(saveT);save();const id=uid();BIDX.ids.push({id,title:'',t0:Date.now()});BIDX.active=id;idxSave();if(view!=='board')setView('board');adopt(blank());log('상황','상황판 작성 시작');save();renderBoardTabs();renderAll();setTimeout(()=>$('#mTitle').focus(),50);toast('새 상황판을 추가했습니다 — 사고명을 입력하세요');}
+function openAsTab(o){clearTimeout(saveT);save();const id=uid();BIDX.ids.unshift({id,title:o.meta.title||'',t0:o.meta.t0});BIDX.active=id;idxSave();if(view!=='board')setView('board');adopt(o);save();renderBoardTabs();$('#btabs').scrollLeft=0;}
+function newBoardDlg(){const n=BIDX.ids.length+1;inputDlg('새 상황판 추가',[{label:'상황판 이름 (사고명)',ph:`예: 한솔아파트 공사장 화재 (비우면 ‘상황판 ${n}’)`}],v=>{addBoard(v[0].trim());});}
+function addBoard(title){clearTimeout(saveT);save();if(!title)title='상황판 '+(BIDX.ids.length+1);const id=uid();BIDX.ids.unshift({id,title,t0:Date.now()});BIDX.active=id;idxSave();if(view!=='board')setView('board');{const nb=blank();if(title)nb.meta.title=title;adopt(nb);}log('상황','상황판 작성 시작'+(title?' - '+title:''));save();renderBoardTabs();$('#btabs').scrollLeft=0;renderAll();toast(title?`‘${title}’ 상황판을 추가했습니다`:'새 상황판을 추가했습니다');}
+function renameTab(el){if(!el||el.querySelector('input'))return;const nm=el.querySelector('.nm');const old=S.meta.title||'';const i=document.createElement('input');i.className='btin';i.value=old;i.placeholder='상황판 이름';i.setAttribute('aria-label','상황판 이름');nm.replaceWith(i);el.classList.add('ren');i.focus();i.select();let done=false;
+  const fin=ok=>{if(done)return;done=true;if(ok){const v=i.value.trim();if(v!==old){S.meta.title=v;$('#mTitle').value=v;log('상황','상황판 이름 변경 - '+(v||'(없음)'));dirty();}}renderBoardTabs();};
+  i.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'&&!e.isComposing){e.preventDefault();fin(true);}else if(e.key==='Escape'){e.preventDefault();fin(false);}});i.addEventListener('blur',()=>fin(true));['click','pointerdown','dblclick'].forEach(t=>i.addEventListener(t,e=>e.stopPropagation()));}
 function closeBoard(id){const b=BIDX.ids.find(x=>x.id===id);if(!b)return;const nm=b.title||'이 상황판';
   confirmBox('상황판 닫기',`‘${esc(nm)}’ 탭을 닫으면 이 기기에서 삭제됩니다. 보관하려면 먼저 ‘저장·불러오기’에서 저장하세요.`,'닫기(삭제)',()=>{
     const i=BIDX.ids.findIndex(x=>x.id===id);BIDX.ids.splice(i,1);try{localStorage.removeItem(BKEY(id));}catch(e){}
@@ -1901,7 +2054,22 @@ function closeBoard(id){const b=BIDX.ids.find(x=>x.id===id);if(!b)return;const n
     else if(BIDX.active===id){BIDX.active=BIDX.ids[Math.max(0,i-1)].id;idxSave();adopt(boardLoad(BIDX.active)||blank());}
     else idxSave();
     renderBoardTabs();});}
-$('#btabs').addEventListener('click',e=>{const x=e.target.closest('[data-bx]');if(x){e.stopPropagation();return closeBoard(x.dataset.bx);}if(e.target.closest('#btAdd'))return addBoard();const t=e.target.closest('[data-bid]');if(t)switchBoard(t.dataset.bid);});
+$('#bAddB').addEventListener('click',()=>newBoardDlg());
+function hitProg(e,sel){const els=document.elementsFromPoint(e.clientX,e.clientY);for(const x of els){if(x.closest&&x.closest('.it'))return null;const r=x.closest&&x.closest('#progBox '+sel);if(r)return r;}return null;}
+board.addEventListener('click',e=>{if(tool!=='select')return;progAct(e);});
+let tabDrag=null,tabDragged=0;
+$('#btabs').addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const t=e.target.closest('[data-bid]');if(!t||e.target.closest('[data-bx]')||e.target.closest('input'))return;
+  tabDrag={el:t,id:t.dataset.bid,sx:e.clientX,sy:e.clientY,on:false,pid:e.pointerId};});
+addEventListener('pointermove',e=>{const d=tabDrag;if(!d||e.pointerId!==d.pid)return;const dx=e.clientX-d.sx;
+  if(!d.on){if(Math.abs(dx)<8||Math.abs(e.clientY-d.sy)>Math.abs(dx))return;d.on=true;d.el.classList.add('tdrag');try{d.el.setPointerCapture(e.pointerId);}catch(_){}}
+  e.preventDefault();d.el.style.transform=`translateX(${dx}px)`;
+  const tabs=[...document.querySelectorAll('#btabs [data-bid]')];let idx=0;tabs.forEach(o=>{if(o===d.el)return;const r=o.getBoundingClientRect();if(e.clientX>r.left+r.width/2)idx++;});d.idx=idx;
+  tabs.forEach(o=>o.classList.remove('tins-l','tins-r'));const others=tabs.filter(o=>o!==d.el);if(others.length){if(idx<others.length)others[idx].classList.add('tins-l');else others[others.length-1].classList.add('tins-r');}},{passive:false});
+const tabDrop=e=>{const d=tabDrag;tabDrag=null;if(!d||!d.on)return;tabDragged=Date.now();
+  const L=BIDX.ids,from=L.findIndex(b=>b.id===d.id);if(from>=0&&d.idx!=null){const [it]=L.splice(from,1);L.splice(Math.max(0,Math.min(L.length,d.idx)),0,it);idxSave();}renderBoardTabs();};
+addEventListener('pointerup',tabDrop);addEventListener('pointercancel',tabDrop);
+$('#btabs').addEventListener('click',e=>{if(Date.now()-tabDragged<350){e.stopPropagation();return;}const x=e.target.closest('[data-bx]');if(x){e.stopPropagation();return closeBoard(x.dataset.bx);}if(e.target.closest('#btAdd'))return newBoardDlg();const t=e.target.closest('[data-bid]');if(!t)return;if(t.dataset.bid===BIDX.active)renameTab(t);else switchBoard(t.dataset.bid);});
+$('#btabs').addEventListener('dblclick',e=>{if(Date.now()-tabDragged<500)return;const t=e.target.closest('[data-bid]');if(!t||e.target.closest('[data-bx]'))return;if(t.dataset.bid!==BIDX.active)switchBoard(t.dataset.bid);renameTab($(`#btabs [data-bid="${t.dataset.bid}"]`));});
 
 /* ---------- 파일 저장(downloads) ---------- */
 let DL=null,DLp=null;function getDL(){if(DL)return Promise.resolve(DL);try{if(!(window.claude&&window.claude.use))return Promise.resolve(null);if(!DLp)DLp=window.claude.use('downloads').then(d=>{DL=d;if(!d)DLp=null;return d;}).catch(()=>{DLp=null;return null;});return Promise.race([DLp,new Promise(r=>setTimeout(()=>r(null),3000))]);}catch(e){return Promise.resolve(null);}}getDL();
