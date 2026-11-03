@@ -493,7 +493,7 @@ table.sum td.z{color:var(--muted)}
 .memo{display:flex;flex-direction:column;gap:4px}
 .memo div{display:flex;gap:8px;font-size:13px;border-bottom:1px dashed var(--line);padding:4px 0}
 .memo .tm,.log .tm{font-family:var(--f-mono);font-size:12px;color:var(--muted);flex:none}
-.memo button{margin-left:auto;border:0;background:transparent;color:var(--muted)}
+.memo button{margin-left:auto;border:0;background:transparent;color:var(--muted)}.memo button:disabled{opacity:.25}
 .vstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .vstats div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
 .vstats b{display:block;font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums}
@@ -777,6 +777,9 @@ function ckPut(o){try{localStorage.setItem(CKKEY,JSON.stringify(o));return true;
 function ckDefault(){return (ckStore().def||DEF_CHECKS).slice();}
 function ensureCk(o){if(!Array.isArray(o.ck)){o.ck=LEGACY_CHECKS.map((n,i)=>({id:'c'+i,n}));const m={};for(const k in (o.checks||{}))m[/^\d+$/.test(k)?'c'+k:k]=o.checks[k];o.checks=m;}return o;}
 function ckL(){ensureCk(S);return S.ck;}
+function memoSort(){if(!S.memoMan)S.memos.sort((a,b)=>a.t-b.t);}
+function memoMove(i,d){const j=i+d;if(i<0||j<0||j>=S.memos.length)return;[S.memos[i],S.memos[j]]=[S.memos[j],S.memos[i]];S.memoMan=true;log('진행',`메모 순서 변경 - ${S.memos[j].text}`);renderAll();}
+function memoResort(){S.memoMan=false;S.memos.sort((a,b)=>a.t-b.t);log('진행','메모 시간순 정렬');renderAll();}
 function ckSt(id){return S.checks[id]?((S.ckq&&S.ckq[id]==='p')?'p':'d'):'';}
 function ckPart(){return ckL().filter(c=>ckSt(c.id)==='p').length;}
 function ckDone(){const L=ckL();return L.filter(c=>S.checks[c.id]).length;}
@@ -1049,7 +1052,7 @@ function progHTML(){
   return `<div class="prog ${M.prog?'min':''} ${ed?'ped':''}" id="progBox" style="left:${b.x0}px;top:${b.y0}px;width:${b.x1-b.x0}px;height:${b.y1-b.y0}px"><span class="mn">${M.prog?'+':'−'}</span><span class="pgear" title="진행사항 관리 (목록 저장·불러오기, 접수시각)" role="button" aria-label="진행사항 관리">⚙</span><span class="pedit ${ed?'on':''}" title="${ed?'편집 완료':'항목·메모 편집'}" role="button" aria-label="항목 편집">${ed?'✓':'✎'}</span>${M.prog?'':'<span class="rs"></span>'}<h4>진행사항 <small>${M.prog?done+'/'+CK.length+' ':''}${esc(S.stage||'')}${S.cc?' · 통제단 '+esc(S.cc):''}</small></h4>`
    +CK.map((c,i)=>`<div class="ck ${ckSt(c.id)}" data-ck="${c.id}" title="${ed?'눌러서 이름 수정':({'':'누르면 △ 수행·미흡 (시각 기록)',p:'△ 수행·미흡 — 한 번 더 누르면 ● 양호',d:'● 양호 — 누르면 체크 해제'})[ckSt(c.id)]}"><i>${ckSt(c.id)==='p'?'<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M10 2.2 L18.6 17.6 H1.4 Z" fill="none" stroke="#111" stroke-width="2.6" stroke-linejoin="round"/></svg>':''}</i><span class="cn">${i+1}. ${esc(c.n)}</span><span class="tm">${S.checks[c.id]?hm(S.checks[c.id]):''}</span>${ed?`<span class="ra"><b data-cku2="${i}" title="위로">▲</b><b data-ckd2="${i}" title="아래로">▼</b><b data-cke="${c.id}" title="수정">✎</b><b class="x" data-ckx2="${c.id}" title="삭제">✕</b></span>`:''}</div>`).join('')
    +(ed?`<div class="padd" data-ckadd>+ 항목 추가</div>`:'')
-   +`<div class="mm"><div class="mh"><span class="stgb" data-stgset title="대응단계 발령·해제">대응단계 : <b>${esc(stgTxt())}</b></span><span class="stgb" data-ccset title="긴급구조통제단 건의·발령·해제">통제단 : <b>${esc(S.cc||'없음')}</b></span></div><div class="mslot"></div>${S.memos.length?'<div class="mmore" data-mall hidden title="진행사항 관리에서 전체 메모 보기"></div>':''}${S.memos.map((m,i)=>({m,i})).map(({m,i})=>`<div class="mr" data-mi="${i}"><span class="mt">${hm(m.t)}</span><span class="mx">${esc(m.text)}</span><span class="ra"><b data-me="${i}" title="수정">✎</b><b class="x" data-mx="${i}" title="삭제">✕</b></span></div>`).join('')}</div></div>`;
+   +`<div class="mm"><div class="mh"><span class="stgb" data-stgset title="대응단계 발령·해제">대응단계 : <b>${esc(stgTxt())}</b></span><span class="stgb" data-ccset title="긴급구조통제단 건의·발령·해제">통제단 : <b>${esc(S.cc||'없음')}</b></span></div><div class="mslot"></div>${S.memos.length?'<div class="mmore" data-mall hidden title="진행사항 관리에서 전체 메모 보기"></div>':''}${S.memos.map((m,i)=>({m,i})).map(({m,i})=>`<div class="mr" data-mi="${i}"><span class="mt">${hm(m.t)}</span><span class="mx">${esc(m.text)}</span><span class="ra"><b data-mup="${i}" title="위로">▲</b><b data-mdn="${i}" title="아래로">▼</b><b data-me="${i}" title="수정">✎</b><b class="x" data-mx="${i}" title="삭제">✕</b></span></div>`).join('')}${ed&&S.memoMan&&S.memos.length>1?'<div class="padd" data-msort title="메모를 시각 순서로 다시 정렬">⏱ 시간순으로 정렬</div>':''}</div></div>`;
 }
 function inputDlg(title,fields,fn,extra=''){const m=modal(`<h2>${title}</h2>${fields.map((f,i)=>`<label>${f.label}<input class="fld" id="dlgF${i}" type="${f.type||'text'}" ${f.step?`step="${f.step}"`:''} value="${esc(f.value||'')}" placeholder="${esc(f.ph||'')}"></label>`).join('')}${extra}<div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="dlgOk">확인</button></div>`);
   const go=()=>{const v=fields.map((f,i)=>m.querySelector('#dlgF'+i).value);if(fn(v,m)!==false)closeModal();};m.querySelector('#dlgOk').onclick=go;
@@ -1061,7 +1064,7 @@ function ckAddDlg(){inputDlg('진행사항 항목 추가',[{label:'항목 이름
 function ckDel(id){const L=ckL(),i=L.findIndex(x=>x.id===id);if(i<0)return;const c=L[i];confirmBox('항목 삭제',`‘${esc(c.n)}’ 항목을 삭제합니다.${S.checks[c.id]?' 체크 기록도 함께 지워집니다.':''}`,'삭제',()=>{L.splice(i,1);delete S.checks[c.id];if(S.ckq)delete S.ckq[c.id];log('진행','진행사항 항목 삭제 - '+c.n);renderAll();});}
 function memoDlg(i){const m=i!=null?S.memos[i]:null;
   const dm=inputDlg(m?'메모 수정':'진행사항 메모 기록',[{label:'내용',value:m?m.text:'',ph:'예: 갈매기 지원요청 / 물탱크 4대 추가요청'},{label:'시각',type:'time',value:hmIn(m?m.t:Date.now())}],v=>{const t=v[0].trim();if(!t){toast('내용을 입력하세요');return false;}
-    if(m){m.text=t;m.t=setHM(m.t,v[1]);log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),v[1]),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);}renderAll();growProg();});
+    if(m){m.text=t;m.t=setHM(m.t,v[1]);log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),v[1]),text:t});memoSort();log('진행',t);}renderAll();growProg();});
   if(m){const a=dm.querySelector('.acts');const d=document.createElement('button');d.className='btn danger';d.textContent='삭제';d.style.marginRight='auto';d.onclick=()=>memoDel(i);a.prepend(d);}}
 function memoDel(i){const m=S.memos[i];if(!m)return;confirmBox('메모 삭제',`${hm(m.t)} ‘${esc(m.text)}’ 메모를 삭제합니다.`,'삭제',()=>{S.memos.splice(i,1);log('진행','메모 삭제 - '+m.text);renderAll();});}
 function stageDlg(){const cur=S.stage||'없음';const m=modal(`<h2>대응단계 발령</h2><div class="chipf" id="sdStg" style="gap:6px">${['없음','대응1단계','대응2단계','대응3단계'].map(x=>`<button type="button" data-s="${x}" class="${x===cur?'on':''}" style="font-size:15px;padding:6px 14px">${x}</button>`).join('')}</div>
@@ -1069,7 +1072,7 @@ function stageDlg(){const cur=S.stage||'없음';const m=modal(`<h2>대응단계 
   <div class="acts"><button class="btn" data-close>취소</button><button class="btn pri" id="sdOk">확인</button></div>`);let sel=cur;
   m.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{sel=b.dataset.s;m.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('on',x===b));});
   m.querySelector('#sdOk').onclick=()=>{const t=setHM(Date.now(),m.querySelector('#sdT').value);const prev=S.stage||'없음';S.stage=sel==='없음'?'':sel;
-    if(sel!==prev){const txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);if(m.querySelector('#sdMemo').checked){S.memos.push({t,text:txt});S.memos.sort((a,b)=>a.t-b.t);}if(sel!=='없음')autoCheck(4);}
+    if(sel!==prev){const txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);if(m.querySelector('#sdMemo').checked){S.memos.push({t,text:txt});memoSort();}if(sel!=='없음')autoCheck(4);}
     closeModal();renderAll();};}
 
 function closeMemoInline(){const o=$('#minline');if(o)o.remove();}
@@ -1083,7 +1086,7 @@ function memoInline(i,mode){closeMemoInline();const pb=$('#progBox');if(!pb)retu
   board.appendChild(o);
   ['pointerdown','click','mousedown','touchstart'].forEach(t=>o.addEventListener(t,e=>e.stopPropagation()));
   const save=()=>{const t=o.querySelector('.mtx').value.trim();if(!t){o.querySelector('.mtx').focus();return;}const tv=o.querySelector('.mtm').value;
-    if(m){m.text=t;m.t=setHM(m.t,tv);S.memos.sort((a,b)=>a.t-b.t);log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),tv),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);}
+    if(m){m.text=t;m.t=setHM(m.t,tv);memoSort();log('진행','메모 수정 - '+t);}else{S.memos.push({t:setHM(Date.now(),tv),text:t});memoSort();log('진행',t);}
     closeMemoInline();renderAll();growProg();};
   const del=()=>{const k=S.memos.indexOf(m);if(k>=0){S.memos.splice(k,1);log('진행','메모 삭제 - '+m.text);}closeMemoInline();renderAll();};
   o.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='ok')save();else if(a==='del')del();else closeMemoInline();});
@@ -1098,7 +1101,7 @@ function _stageInlineOld(){closeMemoInline();const pb=$('#progBox');if(!pb)retur
   o.addEventListener('click',e=>{const b=e.target.closest('[data-s],[data-a]');if(!b)return;if(b.dataset.a){closeMemoInline();return;}
     const sel=b.dataset.s,prev=S.stage||'없음';if(sel===prev){closeMemoInline();return;}
     const t=setHM(Date.now(),o.querySelector('.mtm').value);S.stage=sel==='없음'?'':sel;const txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);
-    if(o.querySelector('.mck input').checked){S.memos.push({t,text:txt});S.memos.sort((a,b)=>a.t-b.t);}if(sel!=='없음')autoCheck(4);closeMemoInline();renderAll();growProg();});
+    if(o.querySelector('.mck input').checked){S.memos.push({t,text:txt});memoSort();}if(sel!=='없음')autoCheck(4);closeMemoInline();renderAll();growProg();});
   o.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();closeMemoInline();}});}
 
 function stgTxt(){return S.stage||'없음';}
@@ -1115,12 +1118,12 @@ function stageInline(kind){const CC=kind==='cc';closeMemoInline();const pb=$('#p
     if(CC){const prev=S.cc||'없음';if(sel===prev){closeMemoInline();return;}S.cc=sel==='없음'?'':sel;txt=sel==='없음'?'긴급구조통제단 해제':`긴급구조통제단 가동 ${sel}`;log('진행','통제단 - '+txt);}
     else{const prev=S.stage||'없음';if(sel===prev){closeMemoInline();return;}
       S.stage=sel==='없음'?'':sel;delete S.stageM;txt=sel==='없음'?`${prev} 해제`:`${sel} 발령`;log('진행','대응단계 - '+txt);if(sel!=='없음')autoCheck(4);}
-    if(o.querySelector('.mck input').checked){S.memos.push({t,text:txt});S.memos.sort((a,b)=>a.t-b.t);}closeMemoInline();renderAll();growProg();});
+    if(o.querySelector('.mck input').checked){S.memos.push({t,text:txt});memoSort();}closeMemoInline();renderAll();growProg();});
   o.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();closeMemoInline();}});}
 function placeMemoFix(){let f=$('#mfix');
   if(!f){f=document.createElement('div');f.id='mfix';f.innerHTML=`<input class="mfx" placeholder="진행사항 메모 입력 후 Enter" aria-label="진행사항 메모" enterkeyhint="done"><button class="mb ok" type="button">기록</button>`;board.appendChild(f);
     ['pointerdown','click','mousedown','touchstart','dblclick'].forEach(t=>f.addEventListener(t,e=>e.stopPropagation()));
-    const inp=f.querySelector('.mfx');const go=()=>{const t=inp.value.trim();if(!t){inp.focus();return;}S.memos.push({t:Date.now(),text:t});S.memos.sort((a,b)=>a.t-b.t);log('진행',t);inp.value='';renderAll();growProg();setTimeout(()=>inp.focus(),0);};
+    const inp=f.querySelector('.mfx');const go=()=>{const t=inp.value.trim();if(!t){inp.focus();return;}S.memos.push({t:Date.now(),text:t});memoSort();log('진행',t);inp.value='';renderAll();growProg();setTimeout(()=>inp.focus(),0);};
     f.querySelector('button').addEventListener('click',go);
     inp.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'&&!e.isComposing){e.preventDefault();go();}else if(e.key==='Escape'){inp.blur();}});}
   const pb=$('#progBox'),slot=pb&&pb.querySelector('.mslot');
@@ -1135,6 +1138,9 @@ function progAct(e){const q=s=>hitProg(e,s);let r;
   if(q('[data-stgset]')){stageInline();return true;}
   if(q('[data-ccset]')){stageInline('cc');return true;}
   if(q('[data-madd]')){memoInline(null);return true;}
+  if((r=q('[data-mup]'))){memoMove(+r.dataset.mup,-1);return true;}
+  if((r=q('[data-mdn]'))){memoMove(+r.dataset.mdn,1);return true;}
+  if(q('[data-msort]')){memoResort();return true;}
   if((r=q('[data-me]'))){memoInline(+r.dataset.me);return true;}
   if((r=q('[data-mx]'))){memoInline(+r.dataset.mx,'del');return true;}
   if(q('[data-mall]')){openProgM();return true;}
@@ -1656,7 +1662,7 @@ function progPanelHTML(){return `
     <div class="sec"><h5>대응단계</h5><div class="chipf" id="stg">${['없음','대응1단계','대응2단계','대응3단계'].map(s=>`<button class="${(S.stage||'없음')===s?'on':''}" data-stg="${s}">${s}</button>`).join('')}</div></div>
     <div class="sec"><h5>요청·지시 메모 <span>상황판 진행사항 칸에 최근 4건 표시</span></h5>
       <div class="row"><input class="fld" id="mIn" style="flex:1" placeholder="예: 갈매기 지원요청 / 물탱크 4대 추가요청"><button class="btn pri sm" id="mGo">기록</button></div>
-      <div class="memo" style="margin-top:6px">${S.memos.map((m,i)=>`<div><span class="tm">${hm(m.t)}</span><span>${esc(m.text)}</span><button data-mdel="${i}" aria-label="삭제">✕</button></div>`).join('')||'<span class="hint">아직 메모가 없습니다.</span>'}</div></div>
+      ${S.memoMan&&S.memos.length>1?'<div style="text-align:right;margin-top:4px"><button class="btn sm" data-msort2>⏱ 시간순으로 정렬</button></div>':''}<div class="memo" style="margin-top:6px">${S.memos.map((m,i)=>`<div><span class="tm">${hm(m.t)}</span><span>${esc(m.text)}</span><button data-mmv="${i}:-1" aria-label="위로" title="위로" ${i?'':'disabled'}>▲</button><button data-mmv="${i}:1" aria-label="아래로" title="아래로" style="margin-left:0" ${i<S.memos.length-1?'':'disabled'}>▼</button><button data-mdel="${i}" aria-label="삭제" style="margin-left:0">✕</button></div>`).join('')||'<span class="hint">아직 메모가 없습니다.</span>'}</div></div>
     <div class="sec"><h5>접수 시각</h5><div class="row"><input class="fld" type="time" step="1" id="t0" value="${hms(S.meta.t0)}"><span class="hint">바꾸면 경과시간이 이 시각부터 다시 계산됩니다. 20분 단위 화재진행시간 전파 알림의 기준입니다.</span></div></div>`;}
 function renderProgM(){const m=$('#progM');if(m){const ae=document.activeElement,id=ae&&ae.id;m.innerHTML=progPanelHTML();if(id&&id!=='t0'){const n=document.getElementById(id);if(n&&m.contains(n))n.focus();}}}
 function openProgM(){const m=modal(`<h2>진행사항 관리</h2><div id="progM" class="pbody pm"></div><div class="acts"><button class="btn pri" data-close>닫기</button></div>`);const c=m.querySelector('#progM');c.innerHTML=progPanelHTML();['click','input','keydown','change'].forEach(t=>c.addEventListener(t,PB[t]));}
@@ -1737,6 +1743,8 @@ const PB={};PB.click=e=>{const vm=e.target.closest('[data-vm]');if(vm){setVMode(
   if(b.dataset.stg){const s=b.dataset.stg;S.stage=s==='없음'?'':s;log('진행','대응단계 - '+s);if(s!=='없음')autoCheck(4);renderAll();return;}
   if(b.id==='mGo'){const v=$('#mIn').value.trim();if(!v)return;S.memos.push({t:Date.now(),text:v});log('진행',v);renderAll();setTimeout(()=>$('#mIn')?.focus(),0);return;}
   if(b.dataset.mdel!=null){S.memos.splice(+b.dataset.mdel,1);renderAll();return;}
+  if(b.dataset.mmv){const [i,d]=b.dataset.mmv.split(':').map(Number);memoMove(i,d);return;}
+  if(b.dataset.msort2!=null){memoResort();return;}
   if(b.id==='vAdd'){const v=newVictim({});renderAll();openVictim(v.id);return;}
   if(b.dataset.vedit)return openVictim(b.dataset.vedit);
   if(b.dataset.vs){const[id,s]=b.dataset.vs.split('|');const v=S.victims.find(q=>q.id===id);setVStatus(v,s);renderAll();return;}
